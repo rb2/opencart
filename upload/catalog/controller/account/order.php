@@ -331,7 +331,7 @@ class ControllerAccountOrder extends Controller {
 				if (empty($product['image'])) {
 					$thumb = '';
 				} else {
-					$thumb = $this->model_tool_image->resize($product['image'], $this->config->get('config_image_thumb_width'), $this->config->get('config_image_thumb_height'));
+					$thumb = $this->model_tool_image->resize($product['image'], $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height'));
 				}
 
         		$this->data['products'][] = array(
