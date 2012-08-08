@@ -85,29 +85,29 @@
               <a onclick="$(this).parent().find(':checkbox').attr('checked', true);"><?php echo $text_select_all; ?></a> / <a onclick="$(this).parent().find(':checkbox').attr('checked', false);"><?php echo $text_unselect_all; ?></a></td>
           </tr>
           <tr>
-            <td><?php echo $entry_delivery_type; ?></td>
-            <td><select name="fedex_delivery_type">
-                <?php if ($fedex_delivery_type == 'REGULAR_PICKUP') { ?>
+            <td><?php echo $entry_dropoff_type; ?></td>
+            <td><select name="fedex_dropoff_type">
+                <?php if ($fedex_dropoff_type == 'REGULAR_PICKUP') { ?>
                 <option value="REGULAR_PICKUP" selected="selected"><?php echo $text_regular_pickup; ?></option>
                 <?php } else { ?>
                 <option value="REGULAR_PICKUP"><?php echo $text_regular_pickup; ?></option>
                 <?php } ?>
-                <?php if ($fedex_delivery_type == 'REQUEST_COURIER') { ?>
+                <?php if ($fedex_dropoff_type == 'REQUEST_COURIER') { ?>
                 <option value="REQUEST_COURIER" selected="selected"><?php echo $text_request_courier; ?></option>
                 <?php } else { ?>
                 <option value="REQUEST_COURIER"><?php echo $text_request_courier; ?></option>
                 <?php } ?>
-                <?php if ($fedex_delivery_type == 'DROP_BOX') { ?>
+                <?php if ($fedex_dropoff_type == 'DROP_BOX') { ?>
                 <option value="DROP_BOX" selected="selected"><?php echo $text_drop_box; ?></option>
                 <?php } else { ?>
                 <option value="DROP_BOX"><?php echo $text_drop_box; ?></option>
                 <?php } ?>
-                <?php if ($fedex_delivery_type == 'BUSINESS_SERVICE_CENTER') { ?>
+                <?php if ($fedex_dropoff_type == 'BUSINESS_SERVICE_CENTER') { ?>
                 <option value="BUSINESS_SERVICE_CENTER" selected="selected"><?php echo $text_business_service_center; ?></option>
                 <?php } else { ?>
                 <option value="BUSINESS_SERVICE_CENTER"><?php echo $text_business_service_center; ?></option>
                 <?php } ?>
-                <?php if ($fedex_delivery_type == 'STATION') { ?>
+                <?php if ($fedex_dropoff_type == 'STATION') { ?>
                 <option value="STATION" selected="selected"><?php echo $text_station; ?></option>
                 <?php } else { ?>
                 <option value="STATION"><?php echo $text_station; ?></option>
@@ -168,22 +168,35 @@
                 <option value="ACCOUNT"><?php echo $text_account_rate; ?></option>
                 <?php } ?>
               </select></td>
+          </tr>    
+		  <tr>
+            <td><?php echo $entry_display_time; ?></td>
+            <td><?php if ($fedex_display_time) { ?>
+              <input type="radio" name="fedex_display_time" value="1" checked="checked" />
+              <?php echo $text_yes; ?>
+              <input type="radio" name="fedex_display_time" value="0" />
+              <?php echo $text_no; ?>
+              <?php } else { ?>
+              <input type="radio" name="fedex_display_time" value="1" />
+              <?php echo $text_yes; ?>
+              <input type="radio" name="fedex_display_time" value="0" checked="checked" />
+              <?php echo $text_no; ?>
+              <?php } ?></td>
           </tr>
           <tr>
-            <td><?php echo $entry_destination_type; ?></td>
-            <td><select name="fedex_destination_type">
-                <?php if ($fedex_rate_type == 'residential') { ?>
-                <option value="residential" selected="selected"><?php echo $text_residential; ?></option>
-                <?php } else { ?>
-                <option value="residential"><?php echo $text_residential; ?></option>
-                <?php } ?>
-                <?php if ($fedex_rate_type == 'business') { ?>
-                <option value="business" selected="selected"><?php echo $text_business; ?></option>
-                <?php } else { ?>
-                <option value="business"><?php echo $text_business; ?></option>
-                <?php } ?>
-              </select></td>
-          </tr>        
+            <td><?php echo $entry_display_weight; ?></td>
+            <td><?php if ($fedex_display_weight) { ?>
+              <input type="radio" name="fedex_display_weight" value="1" checked="checked" />
+              <?php echo $text_yes; ?>
+              <input type="radio" name="fedex_display_weight" value="0" />
+              <?php echo $text_no; ?>
+              <?php } else { ?>
+              <input type="radio" name="fedex_display_weight" value="1" />
+              <?php echo $text_yes; ?>
+              <input type="radio" name="fedex_display_weight" value="0" checked="checked" />
+              <?php echo $text_no; ?>
+              <?php } ?></td>
+          </tr>              
           <tr>
             <td><?php echo $entry_weight_class; ?></td>
             <td><select name="fedex_weight_class_id">
