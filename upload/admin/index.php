@@ -1,6 +1,6 @@
 <?php
 // Version
-define('VERSION', '1.5.4');
+define('VERSION', '1.5.5');
 
 // Configuration
 require_once('config.php');
@@ -109,7 +109,7 @@ $registry->set('session', $session);
 // Language
 $languages = array();
 
-$query = $db->query("SELECT * FROM " . DB_PREFIX . "language"); 
+$query = $db->query("SELECT * FROM `" . DB_PREFIX . "language`"); 
 
 foreach ($query->rows as $result) {
 	$languages[$result['code']] = $result;
@@ -120,7 +120,7 @@ $config->set('config_language_id', $languages[$config->get('config_admin_languag
 // Language	
 $language = new Language($languages[$config->get('config_admin_language')]['directory']);
 $language->load($languages[$config->get('config_admin_language')]['filename']);	
-$registry->set('language', $language); 		
+$registry->set('language', $language);
 
 // Document
 $registry->set('document', new Document()); 		

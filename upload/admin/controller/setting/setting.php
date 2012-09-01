@@ -129,6 +129,7 @@ class ControllerSettingSetting extends Controller {
 		$this->data['entry_fraud_score'] = $this->language->get('entry_fraud_score');
 		$this->data['entry_fraud_status'] = $this->language->get('entry_fraud_status');
 		$this->data['entry_use_ssl'] = $this->language->get('entry_use_ssl');
+		$this->data['entry_use_shared'] = $this->language->get('entry_use_shared');
 		$this->data['entry_maintenance'] = $this->language->get('entry_maintenance');
 		$this->data['entry_encryption'] = $this->language->get('entry_encryption');
 		$this->data['entry_seo_url'] = $this->language->get('entry_seo_url');
@@ -970,11 +971,17 @@ class ControllerSettingSetting extends Controller {
 		} else {
 			$this->data['config_use_ssl'] = $this->config->get('config_use_ssl');
 		}
-		
-		if (isset($this->request->post['config_seo_url'])) {
-			$this->data['config_seo_url'] = $this->request->post['config_seo_url'];
+
+		if (isset($this->request->post['config_use_shared'])) {
+			$this->data['config_use_shared'] = $this->request->post['config_use_shared'];
 		} else {
-			$this->data['config_seo_url'] = $this->config->get('config_seo_url');
+			$this->data['config_use_shared'] = $this->config->get('config_use_shared');
+		}
+				
+		if (isset($this->request->post['config_use_seo_url'])) {
+			$this->data['config_use_seo_url'] = $this->request->post['config_use_seo_url'];
+		} else {
+			$this->data['config_use_seo_url'] = $this->config->get('config_use_seo_url');
 		}
 		
 		if (isset($this->request->post['config_maintenance'])) {
@@ -1151,10 +1158,16 @@ class ControllerSettingSetting extends Controller {
 	}
 	
 	public function template() {
-		if (file_exists(DIR_IMAGE . 'templates/' . basename($this->request->get['template']) . '.png')) {
-			$image = HTTPS_IMAGE . 'templates/' . basename($this->request->get['template']) . '.png';
+		if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
+			$server = HTTPS_CATALOG;
 		} else {
-			$image = HTTPS_IMAGE . 'no_image.jpg';
+			$server = HTTP_CATALOG;
+		}
+		
+		if (file_exists(DIR_IMAGE . 'templates/' . basename($this->request->get['template']) . '.png')) {
+			$image = $server . 'image/templates/' . basename($this->request->get['template']) . '.png';
+		} else {
+			$image = $server . 'image/no_image.jpg';
 		}
 		
 		$this->response->setOutput('<img src="' . $image . '" alt="" title="" style="border: 1px solid #EEEEEE;" />');
