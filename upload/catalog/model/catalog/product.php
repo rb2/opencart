@@ -48,7 +48,7 @@ class ModelCatalogProduct extends Model {
 				'length_class_id'  => $query->row['length_class_id'],
 				'subtract'         => $query->row['subtract'],
 				'rating'           => round($query->row['rating']),
-				'reviews'          => $query->row['reviews'],
+				'reviews'          => $query->row['reviews'] ? $query->row['reviews'] : 0,
 				'minimum'          => $query->row['minimum'],
 				'sort_order'       => $query->row['sort_order'],
 				'status'           => $query->row['status'],
@@ -104,7 +104,7 @@ class ModelCatalogProduct extends Model {
 					$implode[] = (int)$filter_id;
 				}
 				
-				$sql .= " AND pf.filter_id IN ('" . implode(',', $implode) . "')";				
+				$sql .= " AND pf.filter_id IN (" . implode(',', $implode) . ")";				
 			}
 		}	
 
@@ -505,10 +505,10 @@ class ModelCatalogProduct extends Model {
 					$implode[] = (int)$filter_id;
 				}
 				
-				$sql .= " AND pf.filter_id IN ('" . implode(',', $implode) . "')";				
+				$sql .= " AND pf.filter_id IN (" . implode(',', $implode) . ")";				
 			}
 		}
-				
+		
 		if (!empty($data['filter_name']) || !empty($data['filter_tag'])) {
 			$sql .= " AND (";
 			
@@ -518,7 +518,7 @@ class ModelCatalogProduct extends Model {
 				$words = explode(' ', trim(preg_replace('/\s\s+/', ' ', $data['filter_name'])));
 
 				foreach ($words as $word) {
-					$implode[] = "pd.name LIKE '%" . $this->db->escape(utf8_strtolower($word)) . "%'";
+					$implode[] = "pd.name LIKE '%" . $this->db->escape($word) . "%'";
 				}
 				
 				if ($implode) {
@@ -526,7 +526,7 @@ class ModelCatalogProduct extends Model {
 				}
 
 				if (!empty($data['filter_description'])) {
-					$sql .= " OR pd.description LIKE '%" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "%'";
+					$sql .= " OR pd.description LIKE '%" . $this->db->escape($data['filter_name']) . "%'";
 				}
 			}
 			

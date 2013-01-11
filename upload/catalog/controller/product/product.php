@@ -225,6 +225,9 @@ class ControllerProductProduct extends Controller {
 			$this->document->setDescription($product_info['meta_description']);
 			$this->document->setKeywords($product_info['meta_keyword']);
 			$this->document->addLink($this->url->link('product/product', 'product_id=' . $this->request->get['product_id']), 'canonical');
+			$this->document->addScript('catalog/view/javascript/jquery/tabs.js');
+			$this->document->addScript('catalog/view/javascript/jquery/colorbox/jquery.colorbox-min.js');
+			$this->document->addStyle('catalog/view/javascript/jquery/colorbox/colorbox.css');
 			
 			$this->data['heading_title'] = $product_info['name'];
 			
@@ -678,7 +681,7 @@ class ControllerProductProduct extends Controller {
 				$allowed[] = trim($filetype);
 			}
 							
-			if (!in_array($this->request->files['file']['type'], $filetypes)) {
+			if (!in_array($this->request->files['file']['type'], $allowed)) {
 				$json['error'] = $this->language->get('error_filetype');
 			}
 						
