@@ -3,7 +3,7 @@ class ControllerSaleOrder extends Controller {
 	private $error = array();
 
   	public function index() {
-		$this->load->language('sale/order');
+		$this->language->load('sale/order');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -13,7 +13,7 @@ class ControllerSaleOrder extends Controller {
   	}
 	
   	public function insert() {
-		$this->load->language('sale/order');
+		$this->language->load('sale/order');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -69,7 +69,7 @@ class ControllerSaleOrder extends Controller {
   	}
 	
   	public function update() {
-		$this->load->language('sale/order');
+		$this->language->load('sale/order');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -125,7 +125,7 @@ class ControllerSaleOrder extends Controller {
   	}
 	
   	public function delete() {
-		$this->load->language('sale/order');
+		$this->language->load('sale/order');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -182,7 +182,7 @@ class ControllerSaleOrder extends Controller {
     	$this->getList();
   	}
 
-  	private function getList() {
+  	protected function getList() {
 		if (isset($this->request->get['filter_order_id'])) {
 			$filter_order_id = $this->request->get['filter_order_id'];
 		} else {
@@ -486,7 +486,7 @@ class ControllerSaleOrder extends Controller {
 		$this->load->model('sale/customer');
 				
 		$this->data['heading_title'] = $this->language->get('heading_title');
-		 
+		
 		$this->data['text_no_results'] = $this->language->get('text_no_results');  
 		$this->data['text_default'] = $this->language->get('text_default');
 		$this->data['text_select'] = $this->language->get('text_select');
@@ -881,7 +881,7 @@ class ControllerSaleOrder extends Controller {
 		} else {
       		$this->data['comment'] = '';
     	}	
-		
+				
 		$this->load->model('sale/customer');
 
 		if (isset($this->request->post['customer_id'])) {
@@ -1098,8 +1098,6 @@ class ControllerSaleOrder extends Controller {
 		
 		$this->load->model('catalog/product');
 		
-		$this->document->addScript('view/javascript/jquery/ajaxupload.js');
-		
 		$this->data['order_products'] = array();		
 		
 		foreach ($order_products as $order_product) {
@@ -1118,7 +1116,7 @@ class ControllerSaleOrder extends Controller {
 			} else {
 				$order_download = array();
 			}
-											
+							
 			$this->data['order_products'][] = array(
 				'order_product_id' => $order_product['order_product_id'],
 				'product_id'       => $order_product['product_id'],
@@ -1163,7 +1161,7 @@ class ControllerSaleOrder extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-  	private function validateForm() {
+  	protected function validateForm() {
     	if (!$this->user->hasPermission('modify', 'sale/order')) {
       		$this->error['warning'] = $this->language->get('error_permission');
     	}
@@ -1221,7 +1219,7 @@ class ControllerSaleOrder extends Controller {
       		$this->error['payment_country'] = $this->language->get('error_country');
     	}
 		
-    	if ($this->request->post['payment_zone_id'] == '') {
+    	if (!isset($this->request->post['payment_zone_id']) || $this->request->post['payment_zone_id'] == '') {
       		$this->error['payment_zone'] = $this->language->get('error_zone');
     	}	
 		
@@ -1277,7 +1275,7 @@ class ControllerSaleOrder extends Controller {
 				$this->error['shipping_country'] = $this->language->get('error_country');
 			}
 			
-			if ($this->request->post['shipping_zone_id'] == '') {
+			if (!isset($this->request->post['shipping_zone_id']) || $this->request->post['shipping_zone_id'] == '') {
 				$this->error['shipping_zone'] = $this->language->get('error_zone');
 			}
 			
@@ -1297,7 +1295,7 @@ class ControllerSaleOrder extends Controller {
 		}
   	}    
 	
-   	private function validateDelete() {
+   	protected function validateDelete() {
     	if (!$this->user->hasPermission('modify', 'sale/order')) {
 			$this->error['warning'] = $this->language->get('error_permission');
     	}
@@ -1346,7 +1344,7 @@ class ControllerSaleOrder extends Controller {
 		$order_info = $this->model_sale_order->getOrder($order_id);
 
 		if ($order_info) {
-			$this->load->language('sale/order');
+			$this->language->load('sale/order');
 
 			$this->document->setTitle($this->language->get('heading_title'));
 
@@ -1469,7 +1467,7 @@ class ControllerSaleOrder extends Controller {
 			$this->data['tab_payment'] = $this->language->get('tab_payment');
 			$this->data['tab_shipping'] = $this->language->get('tab_shipping');
 			$this->data['tab_product'] = $this->language->get('tab_product');
-			$this->data['tab_order_history'] = $this->language->get('tab_order_history');
+			$this->data['tab_history'] = $this->language->get('tab_history');
 			$this->data['tab_fraud'] = $this->language->get('tab_fraud');
 		
 			$this->data['token'] = $this->session->data['token'];
@@ -1920,7 +1918,7 @@ class ControllerSaleOrder extends Controller {
 			
 			$this->response->setOutput($this->render());
 		} else {
-			$this->load->language('error/not_found');
+			$this->language->load('error/not_found');
 
 			$this->document->setTitle($this->language->get('heading_title'));
 
@@ -2243,7 +2241,7 @@ class ControllerSaleOrder extends Controller {
 				exit('Error: Headers already sent out!');
 			}
 		} else {
-			$this->load->language('error/not_found');
+			$this->language->load('error/not_found');
 
 			$this->document->setTitle($this->language->get('heading_title'));
 
@@ -2288,15 +2286,29 @@ class ControllerSaleOrder extends Controller {
 					$json['error'] = $this->language->get('error_filename');
 				}	  	
 				
+				// Allowed file extension types
 				$allowed = array();
 				
-				$filetypes = explode(',', $this->config->get('config_upload_allowed'));
+				$filetypes = explode("\n", $this->config->get('config_file_extension_allowed'));
 				
 				foreach ($filetypes as $filetype) {
 					$allowed[] = trim($filetype);
 				}
 				
-				if (!in_array(utf8_substr(strrchr($filename, '.'), 1), $allowed)) {
+				if (!in_array(substr(strrchr($filename, '.'), 1), $allowed)) {
+					$json['error'] = $this->language->get('error_filetype');
+				}	
+				
+				// Allowed file mime types		
+				$allowed = array();
+				
+				$filetypes = explode("\n", $this->config->get('config_file_mime_allowed'));
+				
+				foreach ($filetypes as $filetype) {
+					$allowed[] = trim($filetype);
+				}
+								
+				if (!in_array($this->request->files['file']['type'], $allowed)) {
 					$json['error'] = $this->language->get('error_filetype');
 				}
 							
@@ -2324,7 +2336,7 @@ class ControllerSaleOrder extends Controller {
 	}
 			
   	public function invoice() {
-		$this->load->language('sale/order');
+		$this->language->load('sale/order');
 
 		$this->data['title'] = $this->language->get('heading_title');
 

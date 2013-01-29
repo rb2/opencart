@@ -10,7 +10,9 @@ class ControllerAccountRegister extends Controller {
     	$this->language->load('account/register');
 		
 		$this->document->setTitle($this->language->get('heading_title'));
-		
+		$this->document->addScript('catalog/view/javascript/jquery/colorbox/jquery.colorbox-min.js');
+		$this->document->addStyle('catalog/view/javascript/jquery/colorbox/colorbox.css');
+					
 		$this->load->model('account/customer');
 		
     	if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
@@ -75,8 +77,6 @@ class ControllerAccountRegister extends Controller {
     	$this->data['entry_fax'] = $this->language->get('entry_fax');
 		$this->data['entry_company'] = $this->language->get('entry_company');
 		$this->data['entry_customer_group'] = $this->language->get('entry_customer_group');
-		$this->data['entry_company_id'] = $this->language->get('entry_company_id');
-		$this->data['entry_tax_id'] = $this->language->get('entry_tax_id');
     	$this->data['entry_address_1'] = $this->language->get('entry_address_1');
     	$this->data['entry_address_2'] = $this->language->get('entry_address_2');
     	$this->data['entry_postcode'] = $this->language->get('entry_postcode');
@@ -129,18 +129,6 @@ class ControllerAccountRegister extends Controller {
 			$this->data['error_confirm'] = $this->error['confirm'];
 		} else {
 			$this->data['error_confirm'] = '';
-		}
-		
-  		if (isset($this->error['company_id'])) {
-			$this->data['error_company_id'] = $this->error['company_id'];
-		} else {
-			$this->data['error_company_id'] = '';
-		}
-		
-  		if (isset($this->error['tax_id'])) {
-			$this->data['error_tax_id'] = $this->error['tax_id'];
-		} else {
-			$this->data['error_tax_id'] = '';
 		}
 								
   		if (isset($this->error['address_1'])) {
@@ -231,6 +219,29 @@ class ControllerAccountRegister extends Controller {
 			$this->data['customer_group_id'] = $this->config->get('config_customer_group_id');
 		}
 		
+		$this->data['custom_fields'] = array();
+		
+		$this->load->model('account/custom_field');
+		 
+		$custom_fields = $this->model_account_custom_field->getCustomFields();
+		 
+		foreach ($custom_fields as $custom_field) {
+			if (isset($this->request->post['custom_field'][$custom_field['custom_field_id']])) {
+				$value = $this->request->post['custom_field'][$custom_field['custom_field_id']];
+			} else {
+				$value = $custom_field['value'];
+			}
+			
+			$this->data['custom_fields'][] = array(
+				'custom_field_id' => $custom_field['custom_field_id'],
+				'name'            => $custom_field['name'],
+				'type'            => $custom_field['type'],
+				'value'           => $value,
+				'location'        => $custom_field['location'],
+				'position'        => $custom_field['position']
+			);
+		} 
+		 
 		// Company ID
 		if (isset($this->request->post['company_id'])) {
     		$this->data['company_id'] = $this->request->post['company_id'];
@@ -347,7 +358,7 @@ class ControllerAccountRegister extends Controller {
 		$this->response->setOutput($this->render());	
   	}
 
-  	private function validate() {
+  	protected function validate() {
     	if ((utf8_strlen($this->request->post['firstname']) < 1) || (utf8_strlen($this->request->post['firstname']) > 32)) {
       		$this->error['firstname'] = $this->language->get('error_firstname');
     	}
@@ -420,7 +431,7 @@ class ControllerAccountRegister extends Controller {
       		$this->error['country'] = $this->language->get('error_country');
     	}
 		
-    	if ($this->request->post['zone_id'] == '') {
+    	if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {
       		$this->error['zone'] = $this->language->get('error_zone');
     	}
 
