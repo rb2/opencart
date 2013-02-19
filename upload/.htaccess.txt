@@ -1,15 +1,16 @@
-# 1.To use URL Alias you need to be running apache with mod_rewrite enabled.
+# 1.To use URL Alias you need to be running apache with mod_rewrite enabled. 
+
 # 2. In your opencart directory rename htaccess.txt to .htaccess.
+
 # For any support issues please visit: http://www.opencart.com
 
 Options +FollowSymlinks
-AddDefaultCharset UTF-8
 
 # Prevent Directoy listing 
 Options -Indexes
 
 # Prevent Direct Access to files
-<FilesMatch "\.(tpl|ini|log)">
+<FilesMatch "(?i)((\.tpl|\.ini|\.log|(?<!robots)\.txt))">
  Order deny,allow
  Deny from all
 </FilesMatch>
