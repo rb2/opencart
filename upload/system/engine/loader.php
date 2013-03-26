@@ -1,65 +1,71 @@
 <?php
-/**
- * @property Loader $load Loads whatever you want
- * @property Config $config Access to congiguration
- * @property Url $url Helpes to generate links
- * @property Log $log Log helper
- * @property Request $request Access to request data (POST, GET, COOKIE, FILES, SERVER)
- * @property Response $response Some functionality to work with response
- * @property Cache $cache Access to cache
- * @property Session $session Access to Session
- * @property Language $language Language helper
- * @property Document $document Helper to work with html DOM document
- * @property Customer $customer Access to customers data
- * @property Affiliate $affiliate 
- * @property Currency $currency 
- * @property Tax $tax Tax helper
- * @property Weight $weight Weight helper
- * @property Length $length Length helper
- * @property Cart $cart Access to cart data
- * @property Encryption $encryption Encription helper
- */
 final class Loader {
 	protected $registry;
 
 	public function __construct($registry) {
 		$this->registry = $registry;
 	}
+	
+	public function controller($route, $args = array()) {
+		$path = '';
+		
+		$parts = explode('/', str_replace('..', '', (string)$route));
+		
+		foreach ($parts as $part) {
+			$path .= $part;
+			
+			if (is_dir(DIR_APPLICATION . 'controller/' . $path)) {
+				$path .= '/';
+				
+				array_shift($parts);
+				
+				continue;
+			}
+			
+			$file = DIR_APPLICATION . 'controller/' .  $path . '.php';			
+			
+			if (is_file($file)) {
+				$class = 'Controller' . preg_replace('/[^a-zA-Z0-9]/', '', $path);
 
-	public function __get($key) {
-		return $this->registry->get($key);
-	}
-
-	public function __set($key, $value) {
-		$this->registry->set($key, $value);
-	}
-
-	public function library($library) {
-		$file = DIR_SYSTEM . 'library/' . $library . '.php';
-
-		if (file_exists($file)) {
+				array_shift($parts);
+				
+				break;
+			}
+		}
+			
+		$method = array_shift($parts);
+				
+		if (!$method) {
+			$method = 'index';
+		}
+					
+		if (file_exists($file)) { 
 			include_once($file);
+			
+			$controller = new $class($this->registry);
+			
+			echo get_class($controller) . '<br>';
+			echo $method . '<br>';
+			
+			if (is_callable(array($controller, $method))) {
+				
+				
+				
+				return call_user_func_array(array($controller, $method), $args);
+			} else {
+				
+				return false;
+			}
 		} else {
-			trigger_error('Error: Could not load library ' . $library . '!');
+			trigger_error('Error: Could not load controller ' . $file . '!');
 			exit();
 		}
 	}
-
-	public function helper($helper) {
-		$file = DIR_SYSTEM . 'helper/' . $helper . '.php';
-
-		if (file_exists($file)) {
-			include_once($file);
-		} else {
-			trigger_error('Error: Could not load helper ' . $helper . '!');
-			exit();
-		}
-	}
-
+		
 	public function model($model) {
-		$file  = DIR_APPLICATION . 'model/' . $model . '.php';
+		$file = DIR_APPLICATION . 'model/' . $model . '.php';
 		$class = 'Model' . preg_replace('/[^a-zA-Z0-9]/', '', $model);
-
+				
 		if (file_exists($file)) { 
 			include_once($file);
 
@@ -69,15 +75,58 @@ final class Loader {
 			exit();
 		}
 	}
+	
+	public function view($template, $data = array()) {
+		$file = DIR_TEMPLATE . $template;
+		
+		if (file_exists($file)) {
+			extract($data);
 
+			ob_start();
+
+			require($file);
+
+			$output = ob_get_contents();
+
+			ob_end_clean();
+
+			return $output;
+		} else {
+			trigger_error('Error: Could not load template ' . $file . '!');
+			exit();
+		}
+	}
+
+	public function library($library) {
+		$file = DIR_SYSTEM . 'library/' . $library . '.php';
+
+		if (file_exists($file)) {
+			include_once($file);
+		} else {
+			trigger_error('Error: Could not load library ' . $file . '!');
+			exit();
+		}
+	}
+	
+	public function helper($helper) {
+		$file = DIR_SYSTEM . 'helper/' . $helper . '.php';
+
+		if (file_exists($file)) {
+			include_once($file);
+		} else {
+			trigger_error('Error: Could not load helper ' . $file . '!');
+			exit();
+		}
+	}
+	
 	public function database($driver, $hostname, $username, $password, $database) {
-		$file  = DIR_SYSTEM . 'database/' . $driver . '.php';
+		$file = DIR_SYSTEM . 'database/' . $driver . '.php';
 		$class = 'Database' . preg_replace('/[^a-zA-Z0-9]/', '', $driver);
 
 		if (file_exists($file)) {
 			include_once($file);
 
-			$this->registry->set(str_replace('/', '_', $driver), new $class($hostname, $username, $password, $database));
+			$this->registry->set($driver, new $class($hostname, $username, $password, $database));
 		} else {
 			trigger_error('Error: Could not load database ' . $driver . '!');
 			exit();

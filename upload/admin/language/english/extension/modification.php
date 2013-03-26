@@ -1,18 +1,21 @@
 <?php
 // Heading 
-$_['heading_title']    = 'Modifications';
+$_['heading_title']        = 'Modifications';
 
 // Text
-$_['text_install']     = 'Install';
-$_['text_uninstall']   = 'Uninstall';
+$_['text_success']         = 'Success: You have modified modifications!';
 
 // Column
-$_['column_name']      = 'Modification Name';
-$_['column_status']    = 'Status';
-$_['column_action']    = 'Action';
+$_['column_name']          = 'Modification Name';
+$_['column_author']        = 'Author';
+$_['column_date_added']    = 'Date Added';
+$_['column_date_modified'] = 'Date Modified';
+$_['column_action']        = 'Action';
+
+// Entry
+$_['entry_code']           = 'Modification:';
+$_['entry_status']         = 'Status:';
 
 // Error
-$_['error_permission'] = 'Warning: You do not have permission to modify extension manager!';
-$_['error_upload']     = 'Upload required!';
-$_['error_filetype']   = 'Invalid file type!';
+$_['error_permission']     = 'Warning: You do not have permission to modify modifications!';
 ?>

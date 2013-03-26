@@ -1,10 +1,10 @@
 <?php echo $header; ?><?php echo $column_left; ?><?php echo $column_right; ?>
 <div id="content"><?php echo $content_top; ?>
-  <div class="breadcrumb">
+  <ul class="breadcrumb">
     <?php foreach ($breadcrumbs as $breadcrumb) { ?>
-    <?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
+    <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
     <?php } ?>
-  </div>
+  </ul>
   <h1><?php echo $heading_title; ?></h1>
   <h2><?php echo $text_your_details; ?></h2>
   <div class="content">
@@ -32,9 +32,9 @@
     </table>
   </div>
   <div class="buttons">
-    <div class="left"><a href="<?php echo $back; ?>" class="button"><?php echo $button_back; ?></a></div>
+    <div class="left"><a href="<?php echo $back; ?>" class="btn"><?php echo $button_back; ?></a></div>
     <div class="right">
-      <input type="button" value="<?php echo $button_continue; ?>" id="button-edit" class="button" />
+      <input type="button" value="<?php echo $button_continue; ?>" id="button-edit" class="btn" />
     </div>
   </div>
   <?php echo $content_bottom; ?></div>
@@ -60,7 +60,7 @@ $('#button-edit').on('click', function() {
 				location = json['redirect'];				
 			} else if (json['error']) {
 				if (json['error']['warning']) {
-					$('#notification').html('<div class="warning" style="display: none;">' + json['error']['warning'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
+					$('#notification').html('<div class="alert alert-error" style="display: none;">' + json['error']['warning'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
 					
 					$('.warning').fadeIn('slow');
 				}
