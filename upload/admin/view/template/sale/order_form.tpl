@@ -13,8 +13,8 @@
       <h1><i class="icon-edit"></i> <?php echo $heading_title; ?></h1>
     </div>
     <div class="box-content">
-      <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form">
-        <div class="buttons"><a onclick="$('#form').submit();" class="btn"><i class="icon-ok"></i> <?php echo $button_save; ?></a> <a href="<?php echo $cancel; ?>" class="btn"><i class="icon-remove"></i> <?php echo $button_cancel; ?></a></div>
+      <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" class="form-horizontal">
+        <div class="buttons"><button type="submit" class="btn"><i class="icon-ok"></i> <?php echo $button_save; ?></button> <a href="<?php echo $cancel; ?>" class="btn"><i class="icon-remove"></i> <?php echo $button_cancel; ?></a></div>
         <div class="tabbable tabs-left">
         <ul class="nav nav-tabs">
           <li class="active"><a href="#tab-customer" data-toggle="tab"><?php echo $tab_customer; ?></a></li>
@@ -26,228 +26,278 @@
         </ul>
         <div class="tab-content">
           <div class="tab-pane active" id="tab-customer">
-            <table class="form">
-              <tr>
-                <td class="left"><?php echo $entry_store; ?></td>
-                <td class="left"><select name="store_id">
-                    <option value="0"><?php echo $text_default; ?></option>
-                    <?php foreach ($stores as $store) { ?>
-                    <?php if ($store['store_id'] == $store_id) { ?>
-                    <option value="<?php echo $store['store_id']; ?>" selected="selected"><?php echo $store['name']; ?></option>
-                    <?php } else { ?>
-                    <option value="<?php echo $store['store_id']; ?>"><?php echo $store['name']; ?></option>
-                    <?php } ?>
-                    <?php } ?>
-                  </select></td>
-              </tr>
-              <tr>
-                <td><?php echo $entry_customer; ?></td>
-                <td><input type="text" name="customer" value="<?php echo $customer; ?>" />
-                  <input type="hidden" name="customer_id" value="<?php echo $customer_id; ?>" />
-                  <input type="hidden" name="customer_group_id" value="<?php echo $customer_group_id; ?>" /></td>
-              </tr>
-              <tr>
-                <td class="left"><?php echo $entry_customer_group; ?></td>
-                <td class="left"><select id="customer_group_id" <?php echo ($customer_id ? 'disabled="disabled"' : ''); ?>>
-                    <?php foreach ($customer_groups as $customer_group) { ?>
-                    <?php if ($customer_group['customer_group_id'] == $customer_group_id) { ?>
-                    <option value="<?php echo $customer_group['customer_group_id']; ?>" selected="selected"><?php echo $customer_group['name']; ?></option>
-                    <?php } else { ?>
-                    <option value="<?php echo $customer_group['customer_group_id']; ?>"><?php echo $customer_group['name']; ?></option>
-                    <?php } ?>
-                    <?php } ?>
-                  </select></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_firstname; ?></td>
-                <td><input type="text" name="firstname" value="<?php echo $firstname; ?>" />
-                  <?php if ($error_firstname) { ?>
-                  <span class="error"><?php echo $error_firstname; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_lastname; ?></td>
-                <td><input type="text" name="lastname" value="<?php echo $lastname; ?>" />
-                  <?php if ($error_lastname) { ?>
-                  <span class="error"><?php echo $error_lastname; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_email; ?></td>
-                <td><input type="text" name="email" value="<?php echo $email; ?>" />
-                  <?php if ($error_email) { ?>
-                  <span class="error"><?php echo $error_email; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_telephone; ?></td>
-                <td><input type="text" name="telephone" value="<?php echo $telephone; ?>" />
-                  <?php if ($error_telephone) { ?>
-                  <span class="error"><?php echo $error_telephone; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><?php echo $entry_fax; ?></td>
-                <td><input type="text" name="fax" value="<?php echo $fax; ?>" /></td>
-              </tr>
-            </table>
+            <div class="control-group">
+              <label class="control-label" for="input-store"><?php echo $entry_store; ?></label>
+              <div class="controls">
+                <select name="store_id" id="input-store">
+                  <option value="0"><?php echo $text_default; ?></option>
+                  <?php foreach ($stores as $store) { ?>
+                  <?php if ($store['store_id'] == $store_id) { ?>
+                  <option value="<?php echo $store['store_id']; ?>" selected="selected"><?php echo $store['name']; ?></option>
+                  <?php } else { ?>
+                  <option value="<?php echo $store['store_id']; ?>"><?php echo $store['name']; ?></option>
+                  <?php } ?>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-customer"><?php echo $entry_customer; ?></label>
+              <div class="controls">
+                <input type="text" name="customer" value="<?php echo $customer; ?>" placeholder="<?php echo $entry_customer; ?>" id="input-customer" />
+                <input type="hidden" name="customer_id" value="<?php echo $customer_id; ?>" />
+                <input type="hidden" name="customer_group_id" value="<?php echo $customer_group_id; ?>" />
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-customer-group"><?php echo $entry_customer_group; ?></label>
+              <div class="controls">
+                <select id="input-customer-group" <?php echo ($customer_id ? 'disabled="disabled"' : ''); ?>>
+                  <?php foreach ($customer_groups as $customer_group) { ?>
+                  <?php if ($customer_group['customer_group_id'] == $customer_group_id) { ?>
+                  <option value="<?php echo $customer_group['customer_group_id']; ?>" selected="selected"><?php echo $customer_group['name']; ?></option>
+                  <?php } else { ?>
+                  <option value="<?php echo $customer_group['customer_group_id']; ?>"><?php echo $customer_group['name']; ?></option>
+                  <?php } ?>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-firstname"><span class="required">*</span> <?php echo $entry_firstname; ?></label>
+              <div class="controls">
+                <input type="text" name="firstname" value="<?php echo $firstname; ?>" id="input-firstname" />
+                <?php if ($error_firstname) { ?>
+                <span class="error"><?php echo $error_firstname; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-lastname"><span class="required">*</span> <?php echo $entry_lastname; ?></label>
+              <div class="controls">
+                <input type="text" name="lastname" value="<?php echo $lastname; ?>" id="input-lastname" />
+                <?php if ($error_lastname) { ?>
+                <span class="error"><?php echo $error_lastname; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-email"><span class="required">*</span> <?php echo $entry_email; ?></label>
+              <div class="controls">
+                <input type="text" name="email" value="<?php echo $email; ?>" id="input-email" />
+                <?php if ($error_email) { ?>
+                <span class="error"><?php echo $error_email; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-telephone"><span class="required">*</span> <?php echo $entry_telephone; ?></label>
+              <div class="controls">
+                <input type="text" name="telephone" value="<?php echo $telephone; ?>" id="input-telephone" />
+                <?php if ($error_telephone) { ?>
+                <span class="error"><?php echo $error_telephone; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-fax"><?php echo $entry_fax; ?></label>
+              <div class="controls">
+                <input type="text" name="fax" value="<?php echo $fax; ?>" id="input-fax" />
+              </div>
+            </div>
           </div>
           <div class="tab-pane" id="tab-payment">
-            <table class="form">
-              <tr>
-                <td><?php echo $entry_address; ?></td>
-                <td><select name="payment_address">
-                    <option value="0" selected="selected"><?php echo $text_none; ?></option>
-                    <?php foreach ($addresses as $address) { ?>
-                    <option value="<?php echo $address['address_id']; ?>"><?php echo $address['firstname'] . ' ' . $address['lastname'] . ', ' . $address['address_1'] . ', ' . $address['city'] . ', ' . $address['country']; ?></option>
-                    <?php } ?>
-                  </select></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_firstname; ?></td>
-                <td><input type="text" name="payment_firstname" value="<?php echo $payment_firstname; ?>" />
-                  <?php if ($error_payment_firstname) { ?>
-                  <span class="error"><?php echo $error_payment_firstname; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_lastname; ?></td>
-                <td><input type="text" name="payment_lastname" value="<?php echo $payment_lastname; ?>" />
-                  <?php if ($error_payment_lastname) { ?>
-                  <span class="error"><?php echo $error_payment_lastname; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><?php echo $entry_company; ?></td>
-                <td><input type="text" name="payment_company" value="<?php echo $payment_company; ?>" /></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_address_1; ?></td>
-                <td><input type="text" name="payment_address_1" value="<?php echo $payment_address_1; ?>" />
-                  <?php if ($error_payment_address_1) { ?>
-                  <span class="error"><?php echo $error_payment_address_1; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><?php echo $entry_address_2; ?></td>
-                <td><input type="text" name="payment_address_2" value="<?php echo $payment_address_2; ?>" /></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_city; ?></td>
-                <td><input type="text" name="payment_city" value="<?php echo $payment_city; ?>" />
-                  <?php if ($error_payment_city) { ?>
-                  <span class="error"><?php echo $error_payment_city; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><span id="payment-postcode-required" class="required">*</span> <?php echo $entry_postcode; ?></td>
-                <td><input type="text" name="payment_postcode" value="<?php echo $payment_postcode; ?>" />
-                  <?php if ($error_payment_postcode) { ?>
-                  <span class="error"><?php echo $error_payment_postcode; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_country; ?></td>
-                <td><select name="payment_country_id">
-                    <option value=""><?php echo $text_select; ?></option>
-                    <?php foreach ($countries as $country) { ?>
-                    <?php if ($country['country_id'] == $payment_country_id) { ?>
-                    <option value="<?php echo $country['country_id']; ?>" selected="selected"><?php echo $country['name']; ?></option>
-                    <?php } else { ?>
-                    <option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
-                    <?php } ?>
-                    <?php } ?>
-                  </select>
-                  <?php if ($error_payment_country) { ?>
-                  <span class="error"><?php echo $error_payment_country; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_zone; ?></td>
-                <td><select name="payment_zone_id">
-                  </select>
-                  <?php if ($error_payment_zone) { ?>
-                  <span class="error"><?php echo $error_payment_zone; ?></span>
-                  <?php } ?></td>
-              </tr>
-            </table>
+            <div class="control-group">
+              <label class="control-label" for="input-payment-address"><?php echo $entry_address; ?></label>
+              <div class="controls">
+                <select name="payment_address" id="input-payment-address">
+                  <option value="0" selected="selected"><?php echo $text_none; ?></option>
+                  <?php foreach ($addresses as $address) { ?>
+                  <option value="<?php echo $address['address_id']; ?>"><?php echo $address['firstname'] . ' ' . $address['lastname'] . ', ' . $address['address_1'] . ', ' . $address['city'] . ', ' . $address['country']; ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-payment-firstname"><span class="required">*</span> <?php echo $entry_firstname; ?></label>
+              <div class="controls">
+                <input type="text" name="payment_firstname" value="<?php echo $payment_firstname; ?>" id="input-payment-firstname" />
+                <?php if ($error_payment_firstname) { ?>
+                <span class="error"><?php echo $error_payment_firstname; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-payment-lastname"><span class="required">*</span> <?php echo $entry_lastname; ?></label>
+              <div class="controls">
+                <input type="text" name="payment_lastname" value="<?php echo $payment_lastname; ?>" id="input-payment-lastname" />
+                <?php if ($error_payment_lastname) { ?>
+                <span class="error"><?php echo $error_payment_lastname; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-payment-company"><?php echo $entry_company; ?></label>
+              <div class="controls">
+                <input type="text" name="payment_company" value="<?php echo $payment_company; ?>" id="input-payment-company" />
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-payment-address-1"><span class="required">*</span> <?php echo $entry_address_1; ?></label>
+              <div class="controls">
+                <input type="text" name="payment_address_1" value="<?php echo $payment_address_1; ?>" id="input-payment-address-1" />
+                <?php if ($error_payment_address_1) { ?>
+                <span class="error"><?php echo $error_payment_address_1; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-payment-address-2"><?php echo $entry_address_2; ?></label>
+              <div class="controls">
+                <input type="text" name="payment_address_2" value="<?php echo $payment_address_2; ?>" id="input-payment-address-2" />
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-payment-city"><span class="required">*</span> <?php echo $entry_city; ?></label>
+              <div class="controls">
+                <input type="text" name="payment_city" value="<?php echo $payment_city; ?>" id="input-payment-city" />
+                <?php if ($error_payment_city) { ?>
+                <span class="error"><?php echo $error_payment_city; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-payment-postcode"><span id="payment-postcode-required" class="required">*</span> <?php echo $entry_postcode; ?></label>
+              <div class="controls">
+                <input type="text" name="payment_postcode" value="<?php echo $payment_postcode; ?>" id="input-payment-postcode" />
+                <?php if ($error_payment_postcode) { ?>
+                <span class="error"><?php echo $error_payment_postcode; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-payment-country"><span class="required">*</span> <?php echo $entry_country; ?></label>
+              <div class="controls">
+                <select name="payment_country_id" id="input-payment-country">
+                  <option value=""><?php echo $text_select; ?></option>
+                  <?php foreach ($countries as $country) { ?>
+                  <?php if ($country['country_id'] == $payment_country_id) { ?>
+                  <option value="<?php echo $country['country_id']; ?>" selected="selected"><?php echo $country['name']; ?></option>
+                  <?php } else { ?>
+                  <option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
+                  <?php } ?>
+                  <?php } ?>
+                </select>
+                <?php if ($error_payment_country) { ?>
+                <span class="error"><?php echo $error_payment_country; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-payment-zone"><span class="required">*</span> <?php echo $entry_zone; ?></label>
+              <div class="controls">
+                <select name="payment_zone_id" id="input-payment-zone">
+                </select>
+                <?php if ($error_payment_zone) { ?>
+                <span class="error"><?php echo $error_payment_zone; ?></span>
+                <?php } ?>
+              </div>
+            </div>
           </div>
           <div class="tab-pane" id="tab-shipping">
-            <table class="form">
-              <tr>
-                <td><?php echo $entry_address; ?></td>
-                <td><select name="shipping_address">
-                    <option value="0" selected="selected"><?php echo $text_none; ?></option>
-                    <?php foreach ($addresses as $address) { ?>
-                    <option value="<?php echo $address['address_id']; ?>"><?php echo $address['firstname'] . ' ' . $address['lastname'] . ', ' . $address['address_1'] . ', ' . $address['city'] . ', ' . $address['country']; ?></option>
-                    <?php } ?>
-                  </select></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_firstname; ?></td>
-                <td><input type="text" name="shipping_firstname" value="<?php echo $shipping_firstname; ?>" />
-                  <?php if ($error_shipping_firstname) { ?>
-                  <span class="error"><?php echo $error_shipping_firstname; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_lastname; ?></td>
-                <td><input type="text" name="shipping_lastname" value="<?php echo $shipping_lastname; ?>" />
-                  <?php if ($error_shipping_lastname) { ?>
-                  <span class="error"><?php echo $error_shipping_lastname; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><?php echo $entry_company; ?></td>
-                <td><input type="text" name="shipping_company" value="<?php echo $shipping_company; ?>" /></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_address_1; ?></td>
-                <td><input type="text" name="shipping_address_1" value="<?php echo $shipping_address_1; ?>" />
-                  <?php if ($error_shipping_address_1) { ?>
-                  <span class="error"><?php echo $error_shipping_address_1; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><?php echo $entry_address_2; ?></td>
-                <td><input type="text" name="shipping_address_2" value="<?php echo $shipping_address_2; ?>" /></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_city; ?></td>
-                <td><input type="text" name="shipping_city" value="<?php echo $shipping_city; ?>" /></td>
-              </tr>
-              <tr>
-                <td><span id="shipping-postcode-required" class="required">*</span> <?php echo $entry_postcode; ?></td>
-                <td><input type="text" name="shipping_postcode" value="<?php echo $shipping_postcode; ?>" />
-                  <?php if ($error_shipping_postcode) { ?>
-                  <span class="error"><?php echo $error_shipping_postcode; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_country; ?></td>
-                <td><select name="shipping_country_id">
-                    <option value=""><?php echo $text_select; ?></option>
-                    <?php foreach ($countries as $country) { ?>
-                    <?php if ($country['country_id'] == $shipping_country_id) { ?>
-                    <option value="<?php echo $country['country_id']; ?>" selected="selected"><?php echo $country['name']; ?></option>
-                    <?php } else { ?>
-                    <option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
-                    <?php } ?>
-                    <?php } ?>
-                  </select>
-                  <?php if ($error_shipping_country) { ?>
-                  <span class="error"><?php echo $error_shipping_country; ?></span>
-                  <?php } ?></td>
-              </tr>
-              <tr>
-                <td><span class="required">*</span> <?php echo $entry_zone; ?></td>
-                <td><select name="shipping_zone_id">
-                  </select>
-                  <?php if ($error_shipping_zone) { ?>
-                  <span class="error"><?php echo $error_shipping_zone; ?></span>
-                  <?php } ?></td>
-              </tr>
-            </table>
+            <div class="control-group">
+              <label class="control-label" for="input-shipping-address"><?php echo $entry_address; ?></label>
+              <div class="controls">
+                <select name="shipping_address" id="input-shipping-address">
+                  <option value="0" selected="selected"><?php echo $text_none; ?></option>
+                  <?php foreach ($addresses as $address) { ?>
+                  <option value="<?php echo $address['address_id']; ?>"><?php echo $address['firstname'] . ' ' . $address['lastname'] . ', ' . $address['address_1'] . ', ' . $address['city'] . ', ' . $address['country']; ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-shipping-firstname"><span class="required">*</span> <?php echo $entry_firstname; ?></label>
+              <div class="controls">
+                <input type="text" name="shipping_firstname" value="<?php echo $shipping_firstname; ?>" id="input-shipping-firstname" />
+                <?php if ($error_shipping_firstname) { ?>
+                <span class="error"><?php echo $error_shipping_firstname; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-shipping-lastname"><span class="required">*</span> <?php echo $entry_lastname; ?></label>
+              <div class="controls">
+                <input type="text" name="shipping_lastname" value="<?php echo $shipping_lastname; ?>" id="input-shipping-lastname" />
+                <?php if ($error_shipping_lastname) { ?>
+                <span class="error"><?php echo $error_shipping_lastname; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-shipping-company"><?php echo $entry_company; ?></label>
+              <div class="controls">
+                <input type="text" name="shipping_company" value="<?php echo $shipping_company; ?>" id="input-shipping-company" />
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-shipping-address-1"><span class="required">*</span> <?php echo $entry_address_1; ?></label>
+              <div class="controls">
+                <input type="text" name="shipping_address_1" value="<?php echo $shipping_address_1; ?>" id="input-shipping-address-1" />
+                <?php if ($error_shipping_address_1) { ?>
+                <span class="error"><?php echo $error_shipping_address_1; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-shipping-address-2"><?php echo $entry_address_2; ?></label>
+              <div class="controls">
+                <input type="text" name="shipping_address_2" value="<?php echo $shipping_address_2; ?>" id="input-shipping-address-2" />
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-shipping-city"><span class="required">*</span> <?php echo $entry_city; ?></label>
+              <div class="controls">
+                <input type="text" name="shipping_city" value="<?php echo $shipping_city; ?>" id="input-shipping-city" />
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-shipping-postcode"><span id="shipping-postcode-required" class="required">*</span> <?php echo $entry_postcode; ?></label>
+              <div class="controls">
+                <input type="text" name="shipping_postcode" value="<?php echo $shipping_postcode; ?>" id="input-shipping-postcode" />
+                <?php if ($error_shipping_postcode) { ?>
+                <span class="error"><?php echo $error_shipping_postcode; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-shipping-country"><span class="required">*</span> <?php echo $entry_country; ?></label>
+              <div class="controls">
+                <select name="shipping_country_id" id="input-shipping-country">
+                  <option value=""><?php echo $text_select; ?></option>
+                  <?php foreach ($countries as $country) { ?>
+                  <?php if ($country['country_id'] == $shipping_country_id) { ?>
+                  <option value="<?php echo $country['country_id']; ?>" selected="selected"><?php echo $country['name']; ?></option>
+                  <?php } else { ?>
+                  <option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
+                  <?php } ?>
+                  <?php } ?>
+                </select>
+                <?php if ($error_shipping_country) { ?>
+                <span class="error"><?php echo $error_shipping_country; ?></span>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="input-shipping-zone"><span class="required">*</span> <?php echo $entry_zone; ?></label>
+              <div class="controls">
+                <select name="shipping_zone_id" id="input-shipping-zone">
+                </select>
+                <?php if ($error_shipping_zone) { ?>
+                <span class="error"><?php echo $error_shipping_zone; ?></span>
+                <?php } ?>
+              </div>
+            </div>
           </div>
           <div class="tab-pane" id="tab-product">
             <table class="table table-striped table-bordered table-hover">
@@ -311,6 +361,11 @@
                 <?php } ?>
               </tbody>
             </table>
+            
+            
+            
+            
+            
             <table class="table table-striped table-bordered table-hover">
               <thead>
                 <tr>
@@ -532,7 +587,7 @@
                   <td class="left"><input type="text" name="reward" value="" /></td>
                 </tr>
                 <tr>
-                  <td class="left"><?php echo $entry_order_status; ?></td>
+                  <td class="left"><?php echo $entry_status; ?></td>
                   <td class="left"><select name="order_status_id">
                       <?php foreach ($order_statuses as $order_status) { ?>
                       <?php if ($order_status['order_status_id'] == $order_status_id) { ?>
@@ -642,11 +697,11 @@ $('input[name=\'customer\']').catcomplete({
    	}
 });
 
-$('select[id=\'customer_group_id\']').on('change', function() {
+$('#customer-group').on('change', function() {
 
 });
 
-$('select[id=\'customer_group_id\']').trigger('change');
+$('#customer-group').trigger('change');
 
 $('input[name=\'affiliate\']').autocomplete({
 	delay: 500,
