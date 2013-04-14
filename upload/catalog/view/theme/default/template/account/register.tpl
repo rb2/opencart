@@ -1,10 +1,10 @@
 <?php echo $header; ?><?php echo $column_left; ?><?php echo $column_right; ?>
 <div id="content"><?php echo $content_top; ?>
-  <div class="breadcrumb">
+  <ul class="breadcrumb">
     <?php foreach ($breadcrumbs as $breadcrumb) { ?>
-    <?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
+    <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
     <?php } ?>
-  </div>
+  </ul>
   <h1><?php echo $heading_title; ?></h1>
   <p><?php echo $text_account_already; ?></p>
   <h2><?php echo $text_your_details; ?></h2>
@@ -116,13 +116,13 @@
   <div class="buttons">
     <div class="right"><?php echo $text_agree; ?>
       <input type="checkbox" name="agree" value="1" />
-      <input type="button" value="<?php echo $button_continue; ?>" id="button-register" class="button" />
+      <input type="button" value="<?php echo $button_continue; ?>" id="button-register" class="btn" />
     </div>
   </div>
   <?php } else { ?>
   <div class="buttons">
     <div class="right">
-      <input type="button" value="<?php echo $button_continue; ?>" id="button-register" class="button" />
+      <input type="button" value="<?php echo $button_continue; ?>" id="button-register" class="btn" />
     </div>
   </div>
   <?php } ?>
@@ -154,7 +154,7 @@ $('#button-register').on('click', function() {
 				location = json['redirect'];				
 			} else if (json['error']) {
 				if (json['error']['warning']) {
-					$('#notification').html('<div class="warning" style="display: none;">' + json['error']['warning'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
+					$('#notification').html('<div class="alert alert-error" style="display: none;">' + json['error']['warning'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
 					
 					$('.warning').fadeIn('slow');
 				}
@@ -281,22 +281,22 @@ $('select[name=\'customer_group_id\']').on('change', function() {
 				
 				// File
 				if (custom_field['type'] == 'file') {
-					html += '<td><input type="button" value="<?php echo $button_upload; ?>" id="button-custom-field' + custom_field['custom_field_id'] + '" class="button" onclick="upload(\'' + custom_field['custom_field_id'] + '\');" /><input type="hidden" name="custom_field[' + custom_field['custom_field_id'] + ']" value="" /></td>';
+					html += '<td><input type="button" value="<?php echo $button_upload; ?>" id="button-custom-field' + custom_field['custom_field_id'] + '" class="btn" onclick="upload(\'' + custom_field['custom_field_id'] + '\');" /><input type="hidden" name="custom_field[' + custom_field['custom_field_id'] + ']" value="" /></td>';
 				}
 				
 				// Date
 				if (custom_field['type'] == 'date') {
-					html += '<td><input type="text" name="custom_field[' + custom_field['custom_field_id'] + ']" value="' + custom_field['value'] + '" class="date" /></td>';
+					html += '<td><input type="date" name="custom_field[' + custom_field['custom_field_id'] + ']" value="' + custom_field['value'] + '" class="input-medium" /></td>';
 				}			
 				
 				// Datetime
 				if (custom_field['type'] == 'datetime') {
-					html += '<td><input type="text" name="custom_field[' + custom_field['custom_field_id'] + ']" value="' + custom_field['value'] + '" class="datetime" /></td>';
+					html += '<td><input type="datetime-local" name="custom_field[' + custom_field['custom_field_id'] + ']" value="' + custom_field['value'] + '" /></td>';
 				}		
 							
 				// Time
 				if (custom_field['type'] == 'time') {
-					html += '<td><input type="text" name="custom_field[' + custom_field['custom_field_id'] + ']" value="' + custom_field['value'] + '" class="time" /></td>';
+					html += '<td><input type="time" name="custom_field[' + custom_field['custom_field_id'] + ']" value="' + custom_field['value'] + '" class="input-mini" /></td>';
 				}	
 								
 				html += '<tr>';
@@ -309,18 +309,6 @@ $('select[name=\'customer_group_id\']').on('change', function() {
 					$('input[name=\'' + custom_field['position'] + '\']').parent().parent().after(html);
 				}
 			}
-			
-			if ($.browser.msie && $.browser.version == 6) {
-				$('.date, .datetime, .time').bgIframe();
-			}
-			
-			$('.date').datepicker({dateFormat: 'yy-mm-dd'});
-			$('.datetime').datetimepicker({
-				dateFormat: 'yy-mm-dd',
-				timeFormat: 'h:m'
-			});
-			
-			$('.time').timepicker({timeFormat: 'h:m'});		
 		},
 		error: function(xhr, ajaxOptions, thrownError) {
 			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -415,7 +403,6 @@ $('select[name=\'country_id\']').on('change', function() {
 
 $('select[name=\'country_id\']').trigger('change');
 //--></script> 
-<script type="text/javascript" src="catalog/view/javascript/jquery/ui/jquery-ui-timepicker-addon.js"></script> 
 <script type="text/javascript"><!--
 $(document).ready(function() {
 	$('.colorbox').colorbox({

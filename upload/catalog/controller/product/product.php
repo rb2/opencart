@@ -8,9 +8,8 @@ class ControllerProductProduct extends Controller {
 		$this->data['breadcrumbs'] = array();
 
 		$this->data['breadcrumbs'][] = array(
-			'text'      => $this->language->get('text_home'),
-			'href'      => $this->url->link('common/home'),			
-			'separator' => false
+			'text' => $this->language->get('text_home'),
+			'href' => $this->url->link('common/home')
 		);
 		
 		$this->load->model('catalog/category');	
@@ -33,9 +32,8 @@ class ControllerProductProduct extends Controller {
 				
 				if ($category_info) {
 					$this->data['breadcrumbs'][] = array(
-						'text'      => $category_info['name'],
-						'href'      => $this->url->link('product/category', 'path=' . $path),
-						'separator' => $this->language->get('text_separator')
+						'text' => $category_info['name'],
+						'href' => $this->url->link('product/category', 'path=' . $path)
 					);
 				}
 			}
@@ -63,9 +61,8 @@ class ControllerProductProduct extends Controller {
 				}
 										
 				$this->data['breadcrumbs'][] = array(
-					'text'      => $category_info['name'],
-					'href'      => $this->url->link('product/category', 'path=' . $this->request->get['path']),
-					'separator' => $this->language->get('text_separator')
+					'text' => $category_info['name'],
+					'href' => $this->url->link('product/category', 'path=' . $this->request->get['path'])
 				);
 			}
 		}
@@ -74,9 +71,8 @@ class ControllerProductProduct extends Controller {
 		
 		if (isset($this->request->get['manufacturer_id'])) {
 			$this->data['breadcrumbs'][] = array( 
-				'text'      => $this->language->get('text_brand'),
-				'href'      => $this->url->link('product/manufacturer'),
-				'separator' => $this->language->get('text_separator')
+				'text' => $this->language->get('text_brand'),
+				'href' => $this->url->link('product/manufacturer')
 			);	
 	
 			$url = '';
@@ -101,9 +97,8 @@ class ControllerProductProduct extends Controller {
 
 			if ($manufacturer_info) {	
 				$this->data['breadcrumbs'][] = array(
-					'text'	    => $manufacturer_info['name'],
-					'href'	    => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id'] . $url),					
-					'separator' => $this->language->get('text_separator')
+					'text' => $manufacturer_info['name'],
+					'href' => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id'] . $url)
 				);
 			}
 		}
@@ -148,9 +143,8 @@ class ControllerProductProduct extends Controller {
 			}
 												
 			$this->data['breadcrumbs'][] = array(
-				'text'      => $this->language->get('text_search'),
-				'href'      => $this->url->link('product/search', $url),
-				'separator' => $this->language->get('text_separator')
+				'text' => $this->language->get('text_search'),
+				'href' => $this->url->link('product/search', $url)
 			); 	
 		}
 		
@@ -216,9 +210,8 @@ class ControllerProductProduct extends Controller {
 			}
 																		
 			$this->data['breadcrumbs'][] = array(
-				'text'      => $product_info['name'],
-				'href'      => $this->url->link('product/product', $url . '&product_id=' . $this->request->get['product_id']),
-				'separator' => $this->language->get('text_separator')
+				'text' => $product_info['name'],
+				'href' => $this->url->link('product/product', $url . '&product_id=' . $this->request->get['product_id'])
 			);			
 			
 			$this->document->setTitle($product_info['name']);
@@ -274,7 +267,7 @@ class ControllerProductProduct extends Controller {
 			$this->data['tab_review'] = sprintf($this->language->get('tab_review'), $product_info['reviews']);
 			$this->data['tab_related'] = $this->language->get('tab_related');
 			
-			$this->data['product_id'] = $this->request->get['product_id'];
+			$this->data['product_id'] = (int)$this->request->get['product_id'];
 			$this->data['manufacturer'] = $product_info['manufacturer'];
 			$this->data['manufacturers'] = $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $product_info['manufacturer_id']);
 			$this->data['model'] = $product_info['model'];
@@ -526,9 +519,8 @@ class ControllerProductProduct extends Controller {
 			}
 														
       		$this->data['breadcrumbs'][] = array(
-        		'text'      => $this->language->get('text_error'),
-				'href'      => $this->url->link('product/product', $url . '&product_id=' . $product_id),
-        		'separator' => $this->language->get('text_separator')
+        		'text' => $this->language->get('text_error'),
+				'href' => $this->url->link('product/product', $url . '&product_id=' . $product_id)
       		);			
 		
       		$this->document->setTitle($this->language->get('text_error'));
@@ -594,10 +586,11 @@ class ControllerProductProduct extends Controller {
 		$pagination->total = $review_total;
 		$pagination->page = $page;
 		$pagination->limit = 5; 
-		$pagination->text = $this->language->get('text_pagination');
 		$pagination->url = $this->url->link('product/product/review', 'product_id=' . $this->request->get['product_id'] . '&page={page}');
 			
 		$this->data['pagination'] = $pagination->render();
+		
+		$this->data['results'] = sprintf($this->language->get('text_pagination'), ($review_total) ? (($page - 1) * 5) + 1 : 0, ((($page - 1) * 5) > ($review_total - 5)) ? $review_total : ((($page - 1) * 5) + 5), $review_total, ceil($review_total / 5));
 		
 		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/product/review.tpl')) {
 			$this->template = $this->config->get('config_template') . '/template/product/review.tpl';
@@ -643,13 +636,37 @@ class ControllerProductProduct extends Controller {
 	}
 	
 	public function captcha() {
-		$this->load->library('captcha');
+		$this->session->data['captcha'] = substr(sha1(mt_rand()), 17, 6);
 		
-		$captcha = new Captcha();
-		
-		$this->session->data['captcha'] = $captcha->getCode();
-		
-		$captcha->showImage();
+		$image = imagecreatetruecolor(150, 35);
+
+		$width = imagesx($image); 
+		$height = imagesy($image);
+
+		$black = imagecolorallocate($image, 0, 0, 0); 
+		$white = imagecolorallocate($image, 255, 255, 255); 
+		$red = imagecolorallocatealpha($image, 255, 0, 0, 75); 
+		$green = imagecolorallocatealpha($image, 0, 255, 0, 75); 
+		$blue = imagecolorallocatealpha($image, 0, 0, 255, 75); 
+
+		imagefilledrectangle($image, 0, 0, $width, $height, $white); 
+
+		imagefilledellipse($image, ceil(rand(5, 145)), ceil(rand(0, 35)), 30, 30, $red); 
+		imagefilledellipse($image, ceil(rand(5, 145)), ceil(rand(0, 35)), 30, 30, $green); 
+		imagefilledellipse($image, ceil(rand(5, 145)), ceil(rand(0, 35)), 30, 30, $blue); 
+
+		imagefilledrectangle($image, 0, 0, $width, 0, $black); 
+		imagefilledrectangle($image, $width - 1, 0, $width - 1, $height - 1, $black); 
+		imagefilledrectangle($image, 0, 0, 0, $height - 1, $black); 
+		imagefilledrectangle($image, 0, $height - 1, $width, $height - 1, $black); 
+
+		imagestring($image, 10, intval(($width - (strlen($this->session->data['captcha']) * 9)) / 2),  intval(($height - 15) / 2), $this->session->data['captcha'], $black);
+
+		header('Content-type: image/jpeg');
+
+		imagejpeg($image);
+
+		imagedestroy($image);
 	}
 	
 	public function upload() {

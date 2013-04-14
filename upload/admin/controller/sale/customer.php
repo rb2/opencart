@@ -372,15 +372,13 @@ class ControllerSaleCustomer extends Controller {
   		$this->data['breadcrumbs'] = array();
 
    		$this->data['breadcrumbs'][] = array(
-       		'text'      => $this->language->get('text_home'),
-			'href'      => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL'),
-      		'separator' => false
+       		'text' => $this->language->get('text_home'),
+			'href' => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL')
    		);
 
    		$this->data['breadcrumbs'][] = array(
-       		'text'      => $this->language->get('heading_title'),
-			'href'      => $this->url->link('sale/customer', 'token=' . $this->session->data['token'] . $url, 'SSL'),
-      		'separator' => ' :: '
+       		'text' => $this->language->get('heading_title'),
+			'href' => $this->url->link('sale/customer', 'token=' . $this->session->data['token'] . $url, 'SSL')
    		);
 		
 		$this->data['approve'] = $this->url->link('sale/customer/approve', 'token=' . $this->session->data['token'] . $url, 'SSL');
@@ -560,10 +558,11 @@ class ControllerSaleCustomer extends Controller {
 		$pagination->total = $customer_total;
 		$pagination->page = $page;
 		$pagination->limit = $this->config->get('config_admin_limit');
-		$pagination->text = $this->language->get('text_pagination');
 		$pagination->url = $this->url->link('sale/customer', 'token=' . $this->session->data['token'] . $url . '&page={page}', 'SSL');
 			
 		$this->data['pagination'] = $pagination->render();
+		
+		$this->data['results'] = sprintf($this->language->get('text_pagination'), ($customer_total) ? (($page - 1) * $this->config->get('config_admin_limit')) + 1 : 0, ((($page - 1) * $this->config->get('config_admin_limit')) > ($customer_total - $this->config->get('config_admin_limit'))) ? $customer_total : ((($page - 1) * $this->config->get('config_admin_limit')) + $this->config->get('config_admin_limit')), $customer_total, ceil($customer_total / $this->config->get('config_admin_limit')));
 
 		$this->data['filter_name'] = $filter_name;
 		$this->data['filter_email'] = $filter_email;
@@ -600,7 +599,6 @@ class ControllerSaleCustomer extends Controller {
     	$this->data['text_disabled'] = $this->language->get('text_disabled');
 		$this->data['text_select'] = $this->language->get('text_select');
 		$this->data['text_none'] = $this->language->get('text_none');
-    	$this->data['text_wait'] = $this->language->get('text_wait');
 		$this->data['text_no_results'] = $this->language->get('text_no_results');
 		$this->data['text_add_ban_ip'] = $this->language->get('text_add_ban_ip');
 		$this->data['text_remove_ban_ip'] = $this->language->get('text_remove_ban_ip');
@@ -632,6 +630,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->data['entry_description'] = $this->language->get('entry_description');
 		$this->data['entry_amount'] = $this->language->get('entry_amount');
 		$this->data['entry_points'] = $this->language->get('entry_points');
+ 
+		$this->data['help_points'] = $this->language->get('help_points');
  
 		$this->data['button_save'] = $this->language->get('button_save');
     	$this->data['button_cancel'] = $this->language->get('button_cancel');
@@ -781,15 +781,13 @@ class ControllerSaleCustomer extends Controller {
   		$this->data['breadcrumbs'] = array();
 
    		$this->data['breadcrumbs'][] = array(
-       		'text'      => $this->language->get('text_home'),
-			'href'      => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL'),
-      		'separator' => false
+       		'text' => $this->language->get('text_home'),
+			'href' => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL')
    		);
 
    		$this->data['breadcrumbs'][] = array(
-       		'text'      => $this->language->get('heading_title'),
-			'href'      => $this->url->link('sale/customer', 'token=' . $this->session->data['token'] . $url, 'SSL'),
-      		'separator' => ' :: '
+       		'text' => $this->language->get('heading_title'),
+			'href' => $this->url->link('sale/customer', 'token=' . $this->session->data['token'] . $url, 'SSL')
    		);
 
 		if (!isset($this->request->get['customer_id'])) {
@@ -1078,15 +1076,13 @@ class ControllerSaleCustomer extends Controller {
 			$this->data['breadcrumbs'] = array();
 
 			$this->data['breadcrumbs'][] = array(
-				'text'      => $this->language->get('text_home'),
-				'href'      => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL'),
-				'separator' => false
+				'text' => $this->language->get('text_home'),
+				'href' => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL')
 			);
 
 			$this->data['breadcrumbs'][] = array(
-				'text'      => $this->language->get('heading_title'),
-				'href'      => $this->url->link('error/not_found', 'token=' . $this->session->data['token'], 'SSL'),
-				'separator' => ' :: '
+				'text' => $this->language->get('heading_title'),
+				'href' => $this->url->link('error/not_found', 'token=' . $this->session->data['token'], 'SSL')
 			);
 		
 			$this->template = 'error/not_found.tpl';
@@ -1145,11 +1141,12 @@ class ControllerSaleCustomer extends Controller {
 		$pagination = new Pagination();
 		$pagination->total = $transaction_total;
 		$pagination->page = $page;
-		$pagination->limit = 10; 
-		$pagination->text = $this->language->get('text_pagination');
+		$pagination->limit = 10;
 		$pagination->url = $this->url->link('sale/customer/history', 'token=' . $this->session->data['token'] . '&customer_id=' . $this->request->get['customer_id'] . '&page={page}', 'SSL');
 			
 		$this->data['pagination'] = $pagination->render();
+		
+		$this->data['results'] = sprintf($this->language->get('text_pagination'), ($transaction_total) ? (($page - 1) * $this->config->get('config_admin_limit')) + 1 : 0, ((($page - 1) * $this->config->get('config_admin_limit')) > ($transaction_total - $this->config->get('config_admin_limit'))) ? $transaction_total : ((($page - 1) * $this->config->get('config_admin_limit')) + $this->config->get('config_admin_limit')), $transaction_total, ceil($transaction_total / $this->config->get('config_admin_limit')));
 
 		$this->template = 'sale/customer_history.tpl';		
 		
@@ -1208,10 +1205,11 @@ class ControllerSaleCustomer extends Controller {
 		$pagination->total = $transaction_total;
 		$pagination->page = $page;
 		$pagination->limit = 10; 
-		$pagination->text = $this->language->get('text_pagination');
 		$pagination->url = $this->url->link('sale/customer/transaction', 'token=' . $this->session->data['token'] . '&customer_id=' . $this->request->get['customer_id'] . '&page={page}', 'SSL');
 			
 		$this->data['pagination'] = $pagination->render();
+		
+		$this->data['results'] = sprintf($this->language->get('text_pagination'), ($transaction_total) ? (($page - 1) * $this->config->get('config_admin_limit')) + 1 : 0, ((($page - 1) * $this->config->get('config_admin_limit')) > ($transaction_total - $this->config->get('config_admin_limit'))) ? $transaction_total : ((($page - 1) * $this->config->get('config_admin_limit')) + $this->config->get('config_admin_limit')), $transaction_total, ceil($transaction_total / $this->config->get('config_admin_limit')));
 
 		$this->template = 'sale/customer_transaction.tpl';		
 		
@@ -1269,11 +1267,12 @@ class ControllerSaleCustomer extends Controller {
 		$pagination = new Pagination();
 		$pagination->total = $reward_total;
 		$pagination->page = $page;
-		$pagination->limit = 10; 
-		$pagination->text = $this->language->get('text_pagination');
+		$pagination->limit = 10;
 		$pagination->url = $this->url->link('sale/customer/reward', 'token=' . $this->session->data['token'] . '&customer_id=' . $this->request->get['customer_id'] . '&page={page}', 'SSL');
 			
 		$this->data['pagination'] = $pagination->render();
+		
+		$this->data['results'] = sprintf($this->language->get('text_pagination'), ($reward_total) ? (($page - 1) * $this->config->get('config_admin_limit')) + 1 : 0, ((($page - 1) * $this->config->get('config_admin_limit')) > ($reward_total - $this->config->get('config_admin_limit'))) ? $reward_total : ((($page - 1) * $this->config->get('config_admin_limit')) + $this->config->get('config_admin_limit')), $reward_total, ceil($reward_total / $this->config->get('config_admin_limit')));
 
 		$this->template = 'sale/customer_reward.tpl';		
 		
