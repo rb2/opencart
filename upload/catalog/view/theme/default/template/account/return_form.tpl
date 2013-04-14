@@ -1,6 +1,6 @@
 <?php echo $header; ?>
 <?php if ($error_warning) { ?>
-<div class="alert alert-error"><?php echo $error_warning; ?></div>
+<div class="alert alert-error"><i class="icon-exclamation-sign"></i> <?php echo $error_warning; ?></div>
 <?php } ?>
 <?php echo $column_left; ?><?php echo $column_right; ?>
 <div id="content"><?php echo $content_top; ?>
@@ -51,7 +51,7 @@
         <?php } ?>
         <br />
         <?php echo $entry_date_ordered; ?><br />
-        <input type="text" name="date_ordered" value="<?php echo $date_ordered; ?>" class="large-field date" />
+        <input type="date" name="date_ordered" value="<?php echo $date_ordered; ?>" class="large-field" />
         <br />
       </div>
     </div>
@@ -148,12 +148,7 @@
     </div>
     <?php } ?>
   </form>
-  <?php echo $content_bottom; ?></div>
-<script type="text/javascript"><!--
-$(document).ready(function() {
-	$('.date').datepicker({dateFormat: 'yy-mm-dd'});
-});
-//--></script> 
+  <?php echo $content_bottom; ?></div> 
 <script type="text/javascript"><!--
 $(document).ready(function() {
 	$('.colorbox').colorbox({

@@ -6,7 +6,7 @@
     <?php } ?>
   </ul>
   <?php if ($error_warning) { ?>
-  <div class="alert alert-error"><?php echo $error_warning; ?></div>
+  <div class="alert alert-error"><i class="icon-exclamation-sign"></i> <?php echo $error_warning; ?></div>
   <?php } ?>
   <div class="box">
     <div class="box-heading">
@@ -265,6 +265,8 @@
           </div>
           <?php if ($affiliate_id) { ?>
           <div class="tab-pane" id="tab-transaction">
+            <div id="transaction"></div>
+            
             <div class="control-group">
               <label class="control-label" for="input-description"><?php echo $entry_description; ?></label>
               <div class="controls">
@@ -277,8 +279,7 @@
                 <input type="text" name="amount" value="" placeholder="<?php echo $entry_amount; ?>" id="input-amount" />
               </div>
             </div>
-            <a id="button-reward" class="btn" onclick="addTransaction();"><span><?php echo $button_add_transaction; ?></span></a>
-            <div id="transaction"></div>
+            <button id="button-transaction" class="btn"><i class="icon-plus-sign"></i> <?php echo $button_add_transaction; ?></button>
           </div>
           <?php } ?>
         </div>
@@ -349,20 +350,21 @@ $('#transaction .pagination a').on('click', function() {
 
 $('#transaction').load('index.php?route=sale/affiliate/transaction&token=<?php echo $token; ?>&affiliate_id=<?php echo $affiliate_id; ?>');
 
-function addTransaction() {
+$('#button-transaction').on('click', function() {
 	$.ajax({
 		url: 'index.php?route=sale/affiliate/transaction&token=<?php echo $token; ?>&affiliate_id=<?php echo $affiliate_id; ?>',
 		type: 'post',
 		dataType: 'html',
 		data: 'description=' + encodeURIComponent($('#tab-transaction input[name=\'description\']').val()) + '&amount=' + encodeURIComponent($('#tab-transaction input[name=\'amount\']').val()),
 		beforeSend: function() {
-			$('.success, .warning').remove();
+			$('.alert').remove();
+			
+			$('#button-transaction i').replaceWith('<i class="icon-spinner icon-spin"></i>');
 			$('#button-transaction').attr('disabled', true);
-			$('#transaction').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $text_wait; ?></div>');
 		},
 		complete: function() {
+			$('#button-transaction i').replaceWith('<i class="icon-plus-sign"></i>');
 			$('#button-transaction').attr('disabled', false);
-			$('.attention').remove();
 		},
 		success: function(html) {
 			$('#transaction').html(html);
@@ -371,6 +373,6 @@ function addTransaction() {
 			$('#tab-transaction input[name=\'description\']').val('');
 		}
 	});
-}
+});
 //--></script> 
 <?php echo $footer; ?>

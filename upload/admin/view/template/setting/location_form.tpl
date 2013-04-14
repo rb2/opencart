@@ -6,7 +6,7 @@
     <?php } ?>
   </ul>
   <?php if ($error_warning) { ?>
-  <div class="alert alert-error"><?php echo $error_warning; ?></div>
+  <div class="alert alert-error"><i class="icon-exclamation-sign"></i> <?php echo $error_warning; ?></div>
   <?php } ?>
   <div class="box">
     <div class="box-heading">
@@ -85,7 +85,7 @@
         <div class="control-group">
           <label class="control-label" for="input-geocode"><span class="required">*</span> <?php echo $entry_geocode; ?></label>
           <div class="controls">
-            <input id="geocode" type="text" name="geocode" value="<?php echo $geocode; ?>" placeholder="<?php echo $entry_geocode; ?>" id="input-geocode" />
+            <input type="text" name="geocode" value="<?php echo $geocode; ?>" placeholder="<?php echo $entry_geocode; ?>" id="input-geocode" />
             <input type="button" onclick="getGeoCode()" value="<?php echo $button_geocode; ?>" class="btn" />
             <span class="help-block"><?php echo $help_geocode; ?></span>
             <?php if ($error_geocode) { ?>

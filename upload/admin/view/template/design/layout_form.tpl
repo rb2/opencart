@@ -6,7 +6,7 @@
     <?php } ?>
   </ul>
   <?php if ($error_warning) { ?>
-  <div class="alert alert-error"><?php echo $error_warning; ?></div>
+  <div class="alert alert-error"><i class="icon-exclamation-sign"></i> <?php echo $error_warning; ?></div>
   <?php } ?>
   <div class="box">
     <div class="box-heading">
@@ -23,7 +23,7 @@
             <?php } ?>
           </div>
         </div>
-        <table id="route" class="table">
+        <table id="route" class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
               <td class="left"><?php echo $entry_store; ?></td>
@@ -31,10 +31,10 @@
               <td></td>
             </tr>
           </thead>
-          <tbody id="route-row<?php echo $route_row; ?>">
+          <tbody>
             <?php $route_row = 0; ?>
             <?php foreach ($layout_routes as $layout_route) { ?>
-            <tr>
+            <tr id="route-row<?php echo $route_row; ?>">
               <td class="left"><select name="layout_route[<?php echo $route_row; ?>][store_id]">
                   <option value="0"><?php echo $text_default; ?></option>
                   <?php foreach ($stores as $store) { ?>

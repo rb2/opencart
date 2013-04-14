@@ -6,7 +6,7 @@
     <?php } ?>
   </ul>
   <?php if ($error_warning) { ?>
-  <div class="alert alert-error"><?php echo $error_warning; ?></div>
+  <div class="alert alert-error"><i class="icon-exclamation-sign"></i> <?php echo $error_warning; ?></div>
   <?php } ?>
   <div class="box">
     <div class="box-heading">
@@ -253,7 +253,7 @@
             <input type="text" name="sort_order" value="<?php echo $sort_order; ?>" placeholder="<?php echo $entry_sort_order; ?>" id="input-sort-order" class="input-mini" />
           </div>
         </div>
-        <table id="custom-field-value" class="table">
+        <table id="custom-field-value" class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
               <td class="left"><span class="required">*</span> <?php echo $entry_custom_value; ?></td>

@@ -6,7 +6,7 @@
     <?php } ?>
   </ul>
   <?php if ($error_warning) { ?>
-  <div class="alert alert-error"><?php echo $error_warning; ?></div>
+  <div class="alert alert-error"><i class="icon-exclamation-sign"></i> <?php echo $error_warning; ?></div>
   <?php } ?>
   <div class="box">
     <div class="box-heading">
@@ -37,7 +37,7 @@
             </select>
           </div>
         </div>
-        <table id="images" class="table">
+        <table id="images" class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
               <td class="left"><?php echo $entry_title; ?></td>

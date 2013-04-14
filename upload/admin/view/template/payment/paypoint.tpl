@@ -6,7 +6,7 @@
     <?php } ?>
   </ul>
   <?php if ($error_warning) { ?>
-  <div class="alert alert-error"><?php echo $error_warning; ?></div>
+  <div class="alert alert-error"><i class="icon-exclamation-sign"></i> <?php echo $error_warning; ?></div>
   <?php } ?>
   <div class="box">
     <div class="box-heading">
@@ -33,7 +33,7 @@
         <div class="control-group">
           <label class="control-label" for="input-test"><?php echo $entry_test; ?></label>
           <div class="controls">
-            <select name="paypoint_test" for="input-test">
+            <select name="paypoint_test" id="input-test">
               <?php if ($paypoint_test == 'live') { ?>
               <option value="live" selected="selected"><?php echo $text_live; ?></option>
               <?php } else { ?>
