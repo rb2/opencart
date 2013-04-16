@@ -19,6 +19,7 @@
 <script src="view/javascript/bootstrap/js/bootstrap.js"></script>
 <link rel="stylesheet" href="view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="view/stylesheet/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="view/stylesheet/stylesheet-modrb.css" />
 <?php foreach ($styles as $style) { ?>
 <link rel="<?php echo $style['rel']; ?>" type="text/css" href="<?php echo $style['href']; ?>" media="<?php echo $style['media']; ?>" />
 <?php } ?>
