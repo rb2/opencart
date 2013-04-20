@@ -14,11 +14,16 @@ input, button, select, textarea {
 	overflow: visible;
 }
 
-/* admin: catalog/product
-------------------------------------------------*/
-
-input[name=filter_name],
-input[name=filter_model]
+/* Fix filter fields width
+ *
+ *	admin: catalog/product
+ *	admin: sale/customer
+ * ----------------------------------------------*/
+input[name=filter_date_added],
+input[name=filter_email],
+input[name=filter_ip],
+input[name=filter_model],
+input[name=filter_name]
 {
 	width: 100px;
 }
@@ -29,7 +34,15 @@ input[name=filter_quantity]
 	width: 40px;
 }
 
+select[name=filter_approved]
+{
+	width: 40px;
+}
 select[name=filter_status]
+{
+	width: 70px;
+}
+select[name=filter_customer_group_id]
 {
 	width: 100px;
 }
