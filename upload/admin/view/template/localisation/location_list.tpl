@@ -59,7 +59,7 @@
               <td class="left"><?php echo $locations['zone']; ?></td>
               <td class="left"><?php echo $locations['country']; ?></td>
               <td class="right"><?php foreach ($locations['action'] as $action) { ?>
-                [ <a href="<?php echo $action['href']; ?>"><?php echo $action['text']; ?></a> ]
+                <a href="<?php echo $action['href']; ?>"><?php echo $action['text']; ?></a>
                 <?php } ?></td>
             </tr>
             <?php } ?>

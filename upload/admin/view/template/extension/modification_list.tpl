@@ -43,7 +43,7 @@
               <td class="left"><?php echo $modification['date_added']; ?></td>
               <td class="left"><?php echo $modification['date_modified']; ?></td>
               <td class="right"><?php foreach ($modification['action'] as $action) { ?>
-                [ <a href="<?php echo $action['href']; ?>"><?php echo $action['text']; ?></a> ]
+                <a href="<?php echo $action['href']; ?>"><?php echo $action['text']; ?></a>
                 <?php } ?></td>
             </tr>
             <?php } ?>
