@@ -6,10 +6,10 @@
     <?php } ?>
   </ul>
   <?php if ($error_warning) { ?>
-  <div class="alert alert-error"><i class="icon-exclamation-sign"></i> <?php echo $error_warning; ?></div>
+  <div class="alert alert-error"><i class="icon-exclamation-sign"></i> <?php echo $error_warning; ?> <button type="button" class="close" data-dismiss="alert">&times;</button></div>
   <?php } ?>
   <div class="box">
-    <div class="box-heading">
+    <div class="page-header">
       <h1><i class="icon-edit"></i> <?php echo $heading_title; ?></h1>
     </div>
     <div class="box-content">
@@ -29,7 +29,7 @@
             <div class="tab-content">
               <?php foreach ($languages as $language) { ?>
               <div class="tab-pane" id="language<?php echo $language['language_id']; ?>">
-                <div class="control-group">
+                <div class="control-group required">
                   <label class="control-label" for="input-name<?php echo $language['language_id']; ?>"><span class="required">*</span> <?php echo $entry_name; ?></label>
                   <div class="controls">
                     <input type="text" name="category_description[<?php echo $language['language_id']; ?>][name]" value="<?php echo isset($category_description[$language['language_id']]) ? $category_description[$language['language_id']]['name'] : ''; ?>" placeholder="<?php echo $entry_name; ?>" id="input-name<?php echo $language['language_id']; ?>" class="input-xxlarge" />
@@ -72,10 +72,10 @@
               <label class="control-label" for="input-filter"><?php echo $entry_filter; ?></label>
               <div class="controls">
                 <input type="text" name="filter" value="" placeholder="<?php echo $entry_filter; ?>" id="input-filter" />
-                <span class="help-block"><?php echo $help_filter; ?></span>
+                <a data-toggle="tooltip"><?php echo $help_filter; ?></a>
                 <div id="category-filter">
                   <?php foreach ($category_filters as $category_filter) { ?>
-                  <div id="category-filter<?php echo $category_filter['filter_id']; ?>"><?php echo $category_filter['name']; ?><img src="view/image/icon-delete.png" alt="" />
+                  <div id="category-filter<?php echo $category_filter['filter_id']; ?>"><i class="icon-minus-sign"></i> <?php echo $category_filter['name']; ?>
                     <input type="hidden" name="category_filter[]" value="<?php echo $category_filter['filter_id']; ?>" />
                   </div>
                   <?php } ?>
@@ -110,7 +110,8 @@
             <div class="control-group">
               <label class="control-label" for="input-keyword"><?php echo $entry_keyword; ?></label>
               <div class="controls">
-                <input type="text" name="keyword" value="<?php echo $keyword; ?>" placeholder="<?php echo $entry_keyword; ?>" id="input-keyword" /> <i id="help-keyword" class="icon-question-sign"></i>
+                <input type="text" name="keyword" value="<?php echo $keyword; ?>" placeholder="<?php echo $entry_keyword; ?>" id="input-keyword" />
+                <i id="help-keyword" class="icon-question-sign"></i> 
                 <script type="text/javascript"><!--
                 $('#help-keyword').tooltip({'title': '<?php echo addslashes($help_keyword); ?>', trigger: 'hover'});
                 //--></script> 
@@ -118,30 +119,39 @@
             </div>
             <div class="control-group">
               <label class="control-label" for="input-name"><?php echo $entry_image; ?></label>
-              <div class="controls">
-                <div class="image"><img src="<?php echo $thumb; ?>" alt="" id="thumb" class="img-polaroid" />
-                  <input type="hidden" name="image" value="<?php echo $image; ?>" id="image" />
-                  <br />
-                  <a onclick="image_upload('image', 'thumb');"><?php echo $text_browse; ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a onclick="$('#thumb').attr('src', '<?php echo $no_image; ?>'); $('#image').attr('value', '');"><?php echo $text_clear; ?></a></div>
-              </div>
+              <div class="controls"> <img src="<?php echo $thumb; ?>" alt="" id="thumb" class="img-polaroid" /> <br />
+                <br />
+                <div class="btn-group">
+                  <button onclick="image_upload('image', 'thumb');" class="btn btn-small"><i class="icon-edit"></i></button>
+                  <button onclick="$('#thumb').attr('src', '<?php echo $no_image; ?>'); $('#image').attr('value', '');" class="btn btn-small"><i class="icon-remove"></i></button>
+                </div>
+                <input type="hidden" name="image" value="<?php echo $image; ?>" id="image" /></div>
             </div>
             <div class="control-group">
               <label class="control-label" for="input-top"><?php echo $entry_top; ?></label>
               <div class="controls">
-                <label class="checkbox">
+                <label class="checkbox inline">
                   <?php if ($top) { ?>
                   <input type="checkbox" name="top" value="1" checked="checked" id="input-top" />
                   <?php } else { ?>
                   <input type="checkbox" name="top" value="1" id="input-top" />
                   <?php } ?>
                 </label>
-                <span class="help-block"><?php echo $help_top; ?></span></div>
+                <i id="help-top" class="icon-question-sign"></i> 
+                <script type="text/javascript"><!--
+                $('#help-top').tooltip({'title': '<?php echo addslashes($help_top); ?>', trigger: 'hover'});
+                //--></script> 
+              </div>
             </div>
             <div class="control-group">
               <label class="control-label" for="input-column"><?php echo $entry_column; ?></label>
               <div class="controls">
                 <input type="text" name="column" value="<?php echo $column; ?>" placeholder="<?php echo $entry_column; ?>" id="input-column" class="input-mini" />
-                <span class="help-block"><?php echo $help_column; ?></span></div>
+                <i id="help-column" class="icon-question-sign"></i> 
+                <script type="text/javascript"><!--
+                $('#help-column').tooltip({'title': '<?php echo addslashes($help_column); ?>', trigger: 'hover'});
+                //--></script> 
+              </div>
             </div>
             <div class="control-group">
               <label class="control-label" for="input-sort-order"><?php echo $entry_sort_order; ?></label>
@@ -207,7 +217,7 @@
             </table>
           </div>
         </div>
-        <div class="buttons">
+        <div class="form-actions">
           <button type="submit" class="btn btn-primary"><i class="icon-ok"></i> <?php echo $button_save; ?></button>
           <a href="<?php echo $cancel; ?>" class="btn"><i class="icon-remove"></i> <?php echo $button_cancel; ?></a></div>
       </form>
@@ -239,7 +249,7 @@ $('input[name=\'path\']').typeahead({
 					'category_id':  0,
 					'name':  '<?php echo $text_none; ?>'
 				});
-				*/
+				
 			
 				data = [];
 				
@@ -248,7 +258,7 @@ $('input[name=\'path\']').typeahead({
 				}
 			
 				process(JSON.parse(json));	
-				
+				*/
 									
 			}
 		});		
@@ -336,10 +346,7 @@ $('input[name=\'filter\']').autocomplete({
 	select: function(event, ui) {
 		$('#category-filter' + ui.item.value).remove();
 		
-		$('#category-filter').append('<div id="category-filter' + ui.item.value + '">' + ui.item.label + '<img src="view/image/icon-delete.png" alt="" /><input type="hidden" name="category_filter[]" value="' + ui.item.value + '" /></div>');
-
-		$('#category-filter div:odd').attr('class', 'odd');
-		$('#category-filter div:even').attr('class', 'even');
+		$('#category-filter').append('<div id="category-filter' + ui.item.value + '"><i class="icon-minus-sign"></i> ' + ui.item.label + '<input type="hidden" name="category_filter[]" value="' + ui.item.value + '" /></div>');
 				
 		return false;
 	},
@@ -348,11 +355,8 @@ $('input[name=\'filter\']').autocomplete({
    }
 });
 
-$('#category-filter div img').on('click', function() {
-	$(this).parent().remove();
-	
-	$('#category-filter div:odd').attr('class', 'odd');
-	$('#category-filter div:even').attr('class', 'even');	
+$('#category-filter  .icon-minus-sign').on('click', function() {
+	$(this).parent().remove();	
 });
 */
 //--></script> 
