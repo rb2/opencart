@@ -345,7 +345,9 @@ $(document).ready(function() {
 		rel: "colorbox"
 	});
 });
-//--></script> 
+$('#tabs a').tabs();
+//--></script>
+
 <script type="text/javascript"><!--
 $('#button-cart').on('click', function() {
 	$.ajax({
