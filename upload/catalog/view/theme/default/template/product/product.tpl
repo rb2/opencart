@@ -225,7 +225,10 @@
       <?php } ?>
     </div>
   </div>
-  <div id="tabs" class="htabs"><a href="#tab-description"><?php echo $tab_description; ?></a>
+  <div id="tabs" class="htabs">
+    <?php if( ! empty($description) ) { ?>
+    <a href="#tab-description"><?php echo $tab_description; ?></a>
+    <?php } ?>
     <?php if ($attribute_groups) { ?>
     <a href="#tab-attribute"><?php echo $tab_attribute; ?></a>
     <?php } ?>
@@ -236,7 +239,9 @@
     <a href="#tab-related"><?php echo $tab_related; ?> (<?php echo count($products); ?>)</a>
     <?php } ?>
   </div>
+  <?php if( ! empty($description) ) { ?>
   <div id="tab-description" class="tab-content"><?php echo $description; ?></div>
+  <?php } ?>
   <?php if ($attribute_groups) { ?>
   <div id="tab-attribute" class="tab-content">
     <table class="attribute">
@@ -459,10 +464,10 @@ $('#button-review').on('click', function() {
 			if (data['error']) {
 				$('#review-title').after('<div class="alert alert-error">' + data['error'] + '</div>');
 			}
-			
+
 			if (data['success']) {
 				$('#review-title').after('<div class="alert alert-success">' + data['success'] + '</div>');
-								
+
 				$('input[name=\'name\']').val('');
 				$('textarea[name=\'text\']').val('');
 				$('input[name=\'rating\']:checked').attr('checked', '');
