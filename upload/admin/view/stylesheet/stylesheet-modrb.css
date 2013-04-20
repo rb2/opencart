@@ -14,6 +14,10 @@ input, button, select, textarea {
 	overflow: visible;
 }
 
+td.right > a {
+	margin-left: 10px;
+}
+
 /* Fix filter fields width
  *
  *	admin: catalog/product
