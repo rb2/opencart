@@ -13,3 +13,23 @@ input, button, select, textarea {
 {
 	overflow: visible;
 }
+
+/* admin: catalog/product
+------------------------------------------------*/
+
+input[name=filter_name],
+input[name=filter_model]
+{
+	width: 100px;
+}
+
+input[name=filter_price],
+input[name=filter_quantity]
+{
+	width: 40px;
+}
+
+select[name=filter_status]
+{
+	width: 100px;
+}
