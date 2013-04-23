@@ -107,6 +107,7 @@ class ControllerExtensionTotal extends Controller {
 		}
 		
 		$this->data['extensions'] = array();
+		$ext_sort_order = array();
 				
 		$files = glob(DIR_APPLICATION . 'controller/total/*.php');
 		
@@ -117,7 +118,7 @@ class ControllerExtensionTotal extends Controller {
 				$this->language->load('total/' . $extension);
 	
 				$action = array();
-				
+
 				if (!in_array($extension, $extensions)) {
 					$action[] = array(
 						'text' => $this->language->get('text_install'),
@@ -134,14 +135,21 @@ class ControllerExtensionTotal extends Controller {
 						'href' => $this->url->link('extension/total/uninstall', 'token=' . $this->session->data['token'] . '&extension=' . $extension, 'SSL')
 					);
 				}
-										
+	
+				$so = $this->config->get($extension . '_sort_order');
 				$this->data['extensions'][] = array(
 					'name'       => $this->language->get('heading_title'),
 					'status'     => $this->config->get($extension . '_status') ? $this->language->get('text_enabled') : $this->language->get('text_disabled'),
-					'sort_order' => $this->config->get($extension . '_sort_order'),
+					'sort_order' => $so,
 					'action'     => $action
 				);
+				$ext_sort_order[] = $so;
 			}
+
+			array_multisort(
+				$ext_sort_order,
+				$this->data['extensions']
+				);
 		}
 
 		$this->template = 'extension/total.tpl';
