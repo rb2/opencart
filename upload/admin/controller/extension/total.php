@@ -139,7 +139,7 @@ class ControllerExtensionTotal extends Controller {
 				$so = $this->config->get($extension . '_sort_order');
 				$this->data['extensions'][] = array(
 					'name'       => $this->language->get('heading_title'),
-					'status'     => $this->config->get($extension . '_status') ? $this->language->get('text_enabled') : $this->language->get('text_disabled'),
+					'status'     => $this->config->get($extension . '_status') ? '<span class="enabled">'.$this->language->get('text_enabled').'</span>' : $this->language->get('text_disabled'),
 					'sort_order' => $so,
 					'action'     => $action
 				);

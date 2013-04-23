@@ -190,3 +190,13 @@ html, body, label, .control-group input, textarea, select {
 .results {
 	float: right;
 }
+
+
+/**** UI improvement ****/
+.enabled {background-color: green; color: white; padding: 0 4px;}
+.attn {
+	padding: 3px;
+	background: #FFD1D1 10px center no-repeat;
+	border: 1px solid #F8ACAC;
+	color: #555555;
+}
