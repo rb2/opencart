@@ -26,7 +26,7 @@ $(document).ready(function() {
 	route = getURLVar('route');
 	
 	if (!route) {
-		$('#dashboard').addClass('selected');
+		$('#dashboard').addClass('active');
 	} else {
 		part = route.split('/');
 		
@@ -38,13 +38,10 @@ $(document).ready(function() {
 		
 		$('a[href*=\'' + url + '\']').parents('li[id]').addClass('selected');
 	}
-});
-
-$('a[data-toggle=\'tooltip\']').tooltip({
-	'title': function() {
-		alert('hi');
-		
-		return 'test';	
-	}, 
-	trigger: 'hover'
+	
+	$('[data-toggle=\'tooltip\']').tooltip({
+		'animation': false,
+		'html': true
+		//'trigger': 'click'
+	});
 });
