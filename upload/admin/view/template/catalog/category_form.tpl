@@ -2,7 +2,7 @@
 <div id="content">
   <ul class="breadcrumb">
     <?php foreach ($breadcrumbs as $breadcrumb) { ?>
-    <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a> <i class="icon-angle-right"></i></li>
+    <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
     <?php } ?>
   </ul>
   <?php if ($error_warning) { ?>
@@ -66,15 +66,25 @@
             <div class="control-group">
               <label class="control-label" for="input-parent"><?php echo $entry_parent; ?></label>
               <div class="controls">
-                <input type="text" name="path" value="<?php echo $path; ?>" placeholder="<?php echo $entry_parent; ?>" data-provide="typeahead" id="input-parent" />
+                <input type="text" name="path" value="<?php echo $path; ?>" placeholder="<?php echo $entry_parent; ?>" id="input-parent" data-toggle="dropdown" data-target="#autocomplete-parent" autocomplete="off" />
                 <input type="hidden" name="parent_id" value="<?php echo $parent_id; ?>" />
+                <div id="autocomplete-parent" class="typeahead dropdown">
+                  <ul class="dropdown-menu">
+                    <li class="disabled"><a href="#"><i class="icon-spinner icon-spin"></i><?php echo $text_loading; ?></a></li>
+                  </ul>
+                </div>
               </div>
             </div>
             <div class="control-group">
               <label class="control-label" for="input-filter"><?php echo $entry_filter; ?></label>
               <div class="controls">
-                <input type="text" name="filter" value="" placeholder="<?php echo $entry_filter; ?>" id="input-filter" />
-                <a data-toggle="tooltip" title="<?php echo $help_filter; ?>"><i class="icon-question-sign icon-large"></i></a> <br />
+                <input type="text" name="filter" value="" placeholder="<?php echo $entry_filter; ?>" id="input-filter" data-toggle="dropdown" data-target="#autocomplete-filter" autocomplete="off" />
+                <a data-toggle="tooltip" title="<?php echo $help_filter; ?>"><i class="icon-question-sign icon-large"></i></a>
+                <div id="autocomplete-filter" class="typeahead dropdown">
+                  <ul class="dropdown-menu">
+                    <li class="disabled"><a><i class="icon-spinner icon-spin"></i><?php echo $text_loading; ?></a></li>
+                  </ul>
+                </div>
                 <br />
                 <div id="category-filter" class="well well-small scrollbox">
                   <?php foreach ($category_filters as $category_filter) { ?>
@@ -248,164 +258,91 @@ CKEDITOR.replace('input-description<?php echo $language['language_id']; ?>', {
 <?php } ?>
 //--></script> 
 <script type="text/javascript"><!--
-$('input[name=\'path\']').on('keydown', function() {
+var timer = null;
+
+$('input[name=\'path\']').on('click keyup', function() {
 	var input = this;
 	
-	$.ajax({
-		url: 'index.php?route=catalog/category/autocomplete&token=<?php echo $token; ?>&filter_name=' +  encodeURIComponent(this.value),
-		dataType: 'json',
-		success: function(json) {
-			//alert($(input).parent().has('.typeahead'));
-			
-			// If does not exists create it
-			if (!$(input).parent().has('.typeahead').length) {
-				$('input[name=\'path\']').after('<ul class="typeahead dropdown-menu" style="position: absolute; display: none;"></ul>');
-			}
+	if (timer != null) {
+		clearTimeout(timer);
+	}
 
-			html = '';
-			
-			html += '<li data-value="0"><a><?php echo $text_none; ?></a></li>';
-			
-			if (json) {
-				for (i = 0; i < json.length; i++) {
-					html += '<li data-value="' + json[i]['category_id'] + '"><a>' + json[i]['name'] + '</a></li>';
-				}
-			}
-			
-			$('input + .typeahead').html(html);
-			
-			$('input + .typeahead').show();
-			
-			$('.typeahead a').on('click', function() {
-				alert($(this).parent().attr('data-value'));
-			});				
-			
-			// Remove the 
-			$(input).on('focusout', function() {
-				alert('hi');
-				$('.typeahead').hide();
-			});
-		}		
-	});		
-});
-
-/*
-$('input[name=\'path\']').typeahead({
-	source: function(query, process) {
+	timer = setTimeout(function() {
 		$.ajax({
-			url: 'index.php?route=catalog/category/autocomplete&token=<?php echo $token; ?>&filter_name=' +  encodeURIComponent(query),
-			dataType: 'json',
+			url: 'index.php?route=catalog/category/autocomplete&token=<?php echo $token; ?>&filter_name=' +  encodeURIComponent($(input).val()),
+			dataType: 'json',			
 			success: function(json) {
-				var data = [];
-											
-				//json.unshift({
-				//	'category_id':  0,
-				//	'name':  '<?php echo $text_none; ?>'
-				//});
-				
+				html = '<li data-value="0"><a href="#"><?php echo $text_none; ?></a></li>';
 				
 				if (json) {
 					for (i = 0; i < json.length; i++) {
-						data[i] = {
-							'name': json[i]['name'],
-							'value': json[i]['category_id']
-						}
+						html += '<li data-value="' + json[i]['category_id'] + '"><a href="#">' + json[i]['name'] + '</a></li>';
 					}
 				}
 				
-				
-				
-			}		
-		});		
-	},
-	updater: function(item) {
-		alert(item);
-		
-		//$('input[name=\'path\']').val(ui.item.label);
-		//$('input[name=\'parent_id\']').val(ui.item.value);
-				
-		return item;
-	},
-	matcher: function(item) {
-		return item;
-	},
-	sorter: function(items) {
-		return items;
-	},
-	highlighter: function(item) {
-		return item['name'];
-	}
-})
-
-
-$('input[name=\'path\']').autocomplete({
-	delay: 500,
-	source: function(request, response) {		
-		$.ajax({
-			url: 'index.php?route=catalog/category/autocomplete&token=<?php echo $token; ?>&filter_name=' +  encodeURIComponent(request.term),
-			dataType: 'json',
-			success: function(json) {
-				json.unshift({
-					'category_id':  0,
-					'name':  '<?php echo $text_none; ?>'
-				});
-				
-				response($.map(json, function(item) {
-					return {
-						label: item.name,
-						value: item.category_id
-					}
-				}));
+				$($(input).attr('data-target')).find('ul').html(html);
 			}
 		});
-	},
-	select: function(event, ui) {
-		$('input[name=\'path\']').val(ui.item.label);
-		$('input[name=\'parent_id\']').val(ui.item.value);
-		
-		return false;
-	},
-	focus: function(event, ui) {
-      	return false;
-   	}
+	}, 250);
 });
-*/
+
+$('#autocomplete-parent').delegate('a', 'click', function(e) {
+	e.preventDefault();
+	
+	var value = $(this).parent().attr('data-value');
+	
+	if (typeof value !== 'undefined') {
+		$('input[name=\'path\']').val($(this).text());
+		$('input[name=\'parent_id\']').val(value);
+	}
+});
 //--></script> 
 <script type="text/javascript"><!--
-/*
-// Filter
-$('input[name=\'filter\']').autocomplete({
-	delay: 500,
-	source: function(request, response) {
+var timer = null;
+
+$('input[name=\'filter\']').on('click keyup', function() {
+	var input = this;
+	
+	if (timer != null) {
+		clearTimeout(timer);
+	}
+
+	timer = setTimeout(function() {
 		$.ajax({
-			url: 'index.php?route=catalog/filter/autocomplete&token=<?php echo $token; ?>&filter_name=' +  encodeURIComponent(request.term),
-			dataType: 'json',
-			success: function(json) {		
-				response($.map(json, function(item) {
-					return {
-						label: item.name,
-						value: item.filter_id
+			url: 'index.php?route=catalog/filter/autocomplete&token=<?php echo $token; ?>&filter_name=' +  encodeURIComponent($(input).val()),
+			dataType: 'json',			
+			success: function(json) {
+				html = '';
+				
+				if (json.length) {
+					for (i = 0; i < json.length; i++) {
+						html += '<li data-value="' + json[i]['filter_id'] + '"><a href="#">' + json[i]['name'] + '</a></li>';
 					}
-				}));
+				} else {
+					html = '<li class="disabled"><a href="#"><?php echo $text_none; ?></a></li>';
+				}
+				
+				$($(input).attr('data-target')).find('ul').html(html);
 			}
 		});
-	}, 
-	select: function(event, ui) {
-		$('#category-filter' + ui.item.value).remove();
-		
-		$('#category-filter').append('<div id="category-filter' + ui.item.value + '"><i class="icon-minus-sign"></i> ' + ui.item.label + '<input type="hidden" name="category_filter[]" value="' + ui.item.value + '" /></div>');
-				
-		return false;
-	},
-	focus: function(event, ui) {
-      return false;
-   }
+	}, 250);
 });
 
-$('#category-filter  .icon-minus-sign').on('click', function() {
-	$(this).parent().remove();	
+$('#autocomplete-filter').delegate('a', 'click', function(e) {
+	e.preventDefault();
+	
+	var value = $(this).parent().attr('data-value');
+	
+	if (typeof value !== 'undefined') {
+		$('#category-filter' + value).remove();
+		
+		$('#category-filter').append('<div id="category-filter' + value + '"><i class="icon-minus-sign"></i> ' + $(this).text() + '<input type="hidden" name="category_filter[]" value="' + value + '" /></div>');
+	}
 });
-*/
+
+$('#category-filter').delegate('.icon-minus-sign', 'click', function() {
+	$(this).parent().remove();
+});
 //--></script> 
 <script type="text/javascript"><!--
 function image_upload(field, thumb) {
