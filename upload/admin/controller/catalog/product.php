@@ -536,6 +536,7 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['text_none'] = $this->language->get('text_none');
 		$this->data['text_percent'] = $this->language->get('text_percent');
 		$this->data['text_amount'] = $this->language->get('text_amount');
+		$this->data['text_loading'] = $this->language->get('text_loading');
 
 		$this->data['entry_name'] = $this->language->get('entry_name');
 		$this->data['entry_meta_description'] = $this->language->get('entry_meta_description');
@@ -565,6 +566,7 @@ class ControllerCatalogProduct extends Controller {
     	$this->data['entry_weight_class'] = $this->language->get('entry_weight_class');
     	$this->data['entry_weight'] = $this->language->get('entry_weight');
 		$this->data['entry_dimension'] = $this->language->get('entry_dimension');
+		$this->data['entry_length_class'] = $this->language->get('entry_length_class');
 		$this->data['entry_length'] = $this->language->get('entry_length');
 		$this->data['entry_width'] = $this->language->get('entry_width');
 		$this->data['entry_height'] = $this->language->get('entry_height');
