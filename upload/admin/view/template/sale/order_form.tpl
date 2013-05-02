@@ -6,7 +6,9 @@
     <?php } ?>
   </ul>
   <?php if ($error_warning) { ?>
-  <div class="alert alert-error"><i class="icon-exclamation-sign"></i> <?php echo $error_warning; ?> <button type="button" class="close" data-dismiss="alert">&times;</button></div>
+  <div class="alert alert-error"><i class="icon-exclamation-sign"></i> <?php echo $error_warning; ?>
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  </div>
   <?php } ?>
   <div class="box">
     <div class="box-heading">
@@ -46,9 +48,14 @@
               <div class="control-group">
                 <label class="control-label" for="input-customer"><?php echo $entry_customer; ?></label>
                 <div class="controls">
-                  <input type="text" name="customer" value="<?php echo $customer; ?>" placeholder="<?php echo $entry_customer; ?>" id="input-customer" />
+                  <input type="text" name="customer" value="<?php echo $customer; ?>" placeholder="<?php echo $entry_customer; ?>" id="input-customer" data-toggle="dropdown" data-target="#autocomplete-customer" autocomplete="off" />
                   <input type="hidden" name="customer_id" value="<?php echo $customer_id; ?>" />
                   <input type="hidden" name="customer_group_id" value="<?php echo $customer_group_id; ?>" />
+                  <div id="autocomplete-customer" class="dropdown">
+                    <ul class="dropdown-menu">
+                      <li class="disabled"><a href="#"><i class="icon-spinner icon-spin"></i> <?php echo $text_loading; ?></a></li>
+                    </ul>
+                  </div>
                 </div>
               </div>
               <div class="control-group">
@@ -625,82 +632,92 @@
   </form>
 </div>
 <script type="text/javascript"><!--
-$.widget('custom.catcomplete', $.ui.autocomplete, {
-	_renderMenu: function(ul, items) {
-		var self = this, currentCategory = '';
-		
-		$.each(items, function(index, item) {
-			if (item['category'] != currentCategory) {
-				ul.append('<li class="ui-autocomplete-category">' + item['category'] + '</li>');
+var timer = null;
+
+$('input[name=\'customer\']').on('click keyup', function() {
+	var input = this;
+	
+	if (timer != null) {
+		clearTimeout(timer);
+	}
+
+	timer = setTimeout(function() {
+		$.ajax({
+			url: 'index.php?route=sale/customer/autocomplete&token=<?php echo $token; ?>&filter_name=' +  encodeURIComponent($(input).val()),
+			dataType: 'json',			
+			success: function(json) {
+				if (json.length) {
+					html = '';
+					
+					for (i in json) {
+						html += '<li class="disabled"><a href="#"><b>' + json[i]['name'] + '</b></a></li>';
+						
+						for (j = 0; j < json[i]['customer'].length; j++) {
+							customer = json[i]['customer'][j];
+							
+							html += '<li data-value="' + customer['customer_id'] + '"><a href="#">' + customer['name'] + '</a>';
+							html += '<input type="hidden" name="customer_group_id" value="' + json[i]['customer_group_id'] + '" />';
+							html += '<input type="hidden" name="firstname" value="' + customer['firstname'] + '" />';
+							html += '<input type="hidden" name="lastname" value="' + customer['lastname'] + '" />';
+							html += '<input type="hidden" name="email" value="' + customer['email'] + '" />';
+							html += '<input type="hidden" name="telephone" value="' + customer['telephone'] + '" />';
+							html += '<input type="hidden" name="fax" value="' + customer['fax'] + '" />';
+							html += '<select name="address" style="display: none;">';
+							html += '<option value="0"><?php echo $text_none; ?></option>'; 
+							
+							for (k = 0; k < customer['address'].length; k++) {
+								address = customer['address'][k];
+								
+								html += '<option value="' + address['address_id'] + '">' + address['firstname'] + ' ' + address['lastname'] + ', ' + address['address_1'] + ', ' + address['city'] + ', ' + address['country'] + '</option>';
+							}
+										
+							html += '</select>';
+							html += '</li>';						
+						}
+					}
+
+					$($(input).attr('data-target')).find('ul').html(html);
+				} else {
+					html = '<li class="disabled"><a href="#"><?php echo $text_none; ?></a></li>';
+				}
 				
-				currentCategory = item['category'];
+				$($(input).prop('data-target')).find('ul').html(html);
 			}
-			
-			self._renderItem(ul, item);
 		});
+	}, 250);
+});
+
+$('#autocomplete-customer').delegate('a', 'click', function(e) {
+	e.preventDefault();
+	
+	var value = $(this).parent().attr('data-value');
+	
+	if (typeof value !== 'undefined') {
+		$('input[name=\'customer\']').val($(this).text());
+		$('input[name=\'customer_id\']').val(value);
+		$('input[name=\'firstname\']').attr('value', $(this).parent().find('input[name=\'firstname\']').val());
+		$('input[name=\'lastname\']').attr('value', $(this).parent().find('input[name=\'lastname\']').val());
+		$('input[name=\'email\']').attr('value', $(this).parent().find('input[name=\'email\']').val());
+		$('input[name=\'telephone\']').attr('value', $(this).parent().find('input[name=\'telephone\']').val());
+		$('input[name=\'fax\']').attr('value', $(this).parent().find('input[name=\'fax\']').val());
+		
+		$('select[name=\'shipping_address\']').html($(this).parent().find('select[name=\'address\']').html());
+		$('select[name=\'payment_address\']').html($(this).parent().find('select[name=\'address\']').html());
+		
+		$('select[id=\'customer_group_id\']').prop('disabled', false);
+		$('select[id=\'customer_group_id\']').attr('value', $(this).parent().find('input[name=\'customer_group_id\']').val());
+		$('select[id=\'customer_group_id\']').trigger('change');
+		$('select[id=\'customer_group_id\']').prop('disabled', true); 		
 	}
 });
 
-$('input[name=\'customer\']').catcomplete({
-	delay: 500,
-	source: function(request, response) {
-		$.ajax({
-			url: 'index.php?route=sale/customer/autocomplete&token=<?php echo $token; ?>&filter_name=' +  encodeURIComponent(request.term),
-			dataType: 'json',
-			success: function(json) {	
-				response($.map(json, function(item) {
-					return {
-						category: item['customer_group'],
-						label: item['name'],
-						value: item['customer_id'],
-						customer_group_id: item['customer_group_id'],
-						firstname: item['firstname'],
-						lastname: item['lastname'],
-						email: item['email'],
-						telephone: item['telephone'],
-						fax: item['fax'],
-						address: item['address']
-					}
-				}));
-			}
-		});
-	}, 
-	select: function(event, ui) { 
-		$('input[name=\'customer\']').attr('value', ui.item['label']);
-		$('input[name=\'customer_id\']').attr('value', ui.item['value']);
-		$('input[name=\'firstname\']').attr('value', ui.item['firstname']);
-		$('input[name=\'lastname\']').attr('value', ui.item['lastname']);
-		$('input[name=\'email\']').attr('value', ui.item['email']);
-		$('input[name=\'telephone\']').attr('value', ui.item['telephone']);
-		$('input[name=\'fax\']').attr('value', ui.item['fax']);
-			
-		html = '<option value="0"><?php echo $text_none; ?></option>'; 
-			
-		for (i in  ui.item['address']) {
-			html += '<option value="' + ui.item['address'][i]['address_id'] + '">' + ui.item['address'][i]['firstname'] + ' ' + ui.item['address'][i]['lastname'] + ', ' + ui.item['address'][i]['address_1'] + ', ' + ui.item['address'][i]['city'] + ', ' + ui.item['address'][i]['country'] + '</option>';
-		}
-		
-		$('select[name=\'shipping_address\']').html(html);
-		$('select[name=\'payment_address\']').html(html);
-		
-		$('select[id=\'customer_group_id\']').attr('disabled', false);
-		$('select[id=\'customer_group_id\']').attr('value', ui.item['customer_group_id']);
-		$('select[id=\'customer_group_id\']').trigger('change');
-		$('select[id=\'customer_group_id\']').attr('disabled', true); 
-					 	
-		return false; 
-	},
-	focus: function(event, ui) {
-      	return false;
-   	}
-});
-
+// Customer Fields
 $('#customer-group').on('change', function() {
 
 });
 
 $('#customer-group').trigger('change');
-
+/*
 $('input[name=\'affiliate\']').autocomplete({
 	delay: 500,
 	source: function(request, response) {
@@ -727,7 +744,7 @@ $('input[name=\'affiliate\']').autocomplete({
       	return false;
    	}
 });
-
+*/
 var payment_zone_id = '<?php echo $payment_zone_id; ?>';
 
 $('select[name=\'payment_country_id\']').on('change', function() {
@@ -735,10 +752,10 @@ $('select[name=\'payment_country_id\']').on('change', function() {
 		url: 'index.php?route=sale/order/country&token=<?php echo $token; ?>&country_id=' + this.value,
 		dataType: 'json',
 		beforeSend: function() {
-			$('select[name=\'payment_country_id\']').after('<img src="view/image/loading.gif" class="loading" style="padding-left: 5px;" />');
+			$('select[name=\'payment_country_id\']').after(' <i class="icon-spinner icon-spin"></i>');
 		},
 		complete: function() {
-			$('.loading').remove();
+			$('.icon-spinner').remove();
 		},			
 		success: function(json) {
 			if (json['postcode_required'] == '1') {
@@ -777,6 +794,12 @@ $('select[name=\'payment_address\']').on('change', function() {
 	$.ajax({
 		url: 'index.php?route=sale/customer/address&token=<?php echo $token; ?>&address_id=' + this.value,
 		dataType: 'json',
+		beforeSend: function() {
+			$('select[name=\'payment_address\']').after(' <i class="icon-spinner icon-spin"></i>');
+		},
+		complete: function() {
+			$('.icon-spinner').remove();
+		},		
 		success: function(json) {
 			if (json != '') {	
 				$('input[name=\'payment_firstname\']').attr('value', json['firstname']);
@@ -803,10 +826,10 @@ $('select[name=\'shipping_country_id\']').on('change', function() {
 		url: 'index.php?route=sale/order/country&token=<?php echo $token; ?>&country_id=' + this.value,
 		dataType: 'json',
 		beforeSend: function() {
-			$('select[name=\'payment_country_id\']').after('<img src="view/image/loading.gif" class="loading" style="padding-left: 5px;" />');
+			$('select[name=\'payment_country_id\']').after(' <i class="icon-spinner icon-spin"></i>');
 		},
 		complete: function() {
-			$('.loading').remove();
+			$('.icon-spinner').remove();
 		},			
 		success: function(json) {
 			if (json['postcode_required'] == '1') {
@@ -845,6 +868,12 @@ $('select[name=\'shipping_address\']').on('change', function() {
 	$.ajax({
 		url: 'index.php?route=sale/customer/address&token=<?php echo $token; ?>&address_id=' + this.value,
 		dataType: 'json',
+		beforeSend: function() {
+			$('select[name=\'shipping_address\']').after(' <i class="icon-spinner icon-spin"></i>');
+		},
+		complete: function() {
+			$('.icon-spinner').remove();
+		},		
 		success: function(json) {
 			if (json != '') {	
 				$('input[name=\'shipping_firstname\']').attr('value', json['firstname']);
@@ -865,6 +894,7 @@ $('select[name=\'shipping_address\']').on('change', function() {
 });
 //--></script> 
 <script type="text/javascript"><!--
+/*
 $('input[name=\'product\']').autocomplete({
 	delay: 500,
 	source: function(request, response) {
@@ -1096,7 +1126,7 @@ $('input[name=\'product\']').autocomplete({
       	return false;
    	}
 });	
-
+*/
 function upload(product_option_id) {
 	$('#file').off();
 	
@@ -1108,13 +1138,13 @@ function upload(product_option_id) {
 			data: new FormData($(this).parent()[0]),
 			beforeSend: function() {
 				$('#button-option' + product_option_id).after(' <i class="icon-spinner icon-spin"></i>');
-				$('#button-option' + product_option_id).attr('disabled', true);
+				$('#button-option' + product_option_id).prop('disabled', true);
 				$('#option' + product_option_id + ' + .error').remove();
 			},	
 			complete: function() {
 				$('.icon-spinner').remove();
 				
-				$('#button-option' + product_option_id).attr('disabled', false);
+				$('#button-option' + product_option_id).prop('disabled', false);
 			},		
 			success: function(json) {
 				if (json['error']) {
@@ -1188,7 +1218,7 @@ $('#button-product, #button-voucher, #button-update').on('click', function() {
 		beforeSend: function() {
 			$('.success, .warning, .attention, .error').remove();
 			
-			$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $text_wait; ?></div>');
+			$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /></div>');
 		},			
 		success: function(json) {
 			$('.success, .warning, .attention, .error').remove();
