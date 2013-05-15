@@ -21,9 +21,11 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+              <td width="1" class="center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
               <td class="left"><?php echo $column_name; ?></td>
               <td class="left"><?php echo $column_author; ?></td>
+              <td class="left"><?php echo $column_status; ?></td>
+              <td class="right"><?php echo $column_sort_order; ?></td>
               <td class="left"><?php echo $column_date_added; ?></td>
               <td class="left"><?php echo $column_date_modified; ?></td>
               <td class="right"><?php echo $column_action; ?></td>
@@ -33,13 +35,15 @@
             <?php if ($modifications) { ?>
             <?php foreach ($modifications as $modification) { ?>
             <tr>
-              <td style="text-align: center;"><?php if ($modification['selected']) { ?>
+              <td class="center"><?php if ($modification['selected']) { ?>
                 <input type="checkbox" name="selected[]" value="<?php echo $modification['modification_id']; ?>" checked="checked" />
                 <?php } else { ?>
                 <input type="checkbox" name="selected[]" value="<?php echo $modification['modification_id']; ?>" />
                 <?php } ?></td>
               <td class="left"><?php echo $modification['name']; ?></td>
               <td class="left"><?php echo $modification['author']; ?></td>
+              <td class="left"><?php echo $modification['status']; ?></td>
+              <td class="right"><?php echo $modification['sort_order']; ?></td>
               <td class="left"><?php echo $modification['date_added']; ?></td>
               <td class="left"><?php echo $modification['date_modified']; ?></td>
               <td class="right"><?php foreach ($modification['action'] as $action) { ?>
