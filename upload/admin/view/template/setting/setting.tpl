@@ -1522,7 +1522,7 @@
               <div class="controls">
                 <textarea name="config_google_analytics" cols="40" rows="5" placeholder="<?php echo $entry_google_analytics; ?>" id="input-google-analytics"><?php echo $config_google_analytics; ?></textarea>
                 
-                <a data-toggle="tooltip" title="<?php echo $help_google_analytics; ?>"><i class="icon-question-sign icon-large"></i></a>
+                <a data-toggle="tooltip" title="<?php echo htmlspecialchars($help_google_analytics); ?>"><i class="icon-question-sign icon-large"></i></a>
                 
                 </div>
             </div>
