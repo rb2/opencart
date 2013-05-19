@@ -3,6 +3,7 @@
 
 config.php
 admin/config.php
+system/config/svn/svn.ver
 
 download
 image/cache
