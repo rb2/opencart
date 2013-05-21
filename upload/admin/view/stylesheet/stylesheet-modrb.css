@@ -50,3 +50,27 @@ select[name=filter_customer_group_id]
 {
 	width: 100px;
 }
+
+/* Compact admin forms */
+.control-group
+{
+	padding: 0 0 5px 0;
+	margin: 0;
+	border-bottom: none;
+}
+.form-horizontal .control-group {
+	margin-bottom: 5px;
+}
+
+/* Compact breadcrumbs
+   I think they shouldn't be displayed at all, or should be
+   displayed instead the section heading). But this requires TPL modifications
+*/
+.breadcrumb
+{
+	padding-top: 0;
+	padding-bottom: 0;
+	margin-bottom: 5px;
+}
+#content { padding-top: 0px; }
+.navbar  { margin-bottom: 4px; }
