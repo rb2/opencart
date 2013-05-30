@@ -18,6 +18,26 @@ td.right > a {
 	margin-left: 10px;
 }
 
+.scrollbox {
+	width: 250px;
+	height: 200px; 
+	overflow-y: scroll;	
+}
+.results {
+	float: right;
+}
+
+
+/**** UI improvement ****/
+.enabled {background-color: green; color: white; padding: 0 4px;}
+.attn {
+	padding: 3px;
+	background: #FFD1D1 10px center no-repeat;
+	border: 1px solid #F8ACAC;
+	color: #555555;
+}
+
+
 /* Fix filter fields width
  *
  *	admin: catalog/product
