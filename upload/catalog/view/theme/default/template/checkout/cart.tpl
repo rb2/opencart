@@ -10,11 +10,9 @@
 <?php } ?>
 <?php echo $column_left; ?><?php echo $column_right; ?>
 <div id="content"><?php echo $content_top; ?>
-  <ul class="breadcrumb">
-    <?php foreach ($breadcrumbs as $breadcrumb) { ?>
-    <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
-    <?php } ?>
-  </ul>
+
+  <?php include(DIR_TEMPLATE . $this->config->get('config_template') . '/template/breadcrumbs.tpl') ?>
+
   <h1><?php echo $heading_title; ?>
     <?php if ($weight) { ?>
     &nbsp;(<?php echo $weight; ?>)
