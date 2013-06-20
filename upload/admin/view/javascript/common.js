@@ -26,7 +26,7 @@ $(document).ready(function() {
 	route = getURLVar('route');
 	
 	if (!route) {
-		$('#dashboard a').addClass('active');
+		$('#header #dashboard a').addClass('active');
 	} else {
 		part = route.split('/');
 		
@@ -35,8 +35,8 @@ $(document).ready(function() {
 		if (part[1]) {
 			url += '/' + part[1];
 		}
-		//.parents('li[id]')
-		$('a[href*=\'' + url + '\']').addClass('active');
+		
+		$('#header a[href*=\'' + url + '\']').parents('li[id]').addClass('active');
 	}
 	
 	$('[data-toggle=\'tooltip\']').tooltip({
