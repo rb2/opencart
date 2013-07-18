@@ -7,9 +7,11 @@ class ControllerCommonDashboard extends Controller {
 		
     	$this->data['heading_title'] = $this->language->get('heading_title');
 		
+		$this->data['text_no_results'] = $this->language->get('text_no_results');
 		$this->data['text_sales'] = $this->language->get('text_sales');
 		$this->data['text_orders'] = $this->language->get('text_orders');
 		$this->data['text_customers'] = $this->language->get('text_customers');
+		$this->data['text_activity'] = $this->language->get('text_activity');
 		$this->data['text_marketing'] = $this->language->get('text_marketing');
 		$this->data['text_online'] = $this->language->get('text_online');
 		$this->data['text_day'] = $this->language->get('text_day');
@@ -54,7 +56,7 @@ class ControllerCommonDashboard extends Controller {
 			$growth = 0;
 		}
 				
-		$this->data['sale_growth'] = $growth . '%';
+		$this->data['sale_growth'] = $growth;
 		
 		// Total Orders
 		$this->load->model('sale/order');
@@ -77,7 +79,7 @@ class ControllerCommonDashboard extends Controller {
 			$growth = 0;
 		}
 							
-		$this->data['order_growth'] = $growth . '%';		
+		$this->data['order_growth'] = $growth;		
 				
 		// Customers
 		$this->load->model('sale/customer');
@@ -100,7 +102,7 @@ class ControllerCommonDashboard extends Controller {
 			$growth = 0;
 		}
 			
-		$this->data['customer_growth'] = $growth . '%';		
+		$this->data['customer_growth'] = $growth;		
 		
 		// Marketing
 		$this->load->model('marketing/marketing');
@@ -111,10 +113,10 @@ class ControllerCommonDashboard extends Controller {
 
 		$monthly_total = 0;
 
-		$results = $this->model_report_dashboard->getTotalOrdersByMonth();
+		$results = $this->model_report_dashboard->getTotalMarketingsByMonth();
 		
 		foreach ($results as $result) {
-			$monthly_total += $result['total'];
+			$monthly_total += $result['clicks'];
 		}
 		
 		if ($monthly_total) {
@@ -123,7 +125,24 @@ class ControllerCommonDashboard extends Controller {
 			$growth = 0;
 		}			
 		
-		$this->data['marketing_growth'] = $growth . '%';
+		$this->data['marketing_growth'] = $growth;
+		
+		$this->load->model('report/customer');
+		
+		$this->data['activities'] = array();
+	
+		$data = array(			
+			'start' => 0,
+			'limit' => 10
+		);
+				
+		$results = $this->model_report_customer->getCustomersActivity($data);
+    	
+		foreach ($results as $result) {
+      		$this->data['activities'][] = array(
+				'action' => $result['action']
+			);
+		}			
 		
 		$this->template = 'common/dashboard.tpl';
 		$this->children = array(

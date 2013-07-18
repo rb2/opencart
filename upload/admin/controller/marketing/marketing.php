@@ -109,7 +109,7 @@ class ControllerMarketingMarketing extends Controller {
 			
     	if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $marketing_id) {
-				$this->model_marketing_marketing->deleteAffiliate($marketing_id);
+				$this->model_marketing_marketing->deleteMarketing($marketing_id);
 			}
 			
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -455,6 +455,8 @@ class ControllerMarketingMarketing extends Controller {
 
 		$this->data['token'] = $this->session->data['token'];
     	
+		$this->data['store'] = HTTP_CATALOG;
+		
 		if (isset($this->request->post['name'])) {
       		$this->data['name'] = $this->request->post['name'];
     	} elseif (!empty($marketing_info)) { 
@@ -478,8 +480,6 @@ class ControllerMarketingMarketing extends Controller {
 		} else {
       		$this->data['code'] = uniqid();
     	}
-		
-		$this->data['catalog'] = HTTP_CATALOG;
 		
 		$this->template = 'marketing/marketing_form.tpl';
 		$this->children = array(
