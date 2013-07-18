@@ -38,6 +38,7 @@ class ControllerCommonHeader extends Controller {
 		$this->data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
 		$this->data['text_shopping_cart'] = $this->language->get('text_shopping_cart');
     	$this->data['text_search'] = $this->language->get('text_search');
+		$this->data['text_category'] = $this->language->get('text_category');
 		$this->data['text_welcome'] = sprintf($this->language->get('text_welcome'), $this->url->link('account/login', '', 'SSL'), $this->url->link('account/register', '', 'SSL'));
 		$this->data['text_logged'] = sprintf($this->language->get('text_logged'), $this->url->link('account/account', '', 'SSL'), $this->customer->getFirstName(), $this->url->link('account/logout', '', 'SSL'));
 		$this->data['text_account'] = $this->language->get('text_account');
@@ -49,12 +50,14 @@ class ControllerCommonHeader extends Controller {
 		$this->data['account'] = $this->url->link('account/account', '', 'SSL');
 		$this->data['shopping_cart'] = $this->url->link('checkout/cart');
 		$this->data['checkout'] = $this->url->link('checkout/checkout', '', 'SSL');
+		$this->data['telephone'] = $this->config->get('config_telephone');
 		
 		// Daniel's robot detector
 		$status = true;
 		
 		if (isset($this->request->server['HTTP_USER_AGENT'])) {
-			$robots = explode("\n", trim($this->config->get('config_robots')));
+			$config_robots = preg_replace('~\r?\n~', "\n", trim($this->config->get('config_robots')));
+			$robots = explode("\n", $config_robots);
 
 			foreach ($robots as $robot) {
 				if ($robot && strpos($this->request->server['HTTP_USER_AGENT'], trim($robot)) !== false) {

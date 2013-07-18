@@ -109,7 +109,7 @@ class ControllerMarketingMarketing extends Controller {
 			
     	if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $marketing_id) {
-				$this->model_marketing_marketing->deleteAffiliate($marketing_id);
+				$this->model_marketing_marketing->deleteMarketing($marketing_id);
 			}
 			
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -256,8 +256,8 @@ class ControllerMarketingMarketing extends Controller {
 				'marketing_id' => $result['marketing_id'],
 				'name'         => $result['name'],
 				'code'         => $result['code'],
-				'clicked'      => $result['clicked'],
-				'sale'         => $result['sale'],
+				'clicks'       => $result['clicks'],
+				'orders'       => $result['orders'],
 				'date_added'   => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
 				'selected'     => isset($this->request->post['selected']) && in_array($result['marketing_id'], $this->request->post['selected']),
 				'action'       => $action
@@ -270,8 +270,8 @@ class ControllerMarketingMarketing extends Controller {
 
 		$this->data['column_name'] = $this->language->get('column_name');
 		$this->data['column_code'] = $this->language->get('column_code');
-		$this->data['column_clicked'] = $this->language->get('column_clicked');
-		$this->data['column_sale'] = $this->language->get('column_sale');
+		$this->data['column_clicks'] = $this->language->get('column_clicks');
+		$this->data['column_orders'] = $this->language->get('column_orders');
 		$this->data['column_date_added'] = $this->language->get('column_date_added');
 		$this->data['column_action'] = $this->language->get('column_action');		
 		
@@ -455,6 +455,8 @@ class ControllerMarketingMarketing extends Controller {
 
 		$this->data['token'] = $this->session->data['token'];
     	
+		$this->data['store'] = HTTP_CATALOG;
+		
 		if (isset($this->request->post['name'])) {
       		$this->data['name'] = $this->request->post['name'];
     	} elseif (!empty($marketing_info)) { 
@@ -478,8 +480,6 @@ class ControllerMarketingMarketing extends Controller {
 		} else {
       		$this->data['code'] = uniqid();
     	}
-		
-		$this->data['catalog'] = HTTP_CATALOG;
 		
 		$this->template = 'marketing/marketing_form.tpl';
 		$this->children = array(

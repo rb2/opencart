@@ -1016,7 +1016,7 @@ CREATE TABLE `oc_customer` (
   `newsletter` tinyint(1) NOT NULL DEFAULT '0',
   `address_id` int(11) NOT NULL DEFAULT '0',
   `customer_group_id` int(11) NOT NULL,
-  `ip` varchar(40) NOT NULL DEFAULT '0',
+  `ip` varchar(40) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `approved` tinyint(1) NOT NULL,
   `token` varchar(255) NOT NULL,
@@ -1026,6 +1026,26 @@ CREATE TABLE `oc_customer` (
 
 --
 -- Dumping data for table `oc_customer`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oc_customer_activity`
+--
+
+DROP TABLE IF EXISTS `oc_customer_activity`;
+CREATE TABLE `oc_customer_activity` (
+  `activity_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `action` text NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`activity_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `oc_customer_activity`
 --
 
 -- --------------------------------------------------------
@@ -1808,7 +1828,7 @@ CREATE TABLE `oc_marketing` (
   `name` varchar(32) NOT NULL,
   `description` text NOT NULL,
   `code` varchar(64) NOT NULL,
-  `clicked` int(5) NOT NULL DEFAULT '0',
+  `clicks` int(5) NOT NULL DEFAULT '0',
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`marketing_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -2027,6 +2047,7 @@ CREATE TABLE `oc_order` (
   `order_status_id` int(11) NOT NULL DEFAULT '0',
   `affiliate_id` int(11) NOT NULL,
   `commission` decimal(15,4) NOT NULL,
+  `marketing_id` int(11) NOT NULL,
   `tracking` varchar(64) NOT NULL,
   `language_id` int(11) NOT NULL,
   `currency_id` int(11) NOT NULL,
@@ -2335,7 +2356,7 @@ CREATE TABLE `oc_product` (
   `minimum` int(11) NOT NULL DEFAULT '1',
   `sort_order` int(11) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '0',
-  `viewed` int(5) NOT NULL DEFAULT '0',
+  `views` int(5) NOT NULL DEFAULT '0',
   `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `date_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`product_id`)

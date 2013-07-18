@@ -60,15 +60,7 @@ html, body {
 	color: #FFFFFF;
 }
 #header .navbar .icon-caret-down {
-	margin-left: 5px;
-}
-#header .navbar-inner .nav > li > a.profile {
-	padding: 8px 0px 7px 12px;
-}
-#header .navbar-inner .nav > li > a.profile img {
-	padding: 1px;
-	background: #FFFFFF;
-	border: 1px solid #006CBB;
+	margin-left: 4px;
 }
 #header .navbar-inner .nav > li > a.notification {
 	padding: 13px 12px 8px 12px;
@@ -85,7 +77,14 @@ html, body {
 	float: left;
 	padding: 3px 8px;
 }
-
+#header .navbar-inner .nav > li > a.profile {
+	padding: 8px 0px 7px 12px;
+}
+#header .navbar-inner .nav > li > a.profile img {
+	padding: 1px;
+	background: #FFFFFF;
+	border: 1px solid #006CBB;
+}
 
 
 
@@ -127,16 +126,15 @@ body > #container {
 	margin: 0px;
 	padding: 0px;
 	color: #666666;
-	font-size: 19px;
+	font-size: 18px;
 	font-weight: normal;
-	text-shadow: 1px 1px 0px #FFFFFF;
 	line-height: 42px;
 	padding-top: 0px;
 	display: inline-block;
 }
 .box-heading h1 i {
-	color: #909090;
-	margin-right: 3px;
+	color: #007EC8;
+	margin-right: 5px;
 }
 .box-heading .buttons {
 	padding-top: 6px;
