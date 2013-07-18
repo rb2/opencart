@@ -1,7 +1,4 @@
 <?php echo $header; ?>
-
-<!-- Breadcrumb -->
-
 <ul class="breadcrumb">
   <?php foreach ($breadcrumbs as $breadcrumb) { ?>
   <li> <a href="<?php echo $breadcrumb['href']; ?>"> <?php echo $breadcrumb['text']; ?> </a> </li>
@@ -457,7 +454,7 @@ $('#button-cart').click(function() {
             if (json['error']) {
                 if (json['error']['option']) {
                     for (i in json['error']['option']) {
-                        $('#option-' + i).after('<div class="alert alert-error alert-form">' + json['error']['option'][i] + '</div>');
+                        $('#option-' + i).after('<div class="error">' + json['error']['option'][i] + '</div>');
                     }
                 }
             } 
@@ -500,7 +497,7 @@ new AjaxUpload('#button-option-<?php echo $option['product_option_id']; ?>', {
         }
         
         if (json['error']) {
-            $('#option-<?php echo $option['product_option_id']; ?>').after('<div class="alert alert-error alert-form">' + json['error'] + '</div>');
+            $('#option-<?php echo $option['product_option_id']; ?>').after('<div class="error">' + json['error'] + '</div>');
         }
         
         $('.loading').remove(); 
@@ -555,18 +552,17 @@ $('#button-review').bind('click', function() {
     });
 });
 //--></script> 
-<script src="catalog/view/javascript/jquery/ui/jquery-ui-1.10.3.custom.min.js"></script> 
-<script type="text/javascript" src="catalog/view/javascript/jquery/ui/jquery-ui-timepicker-addon.js"></script> 
 <script type="text/javascript"><!--
 $(document).ready(function() {
-
-    $('.date').datepicker({dateFormat: 'yy-mm-dd'});
+/*<script src="catalog/view/javascript/jquery/ui/jquery-ui-1.10.3.custom.min.js"></script> 
+<script type="text/javascript" src="catalog/view/javascript/jquery/ui/jquery-ui-timepicker-addon.js"></script> 
+$('.date').datepicker({dateFormat: 'yy-mm-dd'});
     $('.datetime').datetimepicker({
         dateFormat: 'yy-mm-dd',
         timeFormat: 'h:m'
     });
     $('.time').timepicker({timeFormat: 'h:m'});
-
+*/
     $('.thumbnails').magnificPopup({
         delegate: 'li a', // child items selector, by clicking on it popup will open
         type: 'image',

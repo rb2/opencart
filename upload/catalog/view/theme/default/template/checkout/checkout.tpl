@@ -1,82 +1,72 @@
 <?php echo $header; ?>
-
-<!-- Breadcrumb -->
 <ul class="breadcrumb">
-    <?php foreach ($breadcrumbs as $breadcrumb) { ?>
-    
-    <li>
-        <a href="<?php echo $breadcrumb['href']; ?>">
-            <?php echo $breadcrumb['text']; ?>
-        </a>
-    </li>
-    <?php } ?>
+  <?php foreach ($breadcrumbs as $breadcrumb) { ?>
+  <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
+  <?php } ?>
 </ul>
-
-<div class="row">
-
-    <div class="span12" id="content">
-        <?php echo $column_left; ?>
-        <?php echo $content_top; ?>
-
-            <h1><?php echo $heading_title; ?></h1>
-            <div class="checkout">
-                <div id="checkout">
-                    <div class="checkout-heading"><?php echo $text_checkout_option; ?></div>
-                    <div class="checkout-content"></div>
-                </div>
-                <?php if (!$logged) { ?>
-                <div id="payment-address">
-                    <div class="checkout-heading"><span><?php echo $text_checkout_account; ?></span></div>
-                    <div class="checkout-content"></div>
-                </div>
-                <?php } else { ?>
-                <div id="payment-address">
-                    <div class="checkout-heading"><span><?php echo $text_checkout_payment_address; ?></span></div>
-                    <div class="checkout-content"></div>
-                </div>
-                <?php } ?>
-                <?php if ($shipping_required) { ?>
-                <div id="shipping-address">
-                    <div class="checkout-heading"><?php echo $text_checkout_shipping_address; ?></div>
-                    <div class="checkout-content"></div>
-                </div>
-                <div id="shipping-method">
-                    <div class="checkout-heading"><?php echo $text_checkout_shipping_method; ?></div>
-                    <div class="checkout-content"></div>
-                </div>
-                <?php } ?>
-                <div id="payment-method">
-                    <div class="checkout-heading"><?php echo $text_checkout_payment_method; ?></div>
-                    <div class="checkout-content"></div>
-                </div>
-                <div id="confirm">
-                    <div class="checkout-heading"><?php echo $text_checkout_confirm; ?></div>
-                    <div class="checkout-content"></div>
-                </div>
-            </div> <!-- checkout -->
-
-        <?php echo $content_bottom; ?>
-        <?php echo $column_right; ?>
-
-    </div> <!-- content span9 -->
-
-</div> <!-- row -->
-
-
-
+<div class="row"><?php echo $column_left; ?>
+  <div id="content" class="span12"><?php echo $content_top; ?>
+    <h1><?php echo $heading_title; ?></h1>
+    <div class="accordion" id="accordion">
+      <div class="accordion-group">
+        <div class="accordion-heading"><a href="#collapse-checkout-option" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle"><?php echo $text_checkout_option; ?> <i class="icon-caret-down"></i></a></div>
+        <div id="collapse-checkout-option" class="accordion-body collapse">
+          <div class="accordion-inner"></div>
+        </div>
+      </div>
+      <?php if (!$logged) { ?>
+      <div class="accordion-group">
+        <div class="accordion-heading"><a href="#collapse-payment-address" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle"><?php echo $text_checkout_account; ?> <i class="icon-caret-down"></i></a></div>
+        <div id="collapse-payment-address" class="accordion-body collapse">
+          <div class="accordion-inner"></div>
+        </div>
+      </div>
+      <?php } else { ?>
+      <div class="accordion-group">
+        <div class="accordion-heading"><a href="#collapse-payment-address" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle"><?php echo $text_checkout_payment_address; ?> <i class="icon-caret-down"></i></a></div>
+        <div id="collapse-payment-address" class="accordion-body collapse">
+          <div class="accordion-inner"></div>
+        </div>
+      </div>
+      <?php } ?>
+      <?php if ($shipping_required) { ?>
+      <div class="accordion-group">
+        <div class="accordion-heading"><a href="#collapse-shipping-address" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle"><?php echo $text_checkout_shipping_address; ?> <i class="icon-caret-down"></i></a></div>
+        <div id="collapse-shipping-address" class="accordion-body collapse">
+          <div class="accordion-inner"></div>
+        </div>
+      </div>
+      <div class="accordion-group">
+        <div class="accordion-heading"><a href="#collapse-shipping-method" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle"><?php echo $text_checkout_shipping_method; ?> <i class="icon-caret-down"></i></a></div>
+        <div id="collapse-shipping-method" class="accordion-body collapse">
+          <div class="accordion-inner"> </div>
+        </div>
+      </div>
+      <?php } ?>
+      <div class="accordion-group">
+        <div class="accordion-heading"><a href="#collapse-payment-method" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle"><?php echo $text_checkout_payment_method; ?> <i class="icon-caret-down"></i></a></div>
+        <div id="collapse-payment-method" class="accordion-body collapse">
+          <div class="accordion-inner"></div>
+        </div>
+      </div>
+      <div class="accordion-group">
+        <div class="accordion-heading"><a href="#collapse-checkout-confirm" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle"><?php echo $text_checkout_confirm; ?> <i class="icon-caret-down"></i></a></div>
+        <div id="collapse-checkout-confirm" class="accordion-body collapse">
+          <div class="accordion-inner"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php echo $content_bottom; ?></div>
+<?php echo $column_right; ?>
+</div>
 <script type="text/javascript"><!--
-$('#checkout .checkout-content input[name=\'account\']').change(function() {
-    if ($(this).prop('value') == 'register') {
-        $('#payment-address .checkout-heading span').html('<?php echo $text_checkout_account; ?>');
+$('#collapse-checkout-option input[name=\'account\']').on('change', function() {
+    if (this.value == 'register') {
+        $('#collapse-checkout-option').parent().find('.accordion-heading a').html('<?php echo $text_checkout_account; ?>');
     } else {
-        $('#payment-address .checkout-heading span').html('<?php echo $text_checkout_payment_address; ?>');
+        $('#collapse-checkout-option').parent().find('.accordion-heading a').html('<?php echo $text_checkout_payment_address; ?>');
     }
-});
-
-$(document).on('click', '.checkout-heading a', function() {
-    $('.checkout-content').slideUp('slow');
-    console.log($(this));
-    $(this).parent().parent().find('.checkout-content').slideDown('slow');
 });
 
 <?php if (!$logged) { ?> 
@@ -85,9 +75,10 @@ $(document).ready(function() {
         url: 'index.php?route=checkout/login',
         dataType: 'html',
         success: function(html) {
-            $('#checkout .checkout-content').html(html);
+			alert(html);
+            $('#collapse-checkout-option .accordion-inner').html(html);
                 
-            $('#checkout .checkout-content').slideDown('slow');
+            $('#collapse-checkout-option').slideDown('slow');
         },
         error: function(xhr, ajaxOptions, thrownError) {
             alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -100,7 +91,7 @@ $(document).ready(function() {
         url: 'index.php?route=checkout/payment_address',
         dataType: 'html',
         success: function(html) {
-            $('#payment-address .checkout-content').html(html);
+            $('#collapse-checkout-option .accordion-inner').html(html);
                 
             $('#payment-address .checkout-content').slideDown('slow');
         },
@@ -145,7 +136,6 @@ $(document).on('click', '#button-account', function() {
 
 // Login
 $(document).on('click', '#button-login', function() {
-
     $.ajax({
         url: 'index.php?route=checkout/login/validate',
         type: 'post',
@@ -949,5 +939,5 @@ $(document).on('click', '#button-payment-method', function() {
         }
     }); 
 });
-//--></script>
+//--></script> 
 <?php echo $footer; ?>
