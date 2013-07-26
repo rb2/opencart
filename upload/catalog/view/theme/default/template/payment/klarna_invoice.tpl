@@ -79,8 +79,8 @@
   </div>
 </div>
 <div class="buttons">
-  <div class="right">
-    <input type="button" value="<?php echo $button_confirm; ?>" id="button-confirm" class="btn" />
+  <div class="pull-right">
+    <input type="button" value="<?php echo $button_confirm; ?>" id="button-confirm" class="btn btn-primary" />
   </div>
 </div>
 <script type="text/javascript"><!--
@@ -91,17 +91,13 @@ $('#button-confirm').on('click', function() {
 		data: $('#payment input[type=\'text\'], #payment input[type=\'checkbox\']:checked, #payment input[type=\'radio\']:checked, #payment select'),
 		dataType: 'json',		
 		beforeSend: function() {
-			$('#button-confirm').attr('disabled', true);
-			
-			$('.warning, .error').remove();
-			
-			$('#payment').before('<div class="attention"><img src="catalog/view/theme/default/image/loading.gif" alt="" /> <?php echo $text_wait; ?></div>');
-		},
+			$('#button-confirm').button('loading');		},
 		complete: function() {
-			$('#button-confirm').attr('disabled', false);
-			$('.attention').remove();
+			$('#button-confirm').button('reset');
 		},		
-		success: function(json) {	
+		success: function(json) {
+			$('.alert').remove();
+				
 			if (json['error']) {
 				$('#payment').before('<div class="warning">' + json['error'] + '</div>');
 			}
