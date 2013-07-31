@@ -3,7 +3,7 @@ class Cache {
 	private $expire = 3600; 
 	
 	public function __construct() {
-		$files = glob(DIR_CACHE . 'cache.*');
+		$files = glob(DIR_CACHE . 'cache.*', GLOB_NOSORT);
 
 		if ($files) {			
 			foreach ($files as $file) {
@@ -19,7 +19,7 @@ class Cache {
 	}
 	
 	public function get($key) {
-		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*');
+		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*', GLOB_NOSORT);
 
 		if ($files) {
 			$handle = fopen($files[0], 'r');
@@ -45,7 +45,7 @@ class Cache {
 	}
 
 	public function delete($key) {
-		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*');
+		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*', GLOB_NOSORT);
 
 		if ($files) {
 			foreach ($files as $file) {

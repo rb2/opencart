@@ -105,7 +105,7 @@ class Modification {
 	}
 	
 	public function clear() {
-		$files = glob(DIR_MODIFICATION . '{*.php,*.tpl}', GLOB_BRACE);
+		$files = glob(DIR_MODIFICATION . '{*.php,*.tpl}', GLOB_BRACE | GLOB_NOSORT);
 
 		if ($files) {
 			foreach ($files as $file) {
