@@ -29,7 +29,12 @@
           <thead>
             <tr>
               <td width="1" class="center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
-              <td class="center"><?php echo $column_image; ?></td>
+
+              <?php $html_class_order = 'class="' . strtolower($order) . '"'; ?>
+
+              <td class="center">
+                <a href="<?php echo $sort_image; ?>" <?php echo ($sort == 'p.image') ? $html_class_order : '' ?>><?php echo $column_image; ?></a>
+              </td>
               <td class="left"><?php if ($sort == 'pd.name') { ?>
                 <a href="<?php echo $sort_name; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_name; ?></a>
                 <?php } else { ?>
