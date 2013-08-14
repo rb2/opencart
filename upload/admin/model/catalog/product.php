@@ -346,6 +346,7 @@ class ModelCatalogProduct extends Model {
 		$sql .= " GROUP BY p.product_id";
 					
 		$sort_data = array(
+			'p.image',
 			'pd.name',
 			'p.model',
 			'p.price',
