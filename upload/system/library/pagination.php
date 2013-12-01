@@ -70,7 +70,10 @@ class Pagination {
 		
 		$output .= '</ul>';
 		
-		return $output;
+		if ($num_pages > 1) {
+			return $output;
+		} else {
+			return '';	
+		}
 	}
 }
-?>

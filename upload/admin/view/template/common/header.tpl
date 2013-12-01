@@ -2,7 +2,6 @@
 <html dir="<?php echo $direction; ?>" lang="<?php echo $lang; ?>">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?php echo $title; ?></title>
 <base href="<?php echo $base; ?>" />
 <?php if ($description) { ?>
@@ -11,11 +10,11 @@
 <?php if ($keywords) { ?>
 <meta name="keywords" content="<?php echo $keywords; ?>" />
 <?php } ?>
-<script type="text/javascript" src="view/javascript/jquery/jquery-2.0.0.min.js"></script>
+<script type="text/javascript" src="view/javascript/jquery/jquery-2.0.3.min.js"></script>
 <link href="view/javascript/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen" />
 <script type="text/javascript" src="view/javascript/bootstrap/js/bootstrap.js"></script>
-<link type="text/css" href="view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-<link href="view/stylesheet/stylesheet.css" rel="stylesheet" media="screen" />
+<link href="view/javascript/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
+<link type="text/css" href="view/stylesheet/stylesheet.css" rel="stylesheet" media="screen" />
 <?php foreach ($styles as $style) { ?>
 <link type="text/css" href="<?php echo $style['href']; ?>" rel="<?php echo $style['rel']; ?>" media="<?php echo $style['media']; ?>" />
 <?php } ?>
@@ -28,15 +27,51 @@
 <?php } ?>
 </head>
 <body>
-<div class="navbar navbar-inverse navbar-static-top">
+<div id="container">
+<header id="header" class="navbar navbar-inverse navbar-static-top">
   <div class="container">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
-    <a href="<?php echo $home; ?>" class="navbar-brand"><img src="view/image/logo.png" alt="<?php echo $heading_title; ?>" title="" /></a>
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"><i class="fa fa-bars"></i></button>
+      <a href="<?php echo $home; ?>" class="navbar-brand"><img src="view/image/logo.png" alt="<?php echo $heading_title; ?>" title="<?php echo $heading_title; ?>" /></a></div>
     <?php if ($logged) { ?>
-    <div class="nav-collapse collapse navbar-responsive-collapse">
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a data-toggle="dropdown"><i class="fa fa-bell-o fa-2x"></i> <span class="label label-danger">4</span></a>
+          <ul class="dropdown-menu">
+          </ul>
+        </li>
+        <li><a data-toggle="dropdown">
+          <?php if ($profile_image) { ?>
+          <img src="<?php echo $profile_image; ?>" alt="<?php echo $profile_name; ?>" />
+          <?php } ?>
+          <i class="fa fa-caret-down"></i> <?php echo $profile_name; ?><br />
+          <small><?php echo $profile_group; ?></small></a>
+          <ul class="dropdown-menu">
+            <li><a href="<?php echo $profile; ?>"><?php echo $text_profile; ?></a></li>
+            <li><a href="<?php echo $setting; ?>"><?php echo $text_setting; ?></a></li>
+            <li><a href="<?php echo $logout; ?>"><?php echo $text_logout; ?></a></li>
+            <li class="divider"></li>
+            <li class="dropdown-header"><?php echo $text_help; ?></li>
+            <li><a href="http://www.opencart.com" target="_blank"><?php echo $text_opencart; ?></a></li>
+            <li><a href="http://docs.opencart.com" target="_blank"><?php echo $text_documentation; ?></a></li>
+            <li><a href="http://forum.opencart.com" target="_blank"><?php echo $text_support; ?></a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <?php } ?>
+  </div>
+</header>
+<?php if ($logged) { ?>
+<nav id="menu" class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex2-collapse"><i class="fa fa-bars"></i></button>
+    </div>
+    <div class="collapse navbar-collapse navbar-ex2-collapse">
       <ul class="nav navbar-nav">
         <li id="dashboard"><a href="<?php echo $home; ?>"><?php echo $text_dashboard; ?></a></li>
-        <li class="dropdown" id="catalog"><a data-toggle="dropdown"><?php echo $text_catalog; ?> <i class="icon-caret-down"></i></a>
+        <li id="catalog" class="dropdown"><a data-toggle="dropdown"><?php echo $text_catalog; ?> <span class="visible-xs"><i class="fa fa-caret-down"></i></span></a>
           <ul class="dropdown-menu">
             <li><a href="<?php echo $category; ?>"><?php echo $text_category; ?></a></li>
             <li><a href="<?php echo $product; ?>"><?php echo $text_product; ?></a></li>
@@ -54,7 +89,7 @@
             <li><a href="<?php echo $information; ?>"><?php echo $text_information; ?></a></li>
           </ul>
         </li>
-        <li class="dropdown" id="extension"><a data-toggle="dropdown"><?php echo $text_extension; ?> <i class="icon-caret-down"></i></a>
+        <li id="extension" class="dropdown"><a data-toggle="dropdown"><?php echo $text_extension; ?></a>
           <ul class="dropdown-menu">
             <li><a href="<?php echo $installer; ?>"><?php echo $text_installer; ?></a></li>
             <li><a href="<?php echo $modification; ?>"><?php echo $text_modification; ?></a></li>
@@ -65,7 +100,7 @@
             <li><a href="<?php echo $feed; ?>"><?php echo $text_feed; ?></a></li>
           </ul>
         </li>
-        <li class="dropdown" id="sale"><a data-toggle="dropdown"><?php echo $text_sale; ?> <i class="icon-caret-down"></i></a>
+        <li id="sale" class="dropdown"><a data-toggle="dropdown"><?php echo $text_sale; ?></a>
           <ul class="dropdown-menu">
             <li><a href="<?php echo $order; ?>"><?php echo $text_order; ?></a></li>
             <li><a href="<?php echo $return; ?>"><?php echo $text_return; ?></a></li>
@@ -93,7 +128,7 @@
             </li>
           </ul>
         </li>
-        <li class="dropdown" id="system"><a data-toggle="dropdown"><?php echo $text_system; ?> <i class="icon-caret-down"></i></a>
+        <li id="system" class="dropdown"><a data-toggle="dropdown"><?php echo $text_system; ?></i></a>
           <ul class="dropdown-menu">
             <li><a href="<?php echo $setting; ?>"><?php echo $text_setting; ?></a></li>
             <li class="dropdown-submenu"><a><?php echo $text_design; ?></a>
@@ -140,7 +175,7 @@
             <li><a href="<?php echo $backup; ?>"><?php echo $text_backup; ?></a></li>
           </ul>
         </li>
-        <li class="dropdown" id="reports"><a data-toggle="dropdown"><?php echo $text_reports; ?> <i class="icon-caret-down"></i></a>
+        <li id="reports" class="dropdown"><a data-toggle="dropdown"><?php echo $text_reports; ?></a>
           <ul class="dropdown-menu">
             <li class="dropdown-submenu"><a><?php echo $text_sale; ?></a>
               <ul class="dropdown-menu">
@@ -170,42 +205,27 @@
               <ul class="dropdown-menu">
                 <li><a href="<?php echo $report_marketing; ?>"><?php echo $text_marketing; ?></a></li>
                 <li><a href="<?php echo $report_affiliate; ?>"><?php echo $text_affiliate; ?></a></li>
+                <li><a href="<?php echo $report_affiliate_activity; ?>"><?php echo $text_affiliate_activity; ?></a></li>
               </ul>
             </li>
           </ul>
         </li>
       </ul>
       <ul class="nav navbar-nav pull-right">
-        <li class="dropdown">
-          <?php if ($stores) { ?>
-          <a class="notification" title="<?php echo $text_store; ?>" data-toggle="dropdown"><i class="icon-shopping-cart"></i></a>
+        <?php if ($stores) { ?>
+        <li class="dropdown"><a data-toggle="dropdown"><?php echo $text_store; ?> <i class="fa fa-caret-down"></i></a>
           <ul class="dropdown-menu">
             <li><a href="<?php echo $store; ?>" target="_blank"><?php echo $store_name; ?></a></li>
             <?php foreach ($stores as $store) { ?>
             <li><a href="<?php echo $store['href']; ?>" target="_blank"><?php echo $store['name']; ?></a></li>
             <?php } ?>
           </ul>
-          <?php } else { ?>
-          <a href="<?php echo $store; ?>" target="_blank" title="<?php echo $text_store; ?>" class="notification"><i class="icon-shopping-cart"></i></a>
-          <?php } ?>
         </li>
-        <li class="dropdown"><a href="<?php echo $report_customer_online; ?>" title="<?php echo $text_report_customer_online; ?>" class="notification"><span class="badge badge-success"><?php echo $online; ?></span> <i class="icon-group"></i></a></li>
-        <li class="dropdown"><a class="notification" title="<?php echo $text_help; ?>" data-toggle="dropdown"><i class="icon-question-sign"></i></a>
-          <ul class="dropdown-menu">
-            <li><a href="http://www.opencart.com" target="_blank"><?php echo $text_opencart; ?></a></li>
-            <li><a href="http://docs.opencart.com" target="_blank"><?php echo $text_documentation; ?></a></li>
-            <li><a href="http://forum.opencart.com" target="_blank"><?php echo $text_support; ?></a></li>
-          </ul>
-        </li>
-        <li class="dropdown"><a class="profile" data-toggle="dropdown"><img src="<?php echo $profile_image; ?>" alt="<?php echo $profile_name; ?>" title="<?php echo $profile_name; ?>" /> <i class="icon-caret-down"></i></a>
-          <ul class="dropdown-menu">
-            <li><a href="<?php echo $profile; ?>"><?php echo $text_profile; ?></a></li>
-            <li><a href="<?php echo $setting; ?>"><?php echo $text_setting; ?></a></li>
-            <li><a href="<?php echo $logout; ?>"><?php echo $text_logout; ?></a></li>
-          </ul>
-        </li>
+        <?php } else { ?>
+        <li class="dropdown"><a href="<?php echo $store; ?>" target="_blank"><?php echo $text_store; ?></a></li>
+        <?php } ?>
       </ul>
     </div>
-    <?php } ?>
   </div>
-</div>
+</nav>
+<?php } ?>

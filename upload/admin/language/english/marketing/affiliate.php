@@ -51,6 +51,9 @@ $_['entry_bank_account_name']   = 'Account Name';
 $_['entry_bank_account_number'] = 'Account Number';
 $_['entry_amount']              = 'Amount';
 $_['entry_description']         = 'Description';
+$_['entry_name']                = 'Affiliate Name';
+$_['entry_approved']            = 'Approved';
+$_['entry_date_added']          = 'Date Added';
 
 // Help
 $_['help_code']                = 'The tracking code that will be used to track referrals.';
@@ -71,4 +74,3 @@ $_['error_postcode']            = 'Postcode must be between 2 and 10 characters 
 $_['error_country']             = 'Please select a country!';
 $_['error_zone']                = 'Please select a region / state!';
 $_['error_code']                = 'Tracking Code required!';
-?>

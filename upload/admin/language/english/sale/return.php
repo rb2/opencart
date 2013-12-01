@@ -54,6 +54,9 @@ $_['entry_return_reason'] = 'Return Reason';
 $_['entry_return_action'] = 'Return Action';
 $_['entry_return_status'] = 'Return Status';
 $_['entry_notify']        = 'Notify Customer';
+$_['entry_return_id']     = 'Return ID';
+$_['entry_date_added']    = 'Date Added';
+$_['entry_date_modified'] = 'Date Modified';
 
 // Help
 $_['help_product']        = '(Autocomplete)';
@@ -68,4 +71,3 @@ $_['error_email']         = 'E-Mail Address does not appear to be valid!';
 $_['error_telephone']     = 'Telephone must be between 3 and 32 characters!';
 $_['error_product']       = 'Product Name must be greater than 3 and less than 255 characters!';
 $_['error_model']         = 'Product Model must be greater than 3 and less than 64 characters!';
-?>

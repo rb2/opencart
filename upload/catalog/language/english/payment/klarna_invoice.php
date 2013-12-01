@@ -13,14 +13,14 @@ $_['text_day']             = 'Day';
 $_['text_comment']         = 'Klarna\'s Invoice ID: %s\n%s/%s: %.4f';
 
 // Entry
-$_['entry_gender']         = 'Gender:';
-$_['entry_pno']            = 'Personal Number:';
-$_['entry_dob']            = 'Date of Birth:';
-$_['entry_phone_no']       = 'Phone number:';
-$_['entry_street']         = 'Street:';
-$_['entry_house_no']       = 'House No.:';
-$_['entry_house_ext']      = 'House Ext.:';
-$_['entry_company']        = 'Company Registration Number:';
+$_['entry_gender']         = 'Gender';
+$_['entry_pno']            = 'Personal Number';
+$_['entry_dob']            = 'Date of Birth';
+$_['entry_phone_no']       = 'Phone number';
+$_['entry_street']         = 'Street';
+$_['entry_house_no']       = 'House No.';
+$_['entry_house_ext']      = 'House Ext.';
+$_['entry_company']        = 'Company Registration Number';
 
 // Help
 $_['help_pno']             = 'Please enter your Social Security number here.';
@@ -34,4 +34,3 @@ $_['help_company']         = 'Please enter your Company\'s registration number';
 $_['error_deu_terms']     = 'You must agree to Klarna\'s privacy policy (Datenschutz)';
 $_['error_address_match'] = 'Billing and Shipping addresses must match if you want to use Klarna Invoice';
 $_['error_network']       = 'Error occurred while connecting to Klarna. Please try again later.';
-?>

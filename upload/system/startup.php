@@ -3,8 +3,8 @@
 error_reporting(E_ALL);
 
 // Check Version
-if (version_compare(phpversion(), '5.1.0', '<') == true) {
-	exit('PHP5.1+ Required');
+if (version_compare(phpversion(), '5.3.0', '<') == true) {
+	exit('PHP5.3+ Required');
 }
 
 // Register Globals
@@ -75,6 +75,15 @@ if (!isset($_SERVER['HTTP_HOST'])) {
 	$_SERVER['HTTP_HOST'] = getenv('HTTP_HOST');
 }
 
+// Check if SSL
+if (isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTPS'] == '1'))) {
+	$_SERVER['HTTPS'] = true;
+} elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+	$_SERVER['HTTPS'] = true;
+} else {
+	$_SERVER['HTTPS'] = false;
+}
+
 // Engine
 require_once(DIR_SYSTEM . 'engine/action.php'); 
 require_once(DIR_SYSTEM . 'engine/controller.php');
@@ -85,6 +94,14 @@ require_once(DIR_SYSTEM . 'engine/registry.php');
 
 // Library
 function __autoload($class) {
+	//foreach () {
+		
+	//}
+	
+	if (substr(0, 5, $class) == 'Controller') {
+		
+	}
+	
 	$file = DIR_SYSTEM . 'library/' . strtolower($class) . '.php';
 	
 	if (file_exists($file)) {

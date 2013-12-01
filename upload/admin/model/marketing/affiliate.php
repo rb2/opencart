@@ -106,7 +106,7 @@ class ModelMarketingAffiliate extends Model {
 		if ($affiliate_info) {
 			$this->db->query("UPDATE " . DB_PREFIX . "affiliate SET approved = '1' WHERE affiliate_id = '" . (int)$affiliate_id . "'");
 			
-			$this->language->load('mail/affiliate');
+			$this->load->language('mail/affiliate');
 	
 			$message  = sprintf($this->language->get('text_approve_welcome'), $this->config->get('config_name')) . "\n\n";
 			$message .= $this->language->get('text_approve_login') . "\n";
@@ -125,7 +125,7 @@ class ModelMarketingAffiliate extends Model {
 			$mail->setTo($affiliate_info['email']);
 			$mail->setFrom($this->config->get('config_email'));
 			$mail->setSender($this->config->get('config_name'));
-			$mail->setSubject(html_entity_decode(sprintf($this->language->get('text_approve_subject'), $this->config->get('config_name')), ENT_QUOTES, 'UTF-8'));
+			$mail->setSubject(sprintf($this->language->get('text_approve_subject'), $this->config->get('config_name')));
 			$mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
 			$mail->send();
 		}
@@ -195,7 +195,7 @@ class ModelMarketingAffiliate extends Model {
 		if ($affiliate_info) { 
 			$this->db->query("INSERT INTO " . DB_PREFIX . "affiliate_transaction SET affiliate_id = '" . (int)$affiliate_id . "', order_id = '" . (float)$order_id . "', description = '" . $this->db->escape($description) . "', amount = '" . (float)$amount . "', date_added = NOW()");
 		
-			$this->language->load('mail/affiliate');
+			$this->load->language('mail/affiliate');
 							
 			$message  = sprintf($this->language->get('text_transaction_received'), $this->currency->format($amount, $this->config->get('config_currency'))) . "\n\n";
 			$message .= sprintf($this->language->get('text_transaction_total'), $this->currency->format($this->getTransactionTotal($affiliate_id), $this->config->get('config_currency')));
@@ -211,7 +211,7 @@ class ModelMarketingAffiliate extends Model {
 			$mail->setTo($affiliate_info['email']);
 			$mail->setFrom($this->config->get('config_email'));
 			$mail->setSender($this->config->get('config_name'));
-			$mail->setSubject(html_entity_decode(sprintf($this->language->get('text_transaction_subject'), $this->config->get('config_name')), ENT_QUOTES, 'UTF-8'));
+			$mail->setSubject(sprintf($this->language->get('text_transaction_subject'), $this->config->get('config_name')));
 			$mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
 			$mail->send();
 		}
@@ -253,4 +253,3 @@ class ModelMarketingAffiliate extends Model {
 		return $query->row['total'];
 	}		
 }
-?>

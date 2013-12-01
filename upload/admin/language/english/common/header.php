@@ -4,6 +4,7 @@ $_['heading_title']                    = 'OpenCart';
 
 // Text
 $_['text_affiliate']                   = 'Affiliates';
+$_['text_affiliate_activity']          = 'Affiliate Activity';
 $_['text_attribute']                   = 'Attributes';
 $_['text_attribute_group']             = 'Attribute Groups';
 $_['text_backup']                      = 'Backup / Restore';
@@ -86,4 +87,3 @@ $_['text_voucher_theme']               = 'Voucher Themes';
 $_['text_weight_class']                = 'Weight Classes';
 $_['text_length_class']                = 'Length Classes';
 $_['text_zone']                        = 'Zones';
-?>

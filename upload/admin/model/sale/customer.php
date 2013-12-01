@@ -150,7 +150,7 @@ class ModelSaleCustomer extends Model {
 		if ($customer_info) {
 			$this->db->query("UPDATE " . DB_PREFIX . "customer SET approved = '1' WHERE customer_id = '" . (int)$customer_id . "'");
 
-			$this->language->load('mail/customer');
+			$this->load->language('mail/customer');
 			
 			$this->load->model('setting/store');
 						
@@ -182,7 +182,7 @@ class ModelSaleCustomer extends Model {
 			$mail->setTo($customer_info['email']);
 			$mail->setFrom($this->config->get('config_email'));
 			$mail->setSender($store_name);
-			$mail->setSubject(html_entity_decode(sprintf($this->language->get('text_approve_subject'), $store_name), ENT_QUOTES, 'UTF-8'));
+			$mail->setSubject(sprintf($this->language->get('text_approve_subject'), $store_name));
 			$mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
 			$mail->send();
 		}		
@@ -360,7 +360,7 @@ class ModelSaleCustomer extends Model {
 		if ($customer_info) { 
 			$this->db->query("INSERT INTO " . DB_PREFIX . "customer_transaction SET customer_id = '" . (int)$customer_id . "', order_id = '" . (int)$order_id . "', description = '" . $this->db->escape($description) . "', amount = '" . (float)$amount . "', date_added = NOW()");
 
-			$this->language->load('mail/customer');
+			$this->load->language('mail/customer');
 			
 			if ($customer_info['store_id']) {
 				$this->load->model('setting/store');
@@ -390,7 +390,7 @@ class ModelSaleCustomer extends Model {
 			$mail->setTo($customer_info['email']);
 			$mail->setFrom($this->config->get('config_email'));
 			$mail->setSender($store_name);
-			$mail->setSubject(html_entity_decode(sprintf($this->language->get('text_transaction_subject'), $this->config->get('config_name')), ENT_QUOTES, 'UTF-8'));
+			$mail->setSubject(sprintf($this->language->get('text_transaction_subject'), $this->config->get('config_name')));
 			$mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
 			$mail->send();
 		}
@@ -438,7 +438,7 @@ class ModelSaleCustomer extends Model {
 		if ($customer_info) { 
 			$this->db->query("INSERT INTO " . DB_PREFIX . "customer_reward SET customer_id = '" . (int)$customer_id . "', order_id = '" . (int)$order_id . "', points = '" . (int)$points . "', description = '" . $this->db->escape($description) . "', date_added = NOW()");
 
-			$this->language->load('mail/customer');
+			$this->load->language('mail/customer');
 			
 			if ($order_id) {
 				$this->load->model('sale/order');
@@ -468,7 +468,7 @@ class ModelSaleCustomer extends Model {
 			$mail->setTo($customer_info['email']);
 			$mail->setFrom($this->config->get('config_email'));
 			$mail->setSender($store_name);
-			$mail->setSubject(html_entity_decode(sprintf($this->language->get('text_reward_subject'), $store_name), ENT_QUOTES, 'UTF-8'));
+			$mail->setSubject(sprintf($this->language->get('text_reward_subject'), $store_name));
 			$mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
 			$mail->send();
 		}
@@ -528,4 +528,3 @@ class ModelSaleCustomer extends Model {
 		return $query->row['total'];
 	}	
 }
-?>

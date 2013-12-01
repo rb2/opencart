@@ -1,14 +1,15 @@
 <?php
 final class Loader {
-	protected $registry;
+	private $registry;
 
 	public function __construct($registry) {
 		$this->registry = $registry;
 	}
-	
-	public function controller($route, $args = array()) {
+		
+	public function controller($route) {
 		$path = '';
 		
+		// Break apart the route
 		$parts = explode('/', str_replace(array('../', '..\\', '..'), '', (string)$route));
 		
 		foreach ($parts as $part) {
@@ -22,7 +23,7 @@ final class Loader {
 				continue;
 			}
 			
-			$file = DIR_APPLICATION . 'controller/' .  $path . '.php';			
+			$file = DIR_APPLICATION . 'controller/' .  $path . '.php';
 			
 			if (is_file($file)) {
 				$class = 'Controller' . preg_replace('/[^a-zA-Z0-9]/', '', $path);
@@ -38,7 +39,13 @@ final class Loader {
 		if (!$method) {
 			$method = 'index';
 		}
-					
+		
+		// function arguments
+		$args = func_get_args();
+		
+		// Remove the route
+		array_shift($args);
+		
 		if (file_exists($file)) { 
 			include_once($file);
 			
@@ -46,7 +53,7 @@ final class Loader {
 					
 			if (is_callable(array($controller, $method))) {
 				return call_user_func_array(array($controller, $method), $args);
-			} else {				
+			} else {	
 				return false;
 			}
 		} else {
@@ -56,16 +63,20 @@ final class Loader {
 	}
 		
 	public function model($model) {
-		$file = DIR_APPLICATION . 'model/' . $model . '.php';
-		$class = 'Model' . preg_replace('/[^a-zA-Z0-9]/', '', $model);
-				
-		if (file_exists($file)) { 
-			include_once($file);
-
-			$this->registry->set('model_' . str_replace('/', '_', $model), new $class($this->registry));
-		} else {
-			trigger_error('Error: Could not load model ' . $file . '!');
-			exit();
+		$key = 'model_' . str_replace('/', '_', $model);
+		
+		if (!$this->registry->has($key)) {
+			$file = DIR_APPLICATION . 'model/' . $model . '.php';
+			$class = 'Model' . preg_replace('/[^a-zA-Z0-9]/', '', $model);
+					
+			if (file_exists($file)) { 
+				include_once($file);
+	
+				$this->registry->set($key, new $class($this->registry));
+			} else {
+				trigger_error('Error: Could not load model ' . $file . '!');
+				exit();
+			}
 		}
 	}
 	
@@ -73,14 +84,8 @@ final class Loader {
 		$file = DIR_TEMPLATE . $template;
 		
 		if (file_exists($file)) {
-			foreach ($data as $key => $value) {
-				if (is_object($value)) {
-					${$key} = $value->execute(); 
-				} else {
-					${$key} = $value;
-				}
-			}
-
+			extract($data);
+			
 			ob_start();
 
 			require($file);
@@ -117,27 +122,13 @@ final class Loader {
 			exit();
 		}
 	}
-	
-	public function database($driver, $hostname, $username, $password, $database) {
-		$file = DIR_SYSTEM . 'database/' . $driver . '.php';
-		$class = 'Database' . preg_replace('/[^a-zA-Z0-9]/', '', $driver);
-
-		if (file_exists($file)) {
-			include_once($file);
-
-			$this->registry->set($driver, new $class($hostname, $username, $password, $database));
-		} else {
-			trigger_error('Error: Could not load database ' . $file . '!');
-			exit();
-		}
-	}
 
 	public function config($config) {
-		$this->config->load($config);
+		$this->registry->get('config')->load($config);
 	}
 
 	public function language($language) {
-		return $this->language->load($language);
+		return $this->registry->get('language')->load($language);
 	}
 } 
 ?>
