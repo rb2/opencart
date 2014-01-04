@@ -20,12 +20,12 @@ class ControllerPaymentKlarnaInvoice extends Controller {
 				}
 			}			
 			
-			$filter_data = array(
+			$klarna_data = array(
 				'klarna_invoice_pclasses' => $this->pclasses,
 				'klarna_invoice_status'   => $status
 			);
 			
-			$this->model_setting_setting->editSetting('klarna_invoice', array_merge($this->request->post, $data));
+			$this->model_setting_setting->editSetting('klarna_invoice', array_merge($this->request->post, $klarna_data));
 			
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -169,11 +169,7 @@ class ControllerPaymentKlarnaInvoice extends Controller {
             $this->error['warning'] = $this->language->get('error_permission');
         }
 				
-        if (!$this->error) {
-            return true;
-        } else {
-            return false;
-        }
+		return !$this->error;
     }
     
     private function parseResponse($node, $document) {

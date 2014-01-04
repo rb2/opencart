@@ -18,7 +18,6 @@ class ModelTotalVoucher extends Model {
 				$total_data[] = array(
 					'code'       => 'voucher',
         			'title'      => sprintf($this->language->get('text_voucher'), $this->session->data['voucher']),
-	    			'text'       => $this->currency->format(-$amount),
         			'value'      => -$amount,
 					'sort_order' => $this->config->get('voucher_sort_order')
       			);
@@ -45,5 +44,9 @@ class ModelTotalVoucher extends Model {
 		if ($voucher_info) {
 			$this->model_checkout_voucher->redeem($voucher_info['voucher_id'], $order_info['order_id'], $order_total['value']);	
 		}						
-	}	
+	}
+	
+	public function clear($order_id) {
+		
+	}		
 }

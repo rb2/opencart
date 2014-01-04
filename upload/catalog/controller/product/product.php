@@ -3,8 +3,6 @@ class ControllerProductProduct extends Controller {
 	private $error = array(); 
 	
 	public function index() { 
-		$data = array();
-	
 		$this->load->language('product/product');
 	
 		$data['breadcrumbs'] = array();
@@ -64,7 +62,7 @@ class ControllerProductProduct extends Controller {
 										
 				$data['breadcrumbs'][] = array(
 					'text' => $category_info['name'],
-					'href' => $this->url->link('product/category', 'path=' . $this->request->get['path'])
+					'href' => $this->url->link('product/category', 'path=' . $this->request->get['path'].$url)
 				);
 			}
 		}

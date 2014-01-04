@@ -11,19 +11,19 @@ class ControllerCheckoutSuccess extends Controller {
 
 			if ($this->customer->isLogged()) {
 				$activity_data = array(
-					'order_id'    => $this->session->data['order_id'],
 					'customer_id' => $this->customer->getId(),
-					'name'        => $this->customer->getFirstName() . ' ' . $this->customer->getLastName()
+					'name'        => $this->customer->getFirstName() . ' ' . $this->customer->getLastName(),
+					'order_id'    => $this->session->data['order_id']
 				);
 			
-				$this->model_account_activity->addActivity('account_order', $activity_data);
+				$this->model_account_activity->addActivity('order_account', $activity_data);
 			} else {
 				$activity_data = array(
-					'order_id' => $this->session->data['order_id'],
-					'name'     => $this->session->data['guest']['firstname'] . ' ' . $this->session->data['guest']['lastname']
+					'name'     => $this->session->data['guest']['firstname'] . ' ' . $this->session->data['guest']['lastname'],
+					'order_id' => $this->session->data['order_id']
 				);
 				
-				$this->model_account_activity->addActivity('guest_order', $activity_data);
+				$this->model_account_activity->addActivity('order_guest', $activity_data);
 			}	
 			
 			unset($this->session->data['shipping_method']);
@@ -37,6 +37,7 @@ class ControllerCheckoutSuccess extends Controller {
 			unset($this->session->data['reward']);
 			unset($this->session->data['voucher']);
 			unset($this->session->data['vouchers']);
+			unset($this->session->data['totals']); 
 		}	
 		
 		$this->document->setTitle($this->language->get('heading_title'));

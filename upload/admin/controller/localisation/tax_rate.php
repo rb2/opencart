@@ -369,7 +369,7 @@ class ControllerLocalisationTaxRate extends Controller {
 		} elseif (isset($this->request->get['tax_rate_id'])) {
 			$data['tax_rate_customer_group'] = $this->model_localisation_tax_rate->getTaxRateCustomerGroups($this->request->get['tax_rate_id']);
 		} else {
-			$data['tax_rate_customer_group'] = array();
+			$data['tax_rate_customer_group'] = array($this->config->get('config_customer_group_id'));
 		}	
 		
 		$this->load->model('sale/customer_group');
@@ -407,11 +407,7 @@ class ControllerLocalisationTaxRate extends Controller {
 			$this->error['rate'] = $this->language->get('error_rate');
 		}
 								
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return !$this->error;
 	}
 
 	protected function validateDelete() {
@@ -429,10 +425,6 @@ class ControllerLocalisationTaxRate extends Controller {
 			}
 		}
 				
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return !$this->error;
 	}	
 }

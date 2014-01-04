@@ -21,12 +21,12 @@ class ControllerPaymentKlarnaAccount extends Controller {
 				}
 			}			
 			
-			$filter_data = array(
+			$klarna_data = array(
 				'klarna_account_pclasses' => $this->pclasses,
 				'klarna_account_status'   => $status
 			);
 			
-			$this->model_setting_setting->editSetting('klarna_account', array_merge($this->request->post, $data));
+			$this->model_setting_setting->editSetting('klarna_account', array_merge($this->request->post, $klarna_data));
             
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -301,11 +301,7 @@ class ControllerPaymentKlarnaAccount extends Controller {
 			}
 		}
 
-        if (!$this->error) {
-            return true;
-        } else {
-            return false;
-        }
+		return !$this->error;
     }
 	
     private function parseResponse($node, $document) {

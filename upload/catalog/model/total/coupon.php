@@ -75,10 +75,14 @@ class ModelTotalCoupon extends Model {
 					$discount_total += $this->session->data['shipping_method']['cost'];				
 				}				
       			
+				// If discount greater than total
+				if ($discount_total > $total) {
+					$discount_total = $total; 
+				}
+				
 				$total_data[] = array(
 					'code'       => 'coupon',
         			'title'      => sprintf($this->language->get('text_coupon'), $this->session->data['coupon']),
-	    			'text'       => $this->currency->format(-$discount_total),
         			'value'      => -$discount_total,
 					'sort_order' => $this->config->get('coupon_sort_order')
       			);
@@ -105,5 +109,9 @@ class ModelTotalCoupon extends Model {
 		if ($coupon_info) {
 			$this->model_checkout_coupon->redeem($coupon_info['coupon_id'], $order_info['order_id'], $order_info['customer_id'], $order_total['value']);	
 		}						
+	}
+	
+	public function clear($order_id) {
+		
 	}
 }

@@ -3,6 +3,7 @@
 $_['heading_title']                    = 'OpenCart';
 
 // Text
+$_['text_logged']                      = 'You are logged in as <strong>%s</strong>';
 $_['text_affiliate']                   = 'Affiliates';
 $_['text_affiliate_activity']          = 'Affiliate Activity';
 $_['text_attribute']                   = 'Attributes';
@@ -71,7 +72,7 @@ $_['text_sale']                        = 'Sales';
 $_['text_shipping']                    = 'Shipping';
 $_['text_setting']                     = 'Settings';
 $_['text_stock_status']                = 'Stock Statuses';
-$_['text_store']                       = 'Store Front';
+$_['text_store']                       = 'Stores';
 $_['text_support']                     = 'Support Forum';
 $_['text_system']                      = 'System';
 $_['text_tax']                         = 'Taxes';

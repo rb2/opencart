@@ -226,7 +226,15 @@ class ControllerCheckoutCart extends Controller {
 				array_multisort($sort_order, SORT_ASC, $total_data);				
 			}
 			
-			$data['totals'] = $total_data;
+			
+			$data['totals'] = array();
+	
+			foreach ($total_data as $total) {
+				$data['totals'][] = array(
+					'title' => $total['title'],
+					'text'  => $this->currency->format($total['value']),
+				);				
+			}
 						
 			$data['continue'] = $this->url->link('common/home');
 						

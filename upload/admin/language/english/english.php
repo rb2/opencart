@@ -24,7 +24,7 @@ $_['text_close']                    = 'Close';
 $_['text_pagination']               = 'Showing %d to %d of %d (%d Pages)';
 $_['text_no_results']               = 'No results!';
 $_['text_confirm']                  = 'Are you sure?';
-$_['text_home']                     = '<i class="fa fa-home"></i>';
+$_['text_home']                     = '<i class="fa fa-home fa-lg"></i>';
 
 // Button
 $_['button_insert']                 = 'Add New';
@@ -37,7 +37,6 @@ $_['button_close']                  = 'Close';
 $_['button_enable']                 = 'Enable';
 $_['button_disable']                = 'Disable';
 $_['button_filter']                 = 'Filter';
-$_['button_geocode']                = 'Geocode';
 $_['button_send']                   = 'Send';
 $_['button_edit']                   = 'Edit';
 $_['button_copy']                   = 'Copy';
@@ -56,7 +55,6 @@ $_['button_attribute_add']          = 'Add Attribute';
 $_['button_banner_add']             = 'Add Banner';
 $_['button_custom_field_value_add'] = 'Add Custom Field';
 $_['button_product_add']            = 'Add Product';
-$_['button_voucher_add']            = 'Add Voucher';
 $_['button_filter_add']             = 'Add Filter';
 $_['button_option_add']             = 'Add Option';
 $_['button_option_value_add']       = 'Add Option Value';
@@ -74,6 +72,7 @@ $_['button_total']                  = 'Update Totals';
 $_['button_approve']                = 'Approve';
 $_['button_reset']                  = 'Reset';
 $_['button_generate']               = 'Generate';
+$_['button_voucher_add']            = 'Add Voucher';
 $_['button_reward_add']             = 'Add Reward Points';
 $_['button_reward_remove']          = 'Remove Reward Points';
 $_['button_commission_add']         = 'Add Commission';
@@ -87,6 +86,7 @@ $_['button_view']                   = 'View';
 $_['button_install']                = 'Install';
 $_['button_uninstall']              = 'Uninstall';
 $_['button_link']                   = 'Link';
+$_['button_restock']                = 'Restock';
 
 // Tab
 $_['tab_address']                   = 'Address';

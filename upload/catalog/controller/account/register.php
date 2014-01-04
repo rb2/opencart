@@ -303,7 +303,7 @@ class ControllerAccountRegister extends Controller {
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
 
 			if ($information_info) {
-				$data['text_agree'] = sprintf($this->language->get('text_agree'), $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_id'), 'SSL'), $information_info['title'], $information_info['title']);
+				$data['text_agree'] = sprintf($this->language->get('text_agree'), $this->url->link('information/information/agree', 'information_id=' . $this->config->get('config_account_id'), 'SSL'), $information_info['title'], $information_info['title']);
 			} else {
 				$data['text_agree'] = '';
 			}
@@ -318,17 +318,16 @@ class ControllerAccountRegister extends Controller {
 		}
 
 		// Custom Fields
+		$this->load->model('account/custom_field');
+		
 		if (isset($this->request->post['custom_field'])) {
 			$custom_field_info = $this->request->post['custom_field'];
 		} else {
 			$custom_field_info = array();
 		}	
-		
-		$this->load->model('account/custom_field');
 
 		$data['custom_fields'] = array();
 
-		// If a post request then get a list of all fields that should have been posted for validation checking.
 		$custom_fields = $this->model_account_custom_field->getCustomFields('register');
 
 		foreach ($custom_fields as $custom_field) {
@@ -443,10 +442,6 @@ class ControllerAccountRegister extends Controller {
 			}
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return !$this->error;
 	}
 }
