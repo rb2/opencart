@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']      = 'Bank Transfer';
 
-// Text 
+// Text
 $_['text_payment']       = 'Payment';
 $_['text_success']       = 'Success: You have modified bank transfer details!';
 
@@ -20,4 +20,3 @@ $_['help_total']         = 'The checkout total the order must reach before this 
 // Error
 $_['error_permission']   = 'Warning: You do not have permission to modify payment bank transfer!';
 $_['error_bank']         = 'Bank Transfer Instructions Required!';
-?>

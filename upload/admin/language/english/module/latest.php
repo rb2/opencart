@@ -11,7 +11,7 @@ $_['text_column_left']    = 'Column Left';
 $_['text_column_right']   = 'Column Right';
 
 // Entry
-$_['entry_limit']         = 'Limit'; 
+$_['entry_limit']         = 'Limit';
 $_['entry_image']         = 'Image (W x H) and Resize Type';
 $_['entry_width']         = 'Width';
 $_['entry_height']        = 'Height';
@@ -23,4 +23,3 @@ $_['entry_sort_order']    = 'Sort Order';
 // Error
 $_['error_permission']    = 'Warning: You do not have permission to modify module latest!';
 $_['error_image']         = 'Image width &amp; height dimensions required!';
-?>

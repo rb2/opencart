@@ -14,7 +14,7 @@ class Weight {
 				'title'           => $result['title'],
 				'unit'            => $result['unit'],
 				'value'           => $result['value']
-			); 
+			);
 		}
 	}
 
@@ -54,4 +54,3 @@ class Weight {
 		}
 	}
 }
-?>

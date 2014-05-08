@@ -2,9 +2,9 @@
 // Heading
 $_['heading_title']      = 'LIQPAY';
 
-// Text 
+// Text
 $_['text_payment']       = 'Payment';
-$_['text_success']       = 'Success: You have modified LIQPAY account details!';   
+$_['text_success']       = 'Success: You have modified LIQPAY account details!';
 $_['text_pay']           = 'LIQPAY';
 $_['text_card']          = 'Credit Card';
 
@@ -25,4 +25,3 @@ $_['help_total']         = 'The checkout total the order must reach before this 
 $_['error_permission']   = 'Warning: You do not have permission to modify payment LIQPAY!';
 $_['error_merchant']     = 'Merchant ID Required!';
 $_['error_signature']    = 'Signature Required!';
-?>

@@ -5,7 +5,6 @@ $_['heading_title']      = 'Banners';
 // Text
 $_['text_success']       = 'Success: You have modified banners!';
 $_['text_default']       = 'Default';
-$_['text_image_manager'] = 'Image Manager';
 
 // Column
 $_['column_name']        = 'Banner Name';
@@ -24,4 +23,3 @@ $_['entry_sort_order']   = 'Sort Order';
 $_['error_permission']   = 'Warning: You do not have permission to modify banners!';
 $_['error_name']         = 'Banner Name must be between 3 and 64 characters!';
 $_['error_title']        = 'Banner Title must be between 2 and 64 characters!';
-?>

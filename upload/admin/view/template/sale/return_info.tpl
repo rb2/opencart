@@ -1,24 +1,24 @@
-<?php echo $header; ?>
-<div class="container">
+<?php echo $header; ?><?php echo $menu; ?>
+<div id="content">
   <ul class="breadcrumb">
     <?php foreach ($breadcrumbs as $breadcrumb) { ?>
     <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
     <?php } ?>
   </ul>
-  <div class="panel">
+  <div class="panel panel-default">
     <div class="panel-heading">
-      <h1 class="panel-title"><i class="icon-info-sign"></i> <?php echo $heading_title; ?></h1>
-      <div class="buttons"><a href="<?php echo $cancel; ?>" class="btn"><i class="icon-remove"></i> <?php echo $button_cancel; ?></a></div>
+      <div class="pull-right"><a href="<?php echo $cancel; ?>" data-toggle="tooltip" title="<?php echo $button_cancel; ?>" class="btn"><i class="fa fa-reply"></i></a></div>
+      <h1 class="panel-title"><i class="fa fa-info-circle fa-lg"></i> <?php echo $heading_title; ?></h1>
     </div>
-    <ul class="nav nav-tabs">
-      <li class="active"><a href="#tab-return" data-toggle="tab"><?php echo $tab_return; ?></a></li>
-      <li><a href="#tab-product" data-toggle="tab"><?php echo $tab_product; ?></a></li>
-      <li><a href="#tab-history" data-toggle="tab"><?php echo $tab_history; ?></a></li>
-    </ul>
-    <div class="tab-content">
+    <div class="panel-body">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-return" data-toggle="tab"><?php echo $tab_return; ?></a></li>
+        <li><a href="#tab-product" data-toggle="tab"><?php echo $tab_product; ?></a></li>
+        <li><a href="#tab-history" data-toggle="tab"><?php echo $tab_history; ?></a></li>
+      </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="tab-return">
-          <table class="table table-striped table-bordered">
+          <table class="table table-bordered">
             <tr>
               <td><?php echo $text_return_id; ?></td>
               <td><?php echo $return_id; ?></td>
@@ -74,7 +74,7 @@
           </table>
         </div>
         <div class="tab-pane" id="tab-product">
-          <table class="table table-striped table-bordered">
+          <table class="table table-bordered">
             <tr>
               <td><?php echo $text_product; ?></td>
               <td><?php echo $product; ?></td>
@@ -109,10 +109,11 @@
         </div>
         <div class="tab-pane form-horizontal" id="tab-history">
           <div id="history"></div>
+          <br />
           <div class="form-group">
-            <label class="col-lg-3 control-label" for="input-return-action"><?php echo $entry_return_action; ?></label>
-            <div class="col-lg-9">
-              <select name="return_action_id" id="input-return-action">
+            <label class="col-sm-2 control-label" for="input-return-action"><?php echo $entry_return_action; ?></label>
+            <div class="col-sm-10">
+              <select name="return_action_id" id="input-return-action" class="form-control">
                 <option value="0"></option>
                 <?php foreach ($return_actions as $return_action) { ?>
                 <?php if ($return_action['return_action_id'] == $return_action_id) { ?>
@@ -125,9 +126,9 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-lg-3 control-label" for="input-return-status"><?php echo $entry_return_status; ?></label>
-            <div class="col-lg-9">
-              <select name="return_status_id" id="input-return-status">
+            <label class="col-sm-2 control-label" for="input-return-status"><?php echo $entry_return_status; ?></label>
+            <div class="col-sm-10">
+              <select name="return_status_id" id="input-return-status" class="form-control">
                 <?php foreach ($return_statuses as $return_status) { ?>
                 <?php if ($return_status['return_status_id'] == $return_status_id) { ?>
                 <option value="<?php echo $return_status['return_status_id']; ?>" selected="selected"><?php echo $return_status['name']; ?></option>
@@ -139,18 +140,20 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-lg-3 control-label" for="input-notify"><?php echo $entry_notify; ?></label>
-            <div class="col-lg-9">
+            <label class="col-sm-2 control-label" for="input-notify"><?php echo $entry_notify; ?></label>
+            <div class="col-sm-10">
               <input type="checkbox" name="notify" value="1" id="input-notify" />
             </div>
           </div>
           <div class="form-group">
-            <label class="col-lg-3 control-label" for="input-comment"><?php echo $entry_comment; ?></label>
-            <div class="col-lg-9">
-              <textarea name="comment" rows="8" class="input-xxlarge"></textarea>
+            <label class="col-sm-2 control-label" for="input-comment"><?php echo $entry_comment; ?></label>
+            <div class="col-sm-10">
+              <textarea name="comment" rows="8" id="input-comment" class="form-control"></textarea>
             </div>
           </div>
-          <button id="button-history" class="btn"><i class="icon-plus-sign"></i> <?php echo $button_add_history; ?></button>
+          <div class="text-right">
+            <button id="button-history" class="btn btn-primary"><i class="fa fa-plus-circle"></i> <?php echo $button_history_add; ?></button>
+          </div>
         </div>
       </div>
     </div>
@@ -164,20 +167,20 @@ $('select[name=\'return_action_id\']').on('change', function() {
 		dataType: 'json',
 		data: 'return_action_id=' + this.value,
 		beforeSend: function() {
-			$('select[name=\'return_action_id\']').after(' <i class="icon-spinner icon-spin"></i>');
+			$('select[name=\'return_action_id\']').after(' <i class="fa fa-spinner fa-spin"></i>');
 		},
 		complete: function() {
-			$('.icon-spinner').remove();
+			$('.fa-spinner').remove();
 		},				
 		success: function(json) {
 			$('.alert').remove();
 			
 			if (json['error']) {
-				$('.box').before('<div class="alert alert-danger"><i class="icon-exclamation-sign"></i> ' + json['error'] + '</div>');
+				$('.panel').before('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
 			}
 			
 			if (json['success']) {
-				$('.box').before('<div class="alert alert-success"><i class="icon-ok-sign"></i> ' + json['success'] + '</div>');
+				$('.panel').before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
 				
 				$('#return-action').html($('select[name=\'return_action_id\'] option:selected').text());
 			}
@@ -188,10 +191,11 @@ $('select[name=\'return_action_id\']').on('change', function() {
 	});	
 });
 
-$('#history .pagination a').on('click', function() {
-	$('#history').load(this.href);
+
+$('#history').delegate('.pagination a', 'click', function(e) {
+	e.preventDefault();
 	
-	return false;
+	$('#history').load(this.href);
 });			
 
 $('#history').load('index.php?route=sale/return/history&token=<?php echo $token; ?>&return_id=<?php echo $return_id; ?>');
@@ -203,11 +207,11 @@ $('#button-history').on('click', function() {
 		dataType: 'html',
 		data: 'return_status_id=' + encodeURIComponent($('select[name=\'return_status_id\']').val()) + '&notify=' + ($('input[name=\'notify\']').prop('checked') ? 1 : 0) + '&comment=' + encodeURIComponent($('textarea[name=\'comment\']').val()),
 		beforeSend: function() {
-			$('#button-history i').replaceWith('<i class="icon-spinner icon-spin"></i>');
+			$('#button-history i').replaceWith('<i class="fa fa-spinner fa-spin"></i>');
 			$('#button-history').prop('disabled', true);
 		},
 		complete: function() {
-			$('#button-history i').replaceWith('<i class="icon-plus-sign"></i>');
+			$('#button-history i').replaceWith('<i class="fa fa-plus-circle"></i>');
 			$('#button-history').prop('disabled', false);
 		},
 		success: function(html) {

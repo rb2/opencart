@@ -1,17 +1,24 @@
 <?php
 // Heading
-$_['heading_title']          = 'Products'; 
+$_['heading_title']          = 'Products';
 
-// Text  
+// Text
 $_['text_success']           = 'Success: You have modified products!';
 $_['text_plus']              = '+';
 $_['text_minus']             = '-';
 $_['text_default']           = 'Default';
-$_['text_image_manager']     = 'Image Manager';
 $_['text_option']            = 'Option';
 $_['text_option_value']      = 'Option Value';
 $_['text_percent']           = 'Percentage';
 $_['text_amount']            = 'Fixed Amount';
+$_['text_recurring_help']    = 'Recurring amounts are calculated by the frequency and cycles. <br />For example if you use a frequency of "week" and a cycle of "2", then the user will be billed every 2 weeks. <br />The length is the number of times the user will make a payment, set this to 0 if you want payments until they are cancelled.';
+$_['text_recurring_title']   = 'Recurring payments';
+$_['text_recurring_trial']   = 'Trial period';
+$_['text_length_day']        = 'Day';
+$_['text_length_week']       = 'Week';
+$_['text_length_month']      = 'Month';
+$_['text_length_month_semi'] = 'Semi Month';
+$_['text_length_year']       = 'Year';
 
 // Column
 $_['column_name']            = 'Product Name';
@@ -24,10 +31,10 @@ $_['column_action']          = 'Action';
 
 // Entry
 $_['entry_name']             = 'Product Name';
+$_['entry_description']      = 'Description';
+$_['entry_meta_title'] 	     = 'Meta Tag Title';
 $_['entry_meta_keyword'] 	 = 'Meta Tag Keywords';
 $_['entry_meta_description'] = 'Meta Tag Description';
-$_['entry_description']      = 'Description';
-$_['entry_store']            = 'Stores';
 $_['entry_keyword']          = 'SEO Keyword';
 $_['entry_model']            = 'Model';
 $_['entry_sku']              = 'SKU';
@@ -37,8 +44,9 @@ $_['entry_jan']              = 'JAN';
 $_['entry_isbn']             = 'ISBN';
 $_['entry_mpn']              = 'MPN';
 $_['entry_location']         = 'Location';
-$_['entry_shipping']         = 'Requires Shipping'; 
+$_['entry_shipping']         = 'Requires Shipping';
 $_['entry_manufacturer']     = 'Manufacturer';
+$_['entry_store']            = 'Stores';
 $_['entry_date_available']   = 'Date Available';
 $_['entry_quantity']         = 'Quantity';
 $_['entry_minimum']          = 'Minimum Quantity';
@@ -75,9 +83,20 @@ $_['entry_related']          = 'Related Products';
 $_['entry_tag']          	 = 'Product Tags';
 $_['entry_reward']           = 'Reward Points';
 $_['entry_layout']           = 'Layout Override';
+$_['entry_profile']          = 'Profile:';
+$_['entry_recurring']        = 'Recurring billing:';
+$_['entry_recurring_price']  = 'Recurring price:';
+$_['entry_recurring_freq']   = 'Recurring frequency:';
+$_['entry_recurring_cycle']  = 'Recurring cycles:<span class="help">How often it\'s billed, must be 1 or more</span>';
+$_['entry_recurring_length'] = 'Recurring length:<span class="help">0 = until cancelled</span>';
+$_['entry_trial']            = 'Trial period:';
+$_['entry_trial_price']      = 'Trial recurring price:';
+$_['entry_trial_freq']       = 'Trial recurring frequency:';
+$_['entry_trial_cycle']      = 'Trial recurring cycles:<span class="help">How often it\'s billed, must be 1 or more</span>';
+$_['entry_trial_length']     = 'Trial recurring length:';
 
 // Help
-$_['help_keyword']           = 'Do not use spaces instead replace spaces with - and make sure the keyword is globally unique.';
+$_['help_keyword']           = 'Do not use spaces, instead replace spaces with - and make sure the keyword is globally unique.';
 $_['help_sku']               = 'Stock Keeping Unit';
 $_['help_upc']               = 'Universal Product Code';
 $_['help_ean']               = 'European Article Number';
@@ -98,5 +117,5 @@ $_['help_tag']          	 = 'comma separated';
 $_['error_warning']          = 'Warning: Please check the form carefully for errors!';
 $_['error_permission']       = 'Warning: You do not have permission to modify products!';
 $_['error_name']             = 'Product Name must be greater than 3 and less than 255 characters!';
-$_['error_model']            = 'Product Model must be greater than 3 and less than 64 characters!';
-?>
+$_['error_meta_title']       = 'Meta Title must be greater than 3 and less than 255 characters!';
+$_['error_model']            = 'Product Model must be greater than 1 and less than 64 characters!';
