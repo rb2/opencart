@@ -25,12 +25,14 @@ $_['text_pagination']               = 'Showing %d to %d of %d (%d Pages)';
 $_['text_no_results']               = 'No results!';
 $_['text_confirm']                  = 'Are you sure?';
 $_['text_home']                     = '<i class="fa fa-home fa-lg"></i>';
+$_['text_confirm']			        = 'Delete/Uninstall cannot be undone! Are you sure you want to do this?';
 
 // Button
 $_['button_insert']                 = 'Add New';
 $_['button_delete']                 = 'Delete';
 $_['button_save']                   = 'Save';
 $_['button_cancel']                 = 'Cancel';
+$_['button_cancel_profile']         = 'Cancel profile';
 $_['button_continue']               = 'Continue';
 $_['button_clear']                  = 'Clear';
 $_['button_close']                  = 'Close';
@@ -45,11 +47,12 @@ $_['button_remove']                 = 'Remove';
 $_['button_refresh']                = 'Refresh';
 $_['button_backup']                 = 'Backup';
 $_['button_restore']                = 'Restore';
+$_['button_download']               = 'Download';
 $_['button_repair']                 = 'Repair';
 $_['button_upload']                 = 'Upload';
 $_['button_submit']                 = 'Submit';
 $_['button_invoice']                = 'Print Invoice';
-$_['button_picklist']               = 'Print Picklist';
+$_['button_shipping']               = 'Print Shipping List';
 $_['button_address_add']            = 'Add Address';
 $_['button_attribute_add']          = 'Add Attribute';
 $_['button_banner_add']             = 'Add Banner';
@@ -86,7 +89,8 @@ $_['button_view']                   = 'View';
 $_['button_install']                = 'Install';
 $_['button_uninstall']              = 'Uninstall';
 $_['button_link']                   = 'Link';
-$_['button_restock']                = 'Restock';
+$_['button_restock']                = 'Restock. Only use restock when you plan to void an order but not delete it. Deleting an order will automatically restock products. You should also leave a note in the order history let others know if you have already restocked the items.';
+$_['button_add_profile']            = 'Add Profile';
 
 // Tab
 $_['tab_address']                   = 'Address';
@@ -105,6 +109,7 @@ $_['tab_links']                     = 'Links';
 $_['tab_log']                       = 'Log';
 $_['tab_image']                     = 'Image';
 $_['tab_option']                    = 'Option';
+$_['tab_profile']                   = 'Profile';
 $_['tab_server']                    = 'Server';
 $_['tab_store']                     = 'Store';
 $_['tab_special']                   = 'Special';
@@ -124,6 +129,8 @@ $_['tab_sale']                      = 'Sales';
 $_['tab_marketing']                 = 'Marketing';
 $_['tab_online']                    = 'People Online';
 $_['tab_activity']                  = 'Recent Activity';
+$_['tab_profile']                  	= 'Profile';
+$_['tab_trial']                  	= 'Trial Period';
 
 // Error
 $_['error_exception']               = 'Error Code(%s): %s in %s on line %s';

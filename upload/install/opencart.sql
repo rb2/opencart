@@ -1,17 +1,92 @@
--- phpMyAdmin SQL Dump
--- version 3.3.9
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Jul 16, 2011 at 05:01 PM
--- Server version: 5.1.36
--- PHP Version: 5.3.4
-
 -- --------------------------------------------------------
 
 --
 -- Database: `opencart`
 --
+
+-- --------------------------------------------------------
+
+SET sql_mode = '';
+
+DROP TABLE IF EXISTS `oc_product_profile`;
+CREATE TABLE `oc_product_profile` (
+  `product_id` int(11) NOT NULL,
+  `profile_id` int(11) NOT NULL,
+  `customer_group_id` int(11) NOT NULL,
+  PRIMARY KEY (`product_id`,`profile_id`,`customer_group_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+DROP TABLE IF EXISTS `oc_profile`;
+CREATE TABLE `oc_profile` (
+  `profile_id` int(11) NOT NULL AUTO_INCREMENT,
+  `price` decimal(10,4) NOT NULL,
+  `frequency` enum('day','week','semi_month','month','year') NOT NULL,
+  `duration` int(10) unsigned NOT NULL,
+  `cycle` int(10) unsigned NOT NULL,
+  `trial_status` tinyint(4) NOT NULL,
+  `trial_price` decimal(10,4) NOT NULL,
+  `trial_frequency` enum('day','week','semi_month','month','year') NOT NULL,
+  `trial_duration` int(10) unsigned NOT NULL,
+  `trial_cycle` int(10) unsigned NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `sort_order` int(11) NOT NULL,
+  PRIMARY KEY (`profile_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+DROP TABLE IF EXISTS `oc_profile_description`;
+CREATE TABLE `oc_profile_description` (
+  `profile_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`profile_id`,`language_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Table structure for table `oc_order_recurring`
+--
+
+DROP TABLE IF EXISTS `oc_order_recurring`;
+CREATE TABLE `oc_order_recurring` (
+  `order_recurring_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `product_quantity` int(11) NOT NULL,
+  `profile_id` int(11) NOT NULL,
+  `profile_name` varchar(255) NOT NULL,
+  `profile_description` varchar(255) NOT NULL,
+  `recurring_frequency` varchar(25) NOT NULL,
+  `recurring_cycle` smallint(6) NOT NULL,
+  `recurring_duration` smallint(6) NOT NULL,
+  `recurring_price` decimal(10,4) NOT NULL,
+  `trial` tinyint(1) NOT NULL,
+  `trial_frequency` varchar(25) NOT NULL,
+  `trial_cycle` smallint(6) NOT NULL,
+  `trial_duration` smallint(6) NOT NULL,
+  `trial_price` decimal(10,4) NOT NULL,
+  `profile_reference` varchar(255) NOT NULL,
+  PRIMARY KEY (`order_recurring_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oc_order_recurring_transaction`
+--
+
+DROP TABLE IF EXISTS `oc_order_recurring_transaction`;
+CREATE TABLE `oc_order_recurring_transaction` (
+  `order_recurring_transaction_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_recurring_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `amount` decimal(10,4) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `reference` varchar(255) NOT NULL,
+  PRIMARY KEY (`order_recurring_transaction_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25,7 +100,7 @@ CREATE TABLE `oc_address` (
   `customer_id` int(11) NOT NULL,
   `firstname` varchar(32) NOT NULL,
   `lastname` varchar(32) NOT NULL,
-  `company` varchar(40) NOT NULL,   
+  `company` varchar(40) NOT NULL,
   `address_1` varchar(128) NOT NULL,
   `address_2` varchar(128) NOT NULL,
   `city` varchar(128) NOT NULL,
@@ -40,7 +115,6 @@ CREATE TABLE `oc_address` (
 --
 -- Dumping data for table `oc_address`
 --
-
 
 -- --------------------------------------------------------
 
@@ -336,8 +410,8 @@ CREATE TABLE `oc_category` (
   `column` int(3) NOT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL,
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `date_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
   PRIMARY KEY (`category_id`),
   KEY `parent_id` (`parent_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -896,7 +970,13 @@ INSERT INTO `oc_country` (`country_id`, `name`, `iso_code_2`, `iso_code_3`, `add
 (248, 'South Sudan', 'SS', 'SSD', '', 0, 1),
 (249, 'St. Barthelemy', 'BL', 'BLM', '', 0, 1),
 (250, 'St. Martin (French part)', 'MF', 'MAF', '', 0, 1),
-(251, 'Canary Islands', 'IC', 'ICA', '', 0, 1);
+(251, 'Canary Islands', 'IC', 'ICA', '', 0, 1),
+(252, 'Ascension Island (British)', 'AC', 'ASC', '', 0, 1),
+(253, 'Kosovo, Republic of', 'XK', 'UNK', '', 0, 1),
+(254, 'Isle of Man', 'IM', 'IMN', '', 0, 1),
+(255, 'Tristan da Cunha', 'TA', 'SHN', '', 0, 1),
+(256, 'Guernsey', 'GG', 'GGY', '', 0, 1),
+(257, 'Jersey', 'JE', 'JEY', '', 0, 1);
 -- --------------------------------------------------------
 
 --
@@ -918,7 +998,7 @@ CREATE TABLE `oc_coupon` (
   `uses_total` int(11) NOT NULL,
   `uses_customer` varchar(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
   PRIMARY KEY (`coupon_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -1003,7 +1083,7 @@ CREATE TABLE `oc_currency` (
   `decimal_place` char(1) NOT NULL,
   `value` float(15,8) NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `date_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_modified` datetime NOT NULL,
   PRIMARY KEY (`currency_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -1025,6 +1105,7 @@ INSERT INTO `oc_currency` (`currency_id`, `title`, `code`, `symbol_left`, `symbo
 DROP TABLE IF EXISTS `oc_customer`;
 CREATE TABLE `oc_customer` (
   `customer_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_group_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL DEFAULT '0',
   `firstname` varchar(32) NOT NULL,
   `lastname` varchar(32) NOT NULL,
@@ -1037,13 +1118,12 @@ CREATE TABLE `oc_customer` (
   `wishlist` text,
   `newsletter` tinyint(1) NOT NULL DEFAULT '0',
   `address_id` int(11) NOT NULL DEFAULT '0',
-  `customer_group_id` int(11) NOT NULL,
   `custom_field` text NOT NULL,
   `ip` varchar(40) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `approved` tinyint(1) NOT NULL,
   `token` varchar(255) NOT NULL,
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -1197,7 +1277,7 @@ CREATE TABLE `oc_customer_reward` (
   `order_id` int(11) NOT NULL DEFAULT '0',
   `description` text NOT NULL,
   `points` int(8) NOT NULL DEFAULT '0',
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_reward_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -1237,7 +1317,7 @@ CREATE TABLE `oc_custom_field` (
   `custom_field_id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(32) NOT NULL,
   `value` text NOT NULL,
-  `storage` varchar(7) NOT NULL,
+  `location` varchar(7) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`custom_field_id`)
@@ -1256,7 +1336,6 @@ CREATE TABLE `oc_custom_field` (
 DROP TABLE IF EXISTS `oc_custom_field_customer_group`;
 CREATE TABLE `oc_custom_field_customer_group` (
   `custom_field_id` int(11) NOT NULL,
-  `location` varchar(64) NOT NULL,
   `customer_group_id` int(11) NOT NULL,
   `required` tinyint(1) NOT NULL,
   PRIMARY KEY (`custom_field_id`,`customer_group_id`)
@@ -1332,8 +1411,7 @@ CREATE TABLE `oc_download` (
   `download_id` int(11) NOT NULL AUTO_INCREMENT,
   `filename` varchar(128) NOT NULL,
   `mask` varchar(128) NOT NULL,
-  `remaining` int(11) NOT NULL DEFAULT '0',
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
   PRIMARY KEY (`download_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -1482,8 +1560,8 @@ CREATE TABLE `oc_geo_zone` (
   `geo_zone_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
   `description` varchar(255) NOT NULL,
-  `date_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_modified` datetime NOT NULL,
+  `date_added` datetime NOT NULL,
   PRIMARY KEY (`geo_zone_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -1737,7 +1815,7 @@ CREATE TABLE `oc_location` (
   `name` varchar(32) NOT NULL,
   `address` text NOT NULL,
   `telephone` varchar(32) NOT NULL,
-  `fax` varchar(32) NOT NULL,  
+  `fax` varchar(32) NOT NULL,
   `geocode` varchar(32) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `open` text NOT NULL,
@@ -1999,10 +2077,9 @@ CREATE TABLE `oc_order` (
   `email` varchar(96) NOT NULL,
   `telephone` varchar(32) NOT NULL,
   `fax` varchar(32) NOT NULL,
-  `custom_field` text NOT NULL,
   `payment_firstname` varchar(32) NOT NULL,
   `payment_lastname` varchar(32) NOT NULL,
-  `payment_company` varchar(40) NOT NULL,  
+  `payment_company` varchar(40) NOT NULL,
   `payment_address_1` varchar(128) NOT NULL,
   `payment_address_2` varchar(128) NOT NULL,
   `payment_city` varchar(128) NOT NULL,
@@ -2012,7 +2089,6 @@ CREATE TABLE `oc_order` (
   `payment_zone` varchar(128) NOT NULL,
   `payment_zone_id` int(11) NOT NULL,
   `payment_address_format` text NOT NULL,
-  `payment_custom_field` text NOT NULL,
   `payment_method` varchar(128) NOT NULL,
   `payment_code` varchar(128) NOT NULL,
   `shipping_firstname` varchar(32) NOT NULL,
@@ -2027,9 +2103,8 @@ CREATE TABLE `oc_order` (
   `shipping_zone` varchar(128) NOT NULL,
   `shipping_zone_id` int(11) NOT NULL,
   `shipping_address_format` text NOT NULL,
-  `shipping_custom_field` text NOT NULL,
   `shipping_method` varchar(128) NOT NULL,
-  `shipping_code` varchar(128) NOT NULL,  
+  `shipping_code` varchar(128) NOT NULL,
   `comment` text NOT NULL,
   `total` decimal(15,4) NOT NULL DEFAULT '0.0000',
   `order_status_id` int(11) NOT NULL DEFAULT '0',
@@ -2057,7 +2132,30 @@ CREATE TABLE `oc_order` (
 -- --------------------------------------------------------
 
 --
--- Dumping data for table `oc_order_fraud`
+-- Table structure for table `oc_order_custom_field`
+--
+
+DROP TABLE IF EXISTS `oc_order_custom_field`;
+CREATE TABLE `oc_order_custom_field` (
+  `order_custom_field_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `custom_field_id` int(11) NOT NULL,
+  `custom_field_value_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `value` text NOT NULL,
+  `type` varchar(32) NOT NULL,
+  `location` varchar(16) NOT NULL,
+  PRIMARY KEY (`order_custom_field_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `oc_order_custom_field`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oc_order_fraud`
 --
 
 DROP TABLE IF EXISTS `oc_order_fraud`;
@@ -2114,7 +2212,7 @@ CREATE TABLE `oc_order_fraud` (
   `queries_remaining` int(11) NOT NULL,
   `maxmind_id` varchar(8) NOT NULL,
   `error` text NOT NULL,
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
   PRIMARY KEY (`order_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -2131,7 +2229,7 @@ CREATE TABLE `oc_order_history` (
   `order_status_id` int(5) NOT NULL,
   `notify` tinyint(1) NOT NULL DEFAULT '0',
   `comment` text NOT NULL,
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
   PRIMARY KEY (`order_history_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -2139,9 +2237,7 @@ CREATE TABLE `oc_order_history` (
 -- Dumping data for table `oc_order_history`
 --
 
-
 -- --------------------------------------------------------
-
 
 --
 -- Table structure for table `oc_order_option`
@@ -2163,7 +2259,6 @@ CREATE TABLE `oc_order_option` (
 --
 -- Dumping data for table `oc_order_option`
 --
-
 
 -- --------------------------------------------------------
 
@@ -2294,7 +2389,7 @@ CREATE TABLE `oc_product` (
   `price` decimal(15,4) NOT NULL DEFAULT '0.0000',
   `points` int(8) NOT NULL DEFAULT '0',
   `tax_class_id` int(11) NOT NULL,
-  `date_available` date NOT NULL,
+  `date_available` date NOT NULL DEFAULT '0000-00-00',
   `weight` decimal(15,8) NOT NULL DEFAULT '0.00000000',
   `weight_class_id` int(11) NOT NULL DEFAULT '0',
   `length` decimal(15,8) NOT NULL DEFAULT '0.00000000',
@@ -2306,8 +2401,8 @@ CREATE TABLE `oc_product` (
   `sort_order` int(11) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `viewed` int(5) NOT NULL DEFAULT '0',
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `date_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
   PRIMARY KEY (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -2718,7 +2813,7 @@ CREATE TABLE `oc_product_to_category` (
   `product_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`product_id`,`category_id`),
-  KEY `product_id` (`product_id`)
+  KEY `category_id` (`category_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -2774,7 +2869,6 @@ CREATE TABLE `oc_product_to_download` (
 -- Dumping data for table `oc_product_to_download`
 --
 
-
 -- --------------------------------------------------------
 
 --
@@ -2792,7 +2886,6 @@ CREATE TABLE `oc_product_to_layout` (
 --
 -- Dumping data for table `oc_product_to_layout`
 --
-
 
 -- --------------------------------------------------------
 
@@ -2856,7 +2949,7 @@ CREATE TABLE `oc_return` (
   `return_action_id` int(11) NOT NULL,
   `return_status_id` int(11) NOT NULL,
   `comment` text,
-  `date_ordered` date NOT NULL,
+  `date_ordered` date NOT NULL DEFAULT '0000-00-00',
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`return_id`)
@@ -2974,8 +3067,8 @@ CREATE TABLE `oc_review` (
   `text` text NOT NULL,
   `rating` int(1) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `date_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
   PRIMARY KEY (`review_id`),
   KEY `product_id` (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -3083,7 +3176,7 @@ INSERT INTO `oc_setting` (`setting_id`, `store_id`, `group`, `key`, `value`, `se
 (74, 0, 'config', 'config_cart_weight', '1', 0),
 (75, 0, 'config', 'config_upload_allowed', 'jpg, JPG, jpeg, gif, png, txt', 0),
 (76, 0, 'config', 'config_file_extension_allowed', 'txt\r\npng\r\njpe\r\njpeg\r\njpg\r\ngif\r\nbmp\r\nico\r\ntiff\r\ntif\r\nsvg\r\nsvgz\r\nzip\r\nrar\r\nmsi\r\ncab\r\nmp3\r\nqt\r\nmov\r\npdf\r\npsd\r\nai\r\neps\r\nps\r\ndoc\r\nrtf\r\nxls\r\nppt\r\nodt\r\nods', 0),
-(77, 0, 'config', 'config_file_mime_allowed', 'text/plain\r\nimage/png\r\nimage/jpeg\r\nimage/jpeg\r\nimage/jpeg\r\nimage/gif\r\nimage/bmp\r\nimage/vnd.microsoft.icon\r\nimage/tiff\r\nimage/tiff\r\nimage/svg+xml\r\nimage/svg+xml\r\napplication/zip\r\napplication/x-rar-compressed\r\napplication/x-msdownload\r\napplication/vnd.ms-cab-compressed\r\naudio/mpeg\r\nvideo/quicktime\r\nvideo/quicktime\r\napplication/pdf\r\nimage/vnd.adobe.photoshop\r\napplication/postscript\r\napplication/postscript\r\napplication/postscript\r\napplication/msword\r\napplication/rtf\r\napplication/vnd.ms-excel\r\napplication/vnd.ms-powerpoint\r\napplication/vnd.oasis.opendocument.text\r\napplication/vnd.oasis.opendocument.spreadsheet', 0),
+(77, 0, 'config', 'config_file_mime_allowed', 'text/plain\r\nimage/png\r\nimage/jpeg\r\nimage/gif\r\nimage/bmp\r\nimage/vnd.microsoft.icon\r\nimage/tiff\r\nimage/svg+xml\r\napplication/zip\r\napplication/x-rar-compressed\r\napplication/x-msdownload\r\napplication/vnd.ms-cab-compressed\r\naudio/mpeg\r\nvideo/quicktime\r\napplication/pdf\r\nimage/vnd.adobe.photoshop\r\napplication/postscript\r\napplication/msword\r\napplication/rtf\r\napplication/vnd.ms-excel\r\napplication/vnd.ms-powerpoint\r\napplication/vnd.oasis.opendocument.text\r\napplication/vnd.oasis.opendocument.spreadsheet', 0),
 (78, 0, 'config', 'config_review_status', '1', 0),
 (79, 0, 'config', 'config_download', '1', 0),
 (80, 0, 'config', 'config_return_status_id', '2', 0),
@@ -3197,8 +3290,8 @@ CREATE TABLE `oc_tax_class` (
   `tax_class_id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(32) NOT NULL,
   `description` varchar(255) NOT NULL,
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `date_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
   PRIMARY KEY (`tax_class_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -3223,8 +3316,8 @@ CREATE TABLE `oc_tax_rate` (
   `name` varchar(32) NOT NULL,
   `rate` decimal(15,4) NOT NULL DEFAULT '0.0000',
   `type` char(1) NOT NULL,
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `date_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
   PRIMARY KEY (`tax_rate_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -3282,6 +3375,26 @@ INSERT INTO `oc_tax_rule` (`tax_rule_id`, `tax_class_id`, `tax_rate_id`, `based`
 (120, 10, 87, 'store', 0),
 (128, 9, 86, 'shipping', 1),
 (127, 9, 87, 'shipping', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oc_upload`
+--
+
+DROP TABLE IF EXISTS `oc_upload`;
+CREATE TABLE `oc_upload` (
+  `upload_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `filename` varchar(255) NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`upload_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `oc_upload`
+--
 
 -- --------------------------------------------------------
 
@@ -3390,7 +3503,7 @@ CREATE TABLE `oc_user` (
   `code` varchar(40) NOT NULL,
   `ip` varchar(40) NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -3417,7 +3530,7 @@ CREATE TABLE `oc_user_group` (
 --
 
 INSERT INTO `oc_user_group` (`user_group_id`, `name`, `permission`) VALUES
-(1, 'Administrator', 'a:2:{s:6:"access";a:135:{i:0;s:17:"catalog/attribute";i:1;s:23:"catalog/attribute_group";i:2;s:16:"catalog/category";i:3;s:16:"catalog/download";i:4;s:14:"catalog/filter";i:5;s:19:"catalog/information";i:6;s:20:"catalog/manufacturer";i:7;s:14:"catalog/option";i:8;s:15:"catalog/product";i:9;s:14:"catalog/review";i:10;s:18:"common/filemanager";i:11;s:11:"common/home";i:12;s:13:"design/banner";i:13;s:13:"design/layout";i:14;s:14:"extension/feed";i:15;s:19:"extension/installer";i:16;s:22:"extension/modification";i:17;s:16:"extension/module";i:18;s:17:"extension/payment";i:19;s:18:"extension/shipping";i:20;s:15:"extension/total";i:21;s:16:"feed/google_base";i:22;s:19:"feed/google_sitemap";i:23;s:19:"letmeknow/letmeknow";i:24;s:20:"localisation/country";i:25;s:21:"localisation/currency";i:26;s:21:"localisation/geo_zone";i:27;s:21:"localisation/language";i:28;s:25:"localisation/length_class";i:29;s:21:"localisation/location";i:30;s:25:"localisation/order_status";i:31;s:26:"localisation/return_action";i:32;s:26:"localisation/return_reason";i:33;s:26:"localisation/return_status";i:34;s:25:"localisation/stock_status";i:35;s:22:"localisation/tax_class";i:36;s:21:"localisation/tax_rate";i:37;s:25:"localisation/weight_class";i:38;s:17:"localisation/zone";i:39;s:19:"marketing/affiliate";i:40;s:17:"marketing/contact";i:41;s:16:"marketing/coupon";i:42;s:19:"marketing/marketing";i:43;s:14:"module/account";i:44;s:16:"module/affiliate";i:45;s:13:"module/banner";i:46;s:17:"module/bestseller";i:47;s:15:"module/carousel";i:48;s:15:"module/category";i:49;s:15:"module/featured";i:50;s:13:"module/filter";i:51;s:18:"module/google_talk";i:52;s:18:"module/information";i:53;s:13:"module/latest";i:54;s:16:"module/letmeknow";i:55;s:16:"module/slideshow";i:56;s:14:"module/special";i:57;s:12:"module/store";i:58;s:14:"module/welcome";i:59;s:24:"payment/authorizenet_aim";i:60;s:21:"payment/bank_transfer";i:61;s:14:"payment/cheque";i:62;s:11:"payment/cod";i:63;s:21:"payment/free_checkout";i:64;s:22:"payment/klarna_account";i:65;s:22:"payment/klarna_invoice";i:66;s:14:"payment/liqpay";i:67;s:20:"payment/moneybookers";i:68;s:14:"payment/nochex";i:69;s:15:"payment/paymate";i:70;s:16:"payment/paypoint";i:71;s:13:"payment/payza";i:72;s:26:"payment/perpetual_payments";i:73;s:14:"payment/pp_pro";i:74;s:17:"payment/pp_pro_uk";i:75;s:19:"payment/pp_standard";i:76;s:15:"payment/sagepay";i:77;s:22:"payment/sagepay_direct";i:78;s:18:"payment/sagepay_us";i:79;s:19:"payment/twocheckout";i:80;s:28:"payment/web_payment_software";i:81;s:16:"payment/worldpay";i:82;s:27:"report/affiliate_commission";i:83;s:22:"report/customer_credit";i:84;s:22:"report/customer_online";i:85;s:21:"report/customer_order";i:86;s:22:"report/customer_reward";i:87;s:16:"report/letmeknow";i:88;s:24:"report/product_purchased";i:89;s:21:"report/product_viewed";i:90;s:18:"report/sale_coupon";i:91;s:17:"report/sale_order";i:92;s:18:"report/sale_return";i:93;s:20:"report/sale_shipping";i:94;s:15:"report/sale_tax";i:95;s:14:"sale/affiliate";i:96;s:12:"sale/contact";i:97;s:11:"sale/coupon";i:98;s:17:"sale/custom_field";i:99;s:13:"sale/customer";i:100;s:20:"sale/customer_ban_ip";i:101;s:19:"sale/customer_group";i:102;s:10:"sale/order";i:103;s:11:"sale/return";i:104;s:12:"sale/voucher";i:105;s:18:"sale/voucher_theme";i:106;s:15:"setting/setting";i:107;s:13:"setting/store";i:108;s:16:"shipping/auspost";i:109;s:17:"shipping/citylink";i:110;s:14:"shipping/fedex";i:111;s:13:"shipping/flat";i:112;s:13:"shipping/free";i:113;s:13:"shipping/item";i:114;s:23:"shipping/parcelforce_48";i:115;s:15:"shipping/pickup";i:116;s:19:"shipping/royal_mail";i:117;s:12:"shipping/ups";i:118;s:13:"shipping/usps";i:119;s:15:"shipping/weight";i:120;s:11:"tool/backup";i:121;s:14:"tool/error_log";i:122;s:12:"total/coupon";i:123;s:12:"total/credit";i:124;s:14:"total/handling";i:125;s:16:"total/klarna_fee";i:126;s:19:"total/low_order_fee";i:127;s:12:"total/reward";i:128;s:14:"total/shipping";i:129;s:15:"total/sub_total";i:130;s:9:"total/tax";i:131;s:11:"total/total";i:132;s:13:"total/voucher";i:133;s:9:"user/user";i:134;s:20:"user/user_permission";}s:6:"modify";a:135:{i:0;s:17:"catalog/attribute";i:1;s:23:"catalog/attribute_group";i:2;s:16:"catalog/category";i:3;s:16:"catalog/download";i:4;s:14:"catalog/filter";i:5;s:19:"catalog/information";i:6;s:20:"catalog/manufacturer";i:7;s:14:"catalog/option";i:8;s:15:"catalog/product";i:9;s:14:"catalog/review";i:10;s:18:"common/filemanager";i:11;s:11:"common/home";i:12;s:13:"design/banner";i:13;s:13:"design/layout";i:14;s:14:"extension/feed";i:15;s:19:"extension/installer";i:16;s:22:"extension/modification";i:17;s:16:"extension/module";i:18;s:17:"extension/payment";i:19;s:18:"extension/shipping";i:20;s:15:"extension/total";i:21;s:16:"feed/google_base";i:22;s:19:"feed/google_sitemap";i:23;s:19:"letmeknow/letmeknow";i:24;s:20:"localisation/country";i:25;s:21:"localisation/currency";i:26;s:21:"localisation/geo_zone";i:27;s:21:"localisation/language";i:28;s:25:"localisation/length_class";i:29;s:21:"localisation/location";i:30;s:25:"localisation/order_status";i:31;s:26:"localisation/return_action";i:32;s:26:"localisation/return_reason";i:33;s:26:"localisation/return_status";i:34;s:25:"localisation/stock_status";i:35;s:22:"localisation/tax_class";i:36;s:21:"localisation/tax_rate";i:37;s:25:"localisation/weight_class";i:38;s:17:"localisation/zone";i:39;s:19:"marketing/affiliate";i:40;s:17:"marketing/contact";i:41;s:16:"marketing/coupon";i:42;s:19:"marketing/marketing";i:43;s:14:"module/account";i:44;s:16:"module/affiliate";i:45;s:13:"module/banner";i:46;s:17:"module/bestseller";i:47;s:15:"module/carousel";i:48;s:15:"module/category";i:49;s:15:"module/featured";i:50;s:13:"module/filter";i:51;s:18:"module/google_talk";i:52;s:18:"module/information";i:53;s:13:"module/latest";i:54;s:16:"module/letmeknow";i:55;s:16:"module/slideshow";i:56;s:14:"module/special";i:57;s:12:"module/store";i:58;s:14:"module/welcome";i:59;s:24:"payment/authorizenet_aim";i:60;s:21:"payment/bank_transfer";i:61;s:14:"payment/cheque";i:62;s:11:"payment/cod";i:63;s:21:"payment/free_checkout";i:64;s:22:"payment/klarna_account";i:65;s:22:"payment/klarna_invoice";i:66;s:14:"payment/liqpay";i:67;s:20:"payment/moneybookers";i:68;s:14:"payment/nochex";i:69;s:15:"payment/paymate";i:70;s:16:"payment/paypoint";i:71;s:13:"payment/payza";i:72;s:26:"payment/perpetual_payments";i:73;s:14:"payment/pp_pro";i:74;s:17:"payment/pp_pro_uk";i:75;s:19:"payment/pp_standard";i:76;s:15:"payment/sagepay";i:77;s:22:"payment/sagepay_direct";i:78;s:18:"payment/sagepay_us";i:79;s:19:"payment/twocheckout";i:80;s:28:"payment/web_payment_software";i:81;s:16:"payment/worldpay";i:82;s:27:"report/affiliate_commission";i:83;s:22:"report/customer_credit";i:84;s:22:"report/customer_online";i:85;s:21:"report/customer_order";i:86;s:22:"report/customer_reward";i:87;s:16:"report/letmeknow";i:88;s:24:"report/product_purchased";i:89;s:21:"report/product_viewed";i:90;s:18:"report/sale_coupon";i:91;s:17:"report/sale_order";i:92;s:18:"report/sale_return";i:93;s:20:"report/sale_shipping";i:94;s:15:"report/sale_tax";i:95;s:14:"sale/affiliate";i:96;s:12:"sale/contact";i:97;s:11:"sale/coupon";i:98;s:17:"sale/custom_field";i:99;s:13:"sale/customer";i:100;s:20:"sale/customer_ban_ip";i:101;s:19:"sale/customer_group";i:102;s:10:"sale/order";i:103;s:11:"sale/return";i:104;s:12:"sale/voucher";i:105;s:18:"sale/voucher_theme";i:106;s:15:"setting/setting";i:107;s:13:"setting/store";i:108;s:16:"shipping/auspost";i:109;s:17:"shipping/citylink";i:110;s:14:"shipping/fedex";i:111;s:13:"shipping/flat";i:112;s:13:"shipping/free";i:113;s:13:"shipping/item";i:114;s:23:"shipping/parcelforce_48";i:115;s:15:"shipping/pickup";i:116;s:19:"shipping/royal_mail";i:117;s:12:"shipping/ups";i:118;s:13:"shipping/usps";i:119;s:15:"shipping/weight";i:120;s:11:"tool/backup";i:121;s:14:"tool/error_log";i:122;s:12:"total/coupon";i:123;s:12:"total/credit";i:124;s:14:"total/handling";i:125;s:16:"total/klarna_fee";i:126;s:19:"total/low_order_fee";i:127;s:12:"total/reward";i:128;s:14:"total/shipping";i:129;s:15:"total/sub_total";i:130;s:9:"total/tax";i:131;s:11:"total/total";i:132;s:13:"total/voucher";i:133;s:9:"user/user";i:134;s:20:"user/user_permission";}}'),
+(1, 'Administrator', 'a:2:{s:6:"access";a:137:{i:0;s:17:"catalog/attribute";i:1;s:23:"catalog/attribute_group";i:2;s:16:"catalog/category";i:3;s:16:"catalog/download";i:4;s:14:"catalog/filter";i:5;s:19:"catalog/information";i:6;s:20:"catalog/manufacturer";i:7;s:14:"catalog/option";i:8;s:15:"catalog/product";i:9;s:15:"catalog/profile";i:10;s:14:"catalog/review";i:11;s:18:"common/filemanager";i:12;s:13:"design/banner";i:13;s:13:"design/layout";i:14;s:14:"extension/feed";i:15;s:19:"extension/installer";i:16;s:22:"extension/modification";i:17;s:16:"extension/module";i:18;s:17:"extension/payment";i:19;s:18:"extension/shipping";i:20;s:15:"extension/total";i:21;s:16:"feed/google_base";i:22;s:19:"feed/google_sitemap";i:23;s:20:"localisation/country";i:24;s:21:"localisation/currency";i:25;s:21:"localisation/geo_zone";i:26;s:21:"localisation/language";i:27;s:25:"localisation/length_class";i:28;s:21:"localisation/location";i:29;s:25:"localisation/order_status";i:30;s:26:"localisation/return_action";i:31;s:26:"localisation/return_reason";i:32;s:26:"localisation/return_status";i:33;s:25:"localisation/stock_status";i:34;s:22:"localisation/tax_class";i:35;s:21:"localisation/tax_rate";i:36;s:25:"localisation/weight_class";i:37;s:17:"localisation/zone";i:38;s:19:"marketing/affiliate";i:39;s:17:"marketing/contact";i:40;s:16:"marketing/coupon";i:41;s:19:"marketing/marketing";i:42;s:14:"module/account";i:43;s:16:"module/affiliate";i:44;s:13:"module/banner";i:45;s:17:"module/bestseller";i:46;s:15:"module/carousel";i:47;s:15:"module/category";i:48;s:15:"module/featured";i:49;s:13:"module/filter";i:50;s:18:"module/google_talk";i:51;s:18:"module/information";i:52;s:13:"module/latest";i:53;s:16:"module/slideshow";i:54;s:14:"module/special";i:55;s:12:"module/store";i:56;s:14:"module/welcome";i:57;s:24:"payment/authorizenet_aim";i:58;s:21:"payment/bank_transfer";i:59;s:14:"payment/cheque";i:60;s:11:"payment/cod";i:61;s:21:"payment/free_checkout";i:62;s:22:"payment/klarna_account";i:63;s:22:"payment/klarna_invoice";i:64;s:14:"payment/liqpay";i:65;s:20:"payment/moneybookers";i:66;s:14:"payment/nochex";i:67;s:15:"payment/paymate";i:68;s:16:"payment/paypoint";i:69;s:13:"payment/payza";i:70;s:26:"payment/perpetual_payments";i:71;s:18:"payment/pp_express";i:72;s:25:"payment/pp_payflow_iframe";i:73;s:14:"payment/pp_pro";i:74;s:21:"payment/pp_pro_iframe";i:75;s:18:"payment/pp_payflow";i:76;s:17:"payment/pp_pro_uk";i:77;s:19:"payment/pp_standard";i:78;s:15:"payment/sagepay";i:79;s:22:"payment/sagepay_direct";i:80;s:18:"payment/sagepay_us";i:81;s:19:"payment/twocheckout";i:82;s:28:"payment/web_payment_software";i:83;s:16:"payment/worldpay";i:84;s:16:"report/affiliate";i:85;s:25:"report/affiliate_activity";i:86;s:24:"report/customer_activity";i:87;s:22:"report/customer_credit";i:88;s:22:"report/customer_online";i:89;s:21:"report/customer_order";i:90;s:22:"report/customer_reward";i:91;s:16:"report/marketing";i:92;s:24:"report/product_purchased";i:93;s:21:"report/product_viewed";i:94;s:18:"report/sale_coupon";i:95;s:17:"report/sale_order";i:96;s:18:"report/sale_return";i:97;s:20:"report/sale_shipping";i:98;s:15:"report/sale_tax";i:99;s:17:"sale/custom_field";i:100;s:13:"sale/customer";i:101;s:20:"sale/customer_ban_ip";i:102;s:19:"sale/customer_group";i:103;s:10:"sale/order";i:104;s:14:"sale/recurring";i:105;s:11:"sale/return";i:106;s:12:"sale/voucher";i:107;s:18:"sale/voucher_theme";i:108;s:15:"setting/setting";i:109;s:13:"setting/store";i:110;s:16:"shipping/auspost";i:111;s:17:"shipping/citylink";i:112;s:14:"shipping/fedex";i:113;s:13:"shipping/flat";i:114;s:13:"shipping/free";i:115;s:13:"shipping/item";i:116;s:23:"shipping/parcelforce_48";i:117;s:15:"shipping/pickup";i:118;s:19:"shipping/royal_mail";i:119;s:12:"shipping/ups";i:120;s:13:"shipping/usps";i:121;s:15:"shipping/weight";i:122;s:11:"tool/backup";i:123;s:14:"tool/error_log";i:124;s:12:"total/coupon";i:125;s:12:"total/credit";i:126;s:14:"total/handling";i:127;s:16:"total/klarna_fee";i:128;s:19:"total/low_order_fee";i:129;s:12:"total/reward";i:130;s:14:"total/shipping";i:131;s:15:"total/sub_total";i:132;s:9:"total/tax";i:133;s:11:"total/total";i:134;s:13:"total/voucher";i:135;s:9:"user/user";i:136;s:20:"user/user_permission";}s:6:"modify";a:137:{i:0;s:17:"catalog/attribute";i:1;s:23:"catalog/attribute_group";i:2;s:16:"catalog/category";i:3;s:16:"catalog/download";i:4;s:14:"catalog/filter";i:5;s:19:"catalog/information";i:6;s:20:"catalog/manufacturer";i:7;s:14:"catalog/option";i:8;s:15:"catalog/product";i:9;s:15:"catalog/profile";i:10;s:14:"catalog/review";i:11;s:18:"common/filemanager";i:12;s:13:"design/banner";i:13;s:13:"design/layout";i:14;s:14:"extension/feed";i:15;s:19:"extension/installer";i:16;s:22:"extension/modification";i:17;s:16:"extension/module";i:18;s:17:"extension/payment";i:19;s:18:"extension/shipping";i:20;s:15:"extension/total";i:21;s:16:"feed/google_base";i:22;s:19:"feed/google_sitemap";i:23;s:20:"localisation/country";i:24;s:21:"localisation/currency";i:25;s:21:"localisation/geo_zone";i:26;s:21:"localisation/language";i:27;s:25:"localisation/length_class";i:28;s:21:"localisation/location";i:29;s:25:"localisation/order_status";i:30;s:26:"localisation/return_action";i:31;s:26:"localisation/return_reason";i:32;s:26:"localisation/return_status";i:33;s:25:"localisation/stock_status";i:34;s:22:"localisation/tax_class";i:35;s:21:"localisation/tax_rate";i:36;s:25:"localisation/weight_class";i:37;s:17:"localisation/zone";i:38;s:19:"marketing/affiliate";i:39;s:17:"marketing/contact";i:40;s:16:"marketing/coupon";i:41;s:19:"marketing/marketing";i:42;s:14:"module/account";i:43;s:16:"module/affiliate";i:44;s:13:"module/banner";i:45;s:17:"module/bestseller";i:46;s:15:"module/carousel";i:47;s:15:"module/category";i:48;s:15:"module/featured";i:49;s:13:"module/filter";i:50;s:18:"module/google_talk";i:51;s:18:"module/information";i:52;s:13:"module/latest";i:53;s:16:"module/slideshow";i:54;s:14:"module/special";i:55;s:12:"module/store";i:56;s:14:"module/welcome";i:57;s:24:"payment/authorizenet_aim";i:58;s:21:"payment/bank_transfer";i:59;s:14:"payment/cheque";i:60;s:11:"payment/cod";i:61;s:21:"payment/free_checkout";i:62;s:22:"payment/klarna_account";i:63;s:22:"payment/klarna_invoice";i:64;s:14:"payment/liqpay";i:65;s:20:"payment/moneybookers";i:66;s:14:"payment/nochex";i:67;s:15:"payment/paymate";i:68;s:16:"payment/paypoint";i:69;s:13:"payment/payza";i:70;s:26:"payment/perpetual_payments";i:71;s:18:"payment/pp_express";i:72;s:25:"payment/pp_payflow_iframe";i:73;s:14:"payment/pp_pro";i:74;s:21:"payment/pp_pro_iframe";i:75;s:18:"payment/pp_payflow";i:76;s:17:"payment/pp_pro_uk";i:77;s:19:"payment/pp_standard";i:78;s:15:"payment/sagepay";i:79;s:22:"payment/sagepay_direct";i:80;s:18:"payment/sagepay_us";i:81;s:19:"payment/twocheckout";i:82;s:28:"payment/web_payment_software";i:83;s:16:"payment/worldpay";i:84;s:16:"report/affiliate";i:85;s:25:"report/affiliate_activity";i:86;s:24:"report/customer_activity";i:87;s:22:"report/customer_credit";i:88;s:22:"report/customer_online";i:89;s:21:"report/customer_order";i:90;s:22:"report/customer_reward";i:91;s:16:"report/marketing";i:92;s:24:"report/product_purchased";i:93;s:21:"report/product_viewed";i:94;s:18:"report/sale_coupon";i:95;s:17:"report/sale_order";i:96;s:18:"report/sale_return";i:97;s:20:"report/sale_shipping";i:98;s:15:"report/sale_tax";i:99;s:17:"sale/custom_field";i:100;s:13:"sale/customer";i:101;s:20:"sale/customer_ban_ip";i:102;s:19:"sale/customer_group";i:103;s:10:"sale/order";i:104;s:14:"sale/recurring";i:105;s:11:"sale/return";i:106;s:12:"sale/voucher";i:107;s:18:"sale/voucher_theme";i:108;s:15:"setting/setting";i:109;s:13:"setting/store";i:110;s:16:"shipping/auspost";i:111;s:17:"shipping/citylink";i:112;s:14:"shipping/fedex";i:113;s:13:"shipping/flat";i:114;s:13:"shipping/free";i:115;s:13:"shipping/item";i:116;s:23:"shipping/parcelforce_48";i:117;s:15:"shipping/pickup";i:118;s:19:"shipping/royal_mail";i:119;s:12:"shipping/ups";i:120;s:13:"shipping/usps";i:121;s:15:"shipping/weight";i:122;s:11:"tool/backup";i:123;s:14:"tool/error_log";i:124;s:12:"total/coupon";i:125;s:12:"total/credit";i:126;s:14:"total/handling";i:127;s:16:"total/klarna_fee";i:128;s:19:"total/low_order_fee";i:129;s:12:"total/reward";i:130;s:14:"total/shipping";i:131;s:15:"total/sub_total";i:132;s:9:"total/tax";i:133;s:11:"total/total";i:134;s:13:"total/voucher";i:135;s:9:"user/user";i:136;s:20:"user/user_permission";}}'),
 (10, 'Demonstration', '');
 
 -- --------------------------------------------------------
@@ -3439,14 +3552,13 @@ CREATE TABLE `oc_voucher` (
   `message` text NOT NULL,
   `amount` decimal(15,4) NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
   PRIMARY KEY (`voucher_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `oc_voucher`
 --
-
 
 -- --------------------------------------------------------
 
@@ -4429,27 +4541,27 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `code`, `name`, `status`) VALUES
 (844, 52, 'VAV', 'Vavoua', 1),
 (845, 52, 'YAM', 'Yamoussoukro', 1),
 (846, 52, 'ZUE', 'Zuenoula', 1),
-(847, 53, 'BB', 'Bjelovar-Bilogora', 1),
-(848, 53, 'CZ', 'City of Zagreb', 1),
-(849, 53, 'DN', 'Dubrovnik-Neretva', 1),
-(850, 53, 'IS', 'Istra', 1),
-(851, 53, 'KA', 'Karlovac', 1),
-(852, 53, 'KK', 'Koprivnica-Krizevci', 1),
-(853, 53, 'KZ', 'Krapina-Zagorje', 1),
-(854, 53, 'LS', 'Lika-Senj', 1),
-(855, 53, 'ME', 'Medimurje', 1),
-(856, 53, 'OB', 'Osijek-Baranja', 1),
-(857, 53, 'PS', 'Pozega-Slavonia', 1),
-(858, 53, 'PG', 'Primorje-Gorski Kotar', 1),
-(859, 53, 'SI', 'Sibenik', 1),
-(860, 53, 'SM', 'Sisak-Moslavina', 1),
-(861, 53, 'SB', 'Slavonski Brod-Posavina', 1),
-(862, 53, 'SD', 'Split-Dalmatia', 1),
-(863, 53, 'VA', 'Varazdin', 1),
-(864, 53, 'VP', 'Virovitica-Podravina', 1),
-(865, 53, 'VS', 'Vukovar-Srijem', 1),
-(866, 53, 'ZK', 'Zadar-Knin', 1),
-(867, 53, 'ZA', 'Zagreb', 1),
+(847, 53, 'BB', 'Bjelovarsko-bilogorska', 1),
+(848, 53, 'GZ', 'Grad Zagreb', 1),
+(849, 53, 'DN', 'Dubrovačko-neretvanska', 1),
+(850, 53, 'IS', 'Istarska', 1),
+(851, 53, 'KA', 'Karlovačka', 1),
+(852, 53, 'KK', 'Koprivničko-križevačka', 1),
+(853, 53, 'KZ', 'Krapinsko-zagorska', 1),
+(854, 53, 'LS', 'Ličko-senjska', 1),
+(855, 53, 'ME', 'Međimurska', 1),
+(856, 53, 'OB', 'Osječko-baranjska', 1),
+(857, 53, 'PS', 'Požeško-slavonska', 1),
+(858, 53, 'PG', 'Primorsko-goranska', 1),
+(859, 53, 'SK', 'Šibensko-kninska', 1),
+(860, 53, 'SM', 'Sisačko-moslavačka', 1),
+(861, 53, 'BP', 'Brodsko-posavska', 1),
+(862, 53, 'SD', 'Splitsko-dalmatinska', 1),
+(863, 53, 'VA', 'Varaždinska', 1),
+(864, 53, 'VP', 'Virovitičko-podravska', 1),
+(865, 53, 'VS', 'Vukovarsko-srijemska', 1),
+(866, 53, 'ZA', 'Zadarska', 1),
+(867, 53, 'ZG', 'Zagrebačka', 1),
 (868, 54, 'CA', 'Camaguey', 1),
 (869, 54, 'CD', 'Ciego de Avila', 1),
 (870, 54, 'CI', 'Cienfuegos', 1),
@@ -6559,9 +6671,9 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `code`, `name`, `status`) VALUES
 (3028, 196, 'SO', 'Southern', 1),
 (3029, 196, 'UV', 'Uva', 1),
 (3030, 196, 'WE', 'Western', 1),
-(3031, 197, 'A', 'Ascension', 1),
+
 (3032, 197, 'S', 'Saint Helena', 1),
-(3033, 197, 'T', 'Tristan da Cunha', 1),
+
 (3034, 199, 'ANL', 'A''ali an Nil', 1),
 (3035, 199, 'BAM', 'Al Bahr al Ahmar', 1),
 (3036, 199, 'BRT', 'Al Buhayrat', 1),
@@ -7478,7 +7590,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `code`, `name`, `status`) VALUES
 (3969, 101, 'ALB', 'Alborz', 1),
 (3970, 21, 'BRU', 'Brussels-Capital Region', 1),
 (3971, 138, 'AG', 'Aguascalientes', 1),
-(3972, 222, 'IOM', 'Isle of Man', 1),
+
 (3973, 242, '01', 'Andrijevica', 1),
 (3974, 242, '02', 'Bar', 1),
 (3975, 242, '03', 'Berane', 1),
@@ -7525,7 +7637,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `code`, `name`, `status`) VALUES
 (4016, 243, '22', 'Pirot', 1),
 (4017, 243, '23', 'Jablanica', 1),
 (4018, 243, '24', 'Pčinja', 1),
-(4019, 243, 'KM', 'Kosovo', 1),
+
 (4020, 245, 'BO', 'Bonaire', 1),
 (4021, 245, 'SA', 'Saba', 1),
 (4022, 245, 'SE', 'Sint Eustatius', 1),
@@ -7539,8 +7651,8 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `code`, `name`, `status`) VALUES
 (4030, 248, 'WR', 'Warrap', 1),
 (4031, 248, 'BW', 'Western Bahr el-Ghazal', 1),
 (4032, 248, 'EW', 'Western Equatoria', 1),
-(4033, 222, 'GGY', 'Guernsey', 1),
-(4034, 222, 'JEY', 'Jersey', 1),
+
+
 
 (4036,117,  '0661405', 'Ainaži, Salacgrīvas novads', 1),
 (4037,117,  '0320201', 'Aizkraukle, Aizkraukles novads', 1),
@@ -7741,8 +7853,8 @@ CREATE TABLE `oc_zone_to_geo_zone` (
   `country_id` int(11) NOT NULL,
   `zone_id` int(11) NOT NULL DEFAULT '0',
   `geo_zone_id` int(11) NOT NULL,
-  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `date_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
   PRIMARY KEY (`zone_to_geo_zone_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 

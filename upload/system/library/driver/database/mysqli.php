@@ -10,16 +10,17 @@ final class DBMySQLi {
 		}
 
 		$this->link->set_charset("utf8");
+		$this->link->query("SET SQL_MODE = ''");
 	}
 
 	public function query($sql) {
 		$query = $this->link->query($sql);
 
 		if (!$this->link->errno) {
-			if (isset($query->num_rows)) {
+			if ($query instanceof mysqli_result) {
 				$data = array();
 
-				while ($row = $query->fetch_array()) {
+				while ($row = $query->fetch_assoc()) {
 					$data[] = $row;
 				}
 

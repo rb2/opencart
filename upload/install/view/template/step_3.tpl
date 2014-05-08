@@ -1,6 +1,18 @@
 <?php echo $header; ?>
 <div class="container">
-  <h1><?php echo $heading_step_3; ?></h1>
+  <header>
+    <div class="row">
+      <div class="col-sm-6">
+        <h1 class="pull-left">3<small>/4</small></h1>
+        <h3><?php echo $heading_step_3; ?><br><small><?php echo $heading_step_3_small; ?></small></h3>
+      </div>
+      <div class="col-sm-6">
+        <div id="logo" class="pull-right hidden-xs">
+          <img src="view/image/logo.png" alt="OpenCart" title="OpenCart" />
+        </div>
+      </div>
+    </div>
+  </header>
   <?php if ($error_warning) { ?>
   <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error_warning; ?>
     <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -20,13 +32,6 @@
                 <option value="mysqli" selected="selected"><?php echo $text_mysqli; ?></option>
                 <?php } else { ?>
                 <option value="mysqli"><?php echo $text_mysqli; ?></option>
-                <?php } ?>
-                <?php } ?>
-                <?php if ($mysql) { ?>
-                <?php if ($db_driver == 'mysql') { ?>
-                <option value="mysql" selected="selected"><?php echo $text_mysql; ?></option>
-                <?php } else { ?>
-                <option value="mysql"><?php echo $text_mysql; ?></option>
                 <?php } ?>
                 <?php } ?>
                 <?php if ($pdo) { ?>
@@ -118,11 +123,11 @@
       </form>
     </div>
     <div class="col-sm-3">
-      <ul>
-        <li><?php echo $text_license; ?></li>
-        <li><?php echo $text_installation; ?></li>
-        <li><b><?php echo $text_configuration; ?></b></li>
-        <li><?php echo $text_finished; ?></li>
+      <ul class="list-group">
+        <li class="list-group-item"><?php echo $text_license; ?></li>
+        <li class="list-group-item"><?php echo $text_installation; ?></li>
+        <li class="list-group-item"><b><?php echo $text_configuration; ?></b></li>
+        <li class="list-group-item"><?php echo $text_finished; ?></li>
       </ul>
     </div>
   </div>

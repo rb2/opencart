@@ -39,11 +39,11 @@ class ControllerPaymentPayPoint extends Controller {
 
 		$data['help_password'] = $this->language->get('help_password');
 		$data['help_total'] = $this->language->get('help_total');
-		
+
 		$data['button_save'] = $this->language->get('button_save');
 		$data['button_cancel'] = $this->language->get('button_cancel');
 
- 		if (isset($this->error['warning'])) {
+		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
 		} else {
 			$data['error_warning'] = '';
@@ -55,22 +55,22 @@ class ControllerPaymentPayPoint extends Controller {
 			$data['error_merchant'] = '';
 		}
 
-  		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = array();
 
-   		$data['breadcrumbs'][] = array(
-       		'text' => $this->language->get('text_home'),
+		$data['breadcrumbs'][] = array(
+			'text' => $this->language->get('text_home'),
 			'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], 'SSL')
-   		);
+		);
 
-   		$data['breadcrumbs'][] = array(
-       		'text' => $this->language->get('text_payment'),
+		$data['breadcrumbs'][] = array(
+			'text' => $this->language->get('text_payment'),
 			'href' => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL')
-   		);
+		);
 
-   		$data['breadcrumbs'][] = array(
-       		'text' => $this->language->get('heading_title'),
+		$data['breadcrumbs'][] = array(
+			'text' => $this->language->get('heading_title'),
 			'href' => $this->url->link('payment/paypoint', 'token=' . $this->session->data['token'], 'SSL')
-   		);
+		);
 
 		$data['action'] = $this->url->link('payment/paypoint', 'token=' . $this->session->data['token'], 'SSL');
 
@@ -131,10 +131,11 @@ class ControllerPaymentPayPoint extends Controller {
 		} else {
 			$data['paypoint_sort_order'] = $this->config->get('paypoint_sort_order');
 		}
-		
+
 		$data['header'] = $this->load->controller('common/header');
+		$data['menu'] = $this->load->controller('common/menu');
 		$data['footer'] = $this->load->controller('common/footer');
-		
+
 		$this->response->setOutput($this->load->view('payment/paypoint.tpl', $data));
 	}
 

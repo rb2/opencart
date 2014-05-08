@@ -1,21 +1,20 @@
-<?php echo $header; ?>
-<div class="page-header">
-  <div class="container">
-    <h1><i class="fa fa-eye fa-lg"></i> <?php echo $heading_title; ?></h1>
-  </div>
-</div>
-<div id="content" class="container">
+<?php echo $header; ?><?php echo $menu; ?>
+<div id="content">
+  <ul class="breadcrumb">
+    <?php foreach ($breadcrumbs as $breadcrumb) { ?>
+    <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
+    <?php } ?>
+  </ul>
   <?php if ($error_install) { ?>
   <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error_install; ?>
     <button type="button" class="close" data-dismiss="alert">&times;</button>
   </div>
-  <?php } else { ?>
   <?php } ?>
   <div class="alert alert-info"><i class="fa fa-thumbs-o-up"></i> <?php echo $text_welcome; ?>
     <button type="button" class="close" data-dismiss="alert">&times;</button>
   </div>
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="row">
@@ -32,7 +31,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="row">
@@ -49,7 +48,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="row">
@@ -67,7 +66,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="row">
@@ -89,23 +88,18 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-sm-6">
       <div class="panel panel-default">
         <div class="panel-heading">
           <div class="pull-right">
             <div class="btn-group" data-toggle="buttons">
-              <label class="btn btn-default active">
-                <input type="radio" name="range" value="day" />
-                <?php echo $text_day; ?></label>
-              <label class="btn btn-default">
-                <input type="radio" name="range" value="week" />
-                <?php echo $text_week; ?></label>
-              <label class="btn btn-default">
-                <input type="radio" name="range" value="month" />
-                <?php echo $text_month; ?></label>
-              <label class="btn btn-default">
-                <input type="radio" name="range" value="year" />
-                <?php echo $text_year; ?></label>
+              <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-calendar"></i></button>
+              <ul id="range" class="dropdown-menu dropdown-menu-right">
+                <li><a href="day"><?php echo $text_day; ?></a></li>
+                <li><a href="week"><?php echo $text_week; ?></a></li>
+                <li class="active"><a href="month"><?php echo $text_month; ?></a></li>
+                <li><a href="year"><?php echo $text_year; ?></a></li>
+              </ul>
             </div>
           </div>
           <h1 class="panel-title"><i class="fa fa-bar-chart-o fa-lg"></i> <?php echo $text_analytics; ?></h1>
@@ -115,7 +109,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-sm-6">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h1 class="panel-title"><i class="fa fa-eye fa-lg"></i> <?php echo $text_online; ?></h1>
@@ -127,7 +121,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-sm-4">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h1 class="panel-title"><i class="fa fa-calendar-o fa-lg"></i> <?php echo $text_activity; ?></h1>
@@ -144,41 +138,43 @@
         </ul>
       </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-sm-8">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h1 class="panel-title"><i class="fa fa-shopping-cart fa-lg"></i> <?php echo $text_last_order; ?></h1>
         </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <td class="text-right"><?php echo $column_order_id; ?></td>
-              <td><?php echo $column_customer; ?></td>
-              <td><?php echo $column_status; ?></td>
-              <td><?php echo $column_date_added; ?></td>
-              <td class="text-right"><?php echo $column_total; ?></td>
-              <td class="text-right"><?php echo $column_action; ?></td>
-            </tr>
-          </thead>
-          <tbody>
-            <?php if ($orders) { ?>
-            <?php foreach ($orders as $order) { ?>
-            <tr>
-              <td class="text-right"><?php echo $order['order_id']; ?></td>
-              <td><?php echo $order['customer']; ?></td>
-              <td><?php echo $order['status']; ?></td>
-              <td><?php echo $order['date_added']; ?></td>
-              <td class="text-right"><?php echo $order['total']; ?></td>
-              <td class="text-right"><a href="<?php echo $order['view']; ?>" data-toggle="tooltip" title="<?php echo $button_view; ?>" class="btn btn-info"><i class="fa fa-eye"></i></a></td>
-            </tr>
-            <?php } ?>
-            <?php } else { ?>
-            <tr>
-              <td class="text-center" colspan="6"><?php echo $text_no_results; ?></td>
-            </tr>
-            <?php } ?>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <td class="text-right"><?php echo $column_order_id; ?></td>
+                <td><?php echo $column_customer; ?></td>
+                <td><?php echo $column_status; ?></td>
+                <td><?php echo $column_date_added; ?></td>
+                <td class="text-right"><?php echo $column_total; ?></td>
+                <td class="text-right"><?php echo $column_action; ?></td>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if ($orders) { ?>
+              <?php foreach ($orders as $order) { ?>
+              <tr>
+                <td class="text-right"><?php echo $order['order_id']; ?></td>
+                <td><?php echo $order['customer']; ?></td>
+                <td><?php echo $order['status']; ?></td>
+                <td><?php echo $order['date_added']; ?></td>
+                <td class="text-right"><?php echo $order['total']; ?></td>
+                <td class="text-right"><a href="<?php echo $order['view']; ?>" data-toggle="tooltip" title="<?php echo $button_view; ?>" class="btn btn-info"><i class="fa fa-eye"></i></a></td>
+              </tr>
+              <?php } ?>
+              <?php } else { ?>
+              <tr>
+                <td class="text-center" colspan="6"><?php echo $text_no_results; ?></td>
+              </tr>
+              <?php } ?>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -186,11 +182,17 @@
 <script type="text/javascript" src="view/javascript/jquery/flot/jquery.flot.js"></script> 
 <script type="text/javascript" src="view/javascript/jquery/flot/jquery.flot.resize.min.js"></script> 
 <script type="text/javascript"><!--
-$('input[name=\'range\']').on('change', function() {
+$('#range a').on('click', function(e) {
+	e.preventDefault();
+	
+	$(this).parent().parent().find('li').removeClass('active');
+	
+	$(this).parent().addClass('active');
+	
 	// Sales
 	$.ajax({
 		type: 'get',
-		url: 'index.php?route=common/dashboard/sale&token=<?php echo $token; ?>&range=' + this.value,
+		url: 'index.php?route=common/dashboard/sale&token=<?php echo $token; ?>&range=' + $(this).attr('href'),
 		dataType: 'json',
 		success: function(json) {
 			var option = {	
@@ -241,7 +243,7 @@ $('input[name=\'range\']').on('change', function() {
 	});
 });
 
-$('.active input[name=\'range\']').trigger('change');
+$('#range .active a').trigger('click');
 
 function online() {
 	$.ajax({

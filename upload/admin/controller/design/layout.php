@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerDesignLayout extends Controller {
 	private $error = array();
 
@@ -185,7 +185,7 @@ class ControllerDesignLayout extends Controller {
 		$data['text_confirm'] = $this->language->get('text_confirm');
 
 		$data['column_name'] = $this->language->get('column_name');
-		$data['column_action'] = $this->language->get('column_action');	
+		$data['column_action'] = $this->language->get('column_action');
 
 		$data['button_insert'] = $this->language->get('button_insert');
 		$data['button_edit'] = $this->language->get('button_edit');
@@ -249,6 +249,7 @@ class ControllerDesignLayout extends Controller {
 		$data['order'] = $order;
 
 		$data['header'] = $this->load->controller('common/header');
+		$data['menu'] = $this->load->controller('common/menu');
 		$data['footer'] = $this->load->controller('common/footer');
 
 		$this->response->setOutput($this->load->view('design/layout_list.tpl', $data));
@@ -306,7 +307,7 @@ class ControllerDesignLayout extends Controller {
 			'href' => $this->url->link('design/layout', 'token=' . $this->session->data['token'] . $url, 'SSL')
 		);
 
-		if (!isset($this->request->get['layout_id'])) { 
+		if (!isset($this->request->get['layout_id'])) {
 			$data['action'] = $this->url->link('design/layout/insert', 'token=' . $this->session->data['token'] . $url, 'SSL');
 		} else {
 			$data['action'] = $this->url->link('design/layout/update', 'token=' . $this->session->data['token'] . '&layout_id=' . $this->request->get['layout_id'] . $url, 'SSL');
@@ -336,9 +337,10 @@ class ControllerDesignLayout extends Controller {
 			$data['layout_routes'] = $this->model_design_layout->getLayoutRoutes($this->request->get['layout_id']);
 		} else {
 			$data['layout_routes'] = array();
-		}	
+		}
 
 		$data['header'] = $this->load->controller('common/header');
+		$data['menu'] = $this->load->controller('common/menu');
 		$data['footer'] = $this->load->controller('common/footer');
 
 		$this->response->setOutput($this->load->view('design/layout_form.tpl', $data));

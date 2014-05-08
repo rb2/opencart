@@ -70,7 +70,9 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-date-ordered"><?php echo $entry_date_ordered; ?></label>
             <div class="col-sm-3">
-              <input type="date" name="date_ordered" value="<?php echo $date_ordered; ?>" placeholder="<?php echo $entry_date_ordered; ?>" id="input-date-ordered" class="form-control date" />
+              <div class="input-group date"><input type="text" name="date_ordered" value="<?php echo $date_ordered; ?>" placeholder="<?php echo $entry_date_ordered; ?>" data-format="YYYY-MM-DD" id="input-date-ordered" class="form-control" /><span class="input-group-btn">
+                <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                </span></div>
             </div>
           </div>
         </fieldset>
@@ -152,7 +154,7 @@
             <label class="col-sm-2 control-label" for="input-captcha"><?php echo $entry_captcha; ?></label>
             <div class="col-sm-10">
               <input type="text" name="captcha" value="<?php echo $captcha; ?>" placeholder="<?php echo $entry_captcha; ?>" id="input-captcha" class="form-control" />
-              <img src="index.php?route=account/return/captcha" alt="" />
+              <img src="index.php?route=tool/captcha" alt="" />
               <?php if ($error_captcha) { ?>
               <div class="text-danger"><?php echo $error_captcha; ?></div>
               <?php } ?>
@@ -183,4 +185,9 @@
       <?php echo $content_bottom; ?></div>
     <?php echo $column_right; ?></div>
 </div>
+<script type="text/javascript"><!--
+$('.date').datetimepicker({
+	pickTime: false
+});
+//--></script>
 <?php echo $footer; ?> 

@@ -103,7 +103,7 @@
                   <label class="col-sm-2 control-label" for="input-captcha"><?php echo $entry_captcha; ?></label>
                   <div class="col-sm-10">
                     <input type="text" name="captcha" value="" id="input-captcha" class="form-control" />
-                    <img src="index.php?route=product/product/captcha" alt="" id="captcha" /></div>
+                    <img src="index.php?route=tool/captcha" alt="" id="captcha" /></div>
                 </div>
                 <div class="buttons">
                   <div class="pull-right">
@@ -124,8 +124,8 @@
         <?php } ?>
         <div class="<?php echo $class; ?>">
           <div class="btn-group">
-            <button type="button" data-toggle="tooltip" class="btn btn-default" title="<?php echo $button_wishlist; ?>" onclick="addToWishList('<?php echo $product_id; ?>');"><i class="fa fa-heart"></i></button>
-            <button type="button" data-toggle="tooltip" class="btn btn-default" title="<?php echo $button_compare; ?>" onclick="addToCompare('<?php echo $product_id; ?>');"><i class="fa fa-exchange"></i></button>
+            <button type="button" data-toggle="tooltip" class="btn btn-default" title="<?php echo $button_wishlist; ?>" onclick="wishlist.add('<?php echo $product_id; ?>');"><i class="fa fa-heart"></i></button>
+            <button type="button" data-toggle="tooltip" class="btn btn-default" title="<?php echo $button_compare; ?>" onclick="compare.add('<?php echo $product_id; ?>');"><i class="fa fa-exchange"></i></button>
           </div>
           <h1><?php echo $heading_title; ?></h1>
           <ul class="list-unstyled">
@@ -262,22 +262,47 @@
             <?php if ($option['type'] == 'date') { ?>
             <div class="form-group<?php echo ($option['required'] ? ' required' : ''); ?>">
               <label class="control-label" for="input-option<?php echo $option['product_option_id']; ?>"><?php echo $option['name']; ?></label>
-              <input type="date" name="option[<?php echo $option['product_option_id']; ?>]" value="<?php echo $option['value']; ?>" id="input-option<?php echo $option['product_option_id']; ?>" class="form-control" />
+              <div class="input-group date">
+                <input type="text" name="option[<?php echo $option['product_option_id']; ?>]" value="<?php echo $option['value']; ?>" data-format="YYYY-MM-DD" id="input-option<?php echo $option['product_option_id']; ?>" class="form-control" />
+                <span class="input-group-btn">
+                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                </span></div>
             </div>
             <?php } ?>
             <?php if ($option['type'] == 'datetime') { ?>
             <div class="form-group<?php echo ($option['required'] ? ' required' : ''); ?>">
               <label class="control-label" for="input-option<?php echo $option['product_option_id']; ?>"><?php echo $option['name']; ?></label>
-              <input type="datetime-local" name="option[<?php echo $option['product_option_id']; ?>]" value="<?php echo $option['value']; ?>" id="input-option<?php echo $option['product_option_id']; ?>" class="form-control" />
+              <div class="input-group datetime">
+                <input type="text" name="option[<?php echo $option['product_option_id']; ?>]" value="<?php echo $option['value']; ?>" data-format="YYYY-MM-DD HH:mm" id="input-option<?php echo $option['product_option_id']; ?>" class="form-control" />
+                <span class="input-group-btn">
+                <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                </span></div>
             </div>
             <?php } ?>
             <?php if ($option['type'] == 'time') { ?>
             <div class="form-group<?php echo ($option['required'] ? ' required' : ''); ?>">
               <label class="control-label" for="input-option<?php echo $option['product_option_id']; ?>"><?php echo $option['name']; ?></label>
-              <input type="time" name="option[<?php echo $option['product_option_id']; ?>]" value="<?php echo $option['value']; ?>" id="input-option<?php echo $option['product_option_id']; ?>" class="form-control" />
+              <div class="input-group time">
+                <input type="text" name="option[<?php echo $option['product_option_id']; ?>]" value="<?php echo $option['value']; ?>" data-format="HH:mm" id="input-option<?php echo $option['product_option_id']; ?>" class="form-control" />
+                <span class="input-group-btn">
+                <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                </span></div>
             </div>
             <?php } ?>
             <?php } ?>
+            <?php } ?>
+            <?php if ($profiles) { ?>
+            <hr>
+            <h3><?php echo $text_payment_profile ?></h3>
+            <div class="form-group required">
+              <select name="profile_id" class="form-control">
+                <option value=""><?php echo $text_select; ?></option>
+                <?php foreach ($profiles as $profile) { ?>
+                <option value="<?php echo $profile['profile_id'] ?>"><?php echo $profile['name'] ?></option>
+                <?php } ?>
+              </select>
+              <div class="help-block" id="profile-description"></div>
+            </div>
             <?php } ?>
             <div class="form-group">
               <label class="control-label" for="input-quantity"><?php echo $entry_qty; ?></label>
@@ -315,7 +340,6 @@
       <div class="row">
         <?php $i = 0; ?>
         <?php foreach ($products as $product) { ?>
-        
         <?php if ($column_left && $column_right) { ?>
         <?php $class = 'col-lg-6 col-md-6 col-sm-12 col-xs-12'; ?>
         <?php } elseif ($column_left || $column_right) { ?>
@@ -354,9 +378,9 @@
               <?php } ?>
             </div>
             <div class="button-group">
-              <button type="button" onclick="addToCart('<?php echo $product['product_id']; ?>');"><span class="hidden-xs hidden-sm hidden-md"><?php echo $button_cart; ?></span> <i class="fa fa-shopping-cart"></i></button>
-              <button type="button" data-toggle="tooltip" title="<?php echo $button_wishlist; ?>" onclick="addToWishList('<?php echo $product['product_id']; ?>');"><i class="fa fa-heart"></i></button>
-              <button type="button" data-toggle="tooltip" title="<?php echo $button_compare; ?>" onclick="addToCompare('<?php echo $product['product_id']; ?>');"><i class="fa fa-exchange"></i></button>
+              <button type="button" onclick="cart.add('<?php echo $product['product_id']; ?>');"><span class="hidden-xs hidden-sm hidden-md"><?php echo $button_cart; ?></span> <i class="fa fa-shopping-cart"></i></button>
+              <button type="button" data-toggle="tooltip" title="<?php echo $button_wishlist; ?>" onclick="wishlist.add('<?php echo $product['product_id']; ?>');"><i class="fa fa-heart"></i></button>
+              <button type="button" data-toggle="tooltip" title="<?php echo $button_compare; ?>" onclick="compare.add('<?php echo $product['product_id']; ?>');"><i class="fa fa-exchange"></i></button>
             </div>
           </div>
         </div>
@@ -368,8 +392,6 @@
         <div class="clearfix visible-md"></div>
         <?php } ?>
         <?php $i++; ?>
-        
-        
         <?php } ?>
       </div>
       <?php } ?>
@@ -387,6 +409,26 @@
       <?php echo $content_bottom; ?></div>
     <?php echo $column_right; ?></div>
 </div>
+<script type="text/javascript"><!--
+$('select[name="profile_id"], input[name="quantity"]').change(function(){
+	$.ajax({
+		url: 'index.php?route=product/product/getRecurringDescription',
+		type: 'post',
+		data: $('input[name=\'product_id\'], input[name=\'quantity\'], select[name=\'profile_id\']'),
+		dataType: 'json',
+		beforeSend: function() {
+			$('#profile-description').html('');
+		},
+		success: function(json) {
+			$('.alert, .text-danger').remove();
+		
+			if (json['success']) {
+				$('#profile-description').html(json['success']);
+			}
+		}
+	});
+});
+//--></script> 
 <script type="text/javascript"><!--
 $('#button-cart').on('click', function() {
     $.ajax({
@@ -409,6 +451,10 @@ $('#button-cart').on('click', function() {
                         $('#input-option' + i).after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
                     }
                 }
+
+				if (json['error']['profile']) {
+					$('select[name=\'profile_id\']').after('<div class="text-danger">' + json['error']['profile'] + '</div>');
+				}
             } 
             
             if (json['success']) {
@@ -423,6 +469,19 @@ $('#button-cart').on('click', function() {
 });
 //--></script> 
 <script type="text/javascript"><!--
+$('.date').datetimepicker({
+	pickTime: false
+});
+
+$('.datetime').datetimepicker({
+	pickDate: true,
+	pickTime: true
+});
+
+$('.time').datetimepicker({
+	pickDate: false
+});
+		
 $('button[id^=\'button-upload\']').on('click', function() {
 	var node = this;
 	
@@ -451,13 +510,13 @@ $('button[id^=\'button-upload\']').on('click', function() {
 			},		
 			success: function(json) {
 				if (json['error']) {
-					$(node).parent().find('input[name^=\'option\']').after('<div class="text-danger">' + json['error'] + '</div>');
+					$(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
 				}
 							
 				if (json['success']) {
 					alert(json['success']);
 					
-					$(node).parent().find('input[name^=\'option\']').attr('value', json['file']);
+					$(node).parent().find('input').attr('value', json['code']);
 				}
 			},			
 			error: function(xhr, ajaxOptions, thrownError) {
@@ -509,6 +568,16 @@ $('#button-review').on('click', function() {
             }
         }
     });
+});
+
+$(document).ready(function() {
+	$('.thumbnails').magnificPopup({
+		type:'image',
+		delegate: 'a',
+		gallery: { 
+			enabled:true 
+		}
+	});
 });
 //--></script> 
 <?php echo $footer; ?>

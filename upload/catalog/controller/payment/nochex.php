@@ -78,7 +78,7 @@ class ControllerPaymentNochex extends Controller {
 		if (isset($this->request->get['method']) && $this->request->get['method'] == 'decline') {
 			$this->session->data['error'] = $this->language->get('error_declined');
 
-			$this->response->redirect($this->url->link('checkout/cart')); 
+			$this->response->redirect($this->url->link('checkout/cart'));
 		}
 
 		if (isset($this->request->post['order_id'])) {
@@ -107,7 +107,7 @@ class ControllerPaymentNochex extends Controller {
 		$curl = curl_init('https://www.nochex.com/nochex.dll/apc/apc');
 
 		curl_setopt($curl, CURLOPT_POST, true);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $request);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, trim($request, '&'));
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_HEADER, false);
 		curl_setopt($curl, CURLOPT_TIMEOUT, 30);

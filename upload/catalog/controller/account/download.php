@@ -46,7 +46,7 @@ class ControllerAccountDownload extends Controller {
 			$page = $this->request->get['page'];
 		} else {
 			$page = 1;
-		}			
+		}
 
 		$data['downloads'] = array();
 
@@ -110,7 +110,7 @@ class ControllerAccountDownload extends Controller {
 			$this->response->setOutput($this->load->view($this->config->get('config_template') . '/template/account/download.tpl', $data));
 		} else {
 			$this->response->setOutput($this->load->view('default/template/account/download.tpl', $data));
-		}			
+		}
 	}
 
 	public function download() {
@@ -143,7 +143,9 @@ class ControllerAccountDownload extends Controller {
 					header('Pragma: public');
 					header('Content-Length: ' . filesize($file));
 
-					if (ob_get_level()) ob_end_clean();
+					if (ob_get_level()) {
+						ob_end_clean();
+					}
 
 					readfile($file, 'rb');
 

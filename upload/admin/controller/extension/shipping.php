@@ -19,7 +19,7 @@ class ControllerExtensionShipping extends Controller {
 
 		$this->load->model('setting/extension');
 
-		if ($this->validate()) {		
+		if ($this->validate()) {
 			$this->model_setting_extension->install('shipping', $this->request->get['extension']);
 
 			$this->load->model('user/user_group');
@@ -28,6 +28,15 @@ class ControllerExtensionShipping extends Controller {
 			$this->model_user_user_group->addPermission($this->user->getId(), 'modify', 'shipping/' . $this->request->get['extension']);
 
 			$this->session->data['success'] = $this->language->get('text_success');
+
+			require_once(DIR_APPLICATION . 'controller/shipping/' . $this->request->get['extension'] . '.php');
+
+			$class = 'ControllerShipping' . str_replace('_', '', $this->request->get['extension']);
+			$class = new $class($this->registry);
+
+			if (method_exists($class, 'install')) {
+				$class->install();
+			}
 
 			$this->response->redirect($this->url->link('extension/shipping', 'token=' . $this->session->data['token'], 'SSL'));
 		}
@@ -42,7 +51,7 @@ class ControllerExtensionShipping extends Controller {
 
 		$this->load->model('setting/extension');
 
-		if ($this->validate()) {	
+		if ($this->validate()) {
 			$this->model_setting_extension->uninstall('shipping', $this->request->get['extension']);
 
 			$this->load->model('setting/setting');
@@ -50,6 +59,15 @@ class ControllerExtensionShipping extends Controller {
 			$this->model_setting_setting->deleteSetting($this->request->get['extension']);
 
 			$this->session->data['success'] = $this->language->get('text_success');
+
+			require_once(DIR_APPLICATION . 'controller/shipping/' . $this->request->get['extension'] . '.php');
+
+			$class = 'ControllerShipping' . str_replace('_', '', $this->request->get['extension']);
+			$class = new $class($this->registry);
+
+			if (method_exists($class, 'uninstall')) {
+				$class->uninstall();
+			}
 
 			$this->response->redirect($this->url->link('extension/shipping', 'token=' . $this->session->data['token'], 'SSL'));
 		}
@@ -133,6 +151,7 @@ class ControllerExtensionShipping extends Controller {
 		}
 
 		$data['header'] = $this->load->controller('common/header');
+		$data['menu'] = $this->load->controller('common/menu');
 		$data['footer'] = $this->load->controller('common/footer');
 
 		$this->response->setOutput($this->load->view('extension/shipping.tpl', $data));

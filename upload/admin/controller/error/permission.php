@@ -1,6 +1,6 @@
-<?php    
-class ControllerErrorPermission extends Controller {    
-	public function index() { 
+<?php
+class ControllerErrorPermission extends Controller {
+	public function index() {
 		$this->load->language('error/permission');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -22,6 +22,7 @@ class ControllerErrorPermission extends Controller {
 		);
 
 		$data['header'] = $this->load->controller('common/header');
+		$data['menu'] = $this->load->controller('common/menu');
 		$data['footer'] = $this->load->controller('common/footer');
 
 		$this->response->setOutput($this->load->view('error/permission.tpl', $data));
@@ -48,12 +49,12 @@ class ControllerErrorPermission extends Controller {
 				'common/forgotten',
 				'common/reset',
 				'error/not_found',
-				'error/permission'		
-			);			
+				'error/permission'
+			);
 
 			if (!in_array($route, $ignore) && !$this->user->hasPermission('access', $route)) {
 				return new Action('error/permission');
 			}
 		}
-	}	
+	}
 }

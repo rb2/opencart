@@ -29,6 +29,15 @@ class ControllerExtensionModule extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
+			require_once(DIR_APPLICATION . 'controller/module/' . $this->request->get['extension'] . '.php');
+
+			$class = 'ControllerModule' . str_replace('_', '', $this->request->get['extension']);
+			$class = new $class($this->registry);
+
+			if (method_exists($class, 'install')) {
+				$class->install();
+			}
+
 			$this->response->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
 		}
 
@@ -42,7 +51,7 @@ class ControllerExtensionModule extends Controller {
 
 		$this->load->model('setting/extension');
 
-		if ($this->validate()) {		
+		if ($this->validate()) {
 			$this->model_setting_extension->uninstall('module', $this->request->get['extension']);
 
 			$this->load->model('setting/setting');
@@ -51,7 +60,16 @@ class ControllerExtensionModule extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));	
+			require_once(DIR_APPLICATION . 'controller/module/' . $this->request->get['extension'] . '.php');
+
+			$class = 'ControllerModule' . str_replace('_', '', $this->request->get['extension']);
+			$class = new $class($this->registry);
+
+			if (method_exists($class, 'uninstall')) {
+				$class->uninstall();
+			}
+
+			$this->response->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
 		}
 
 		$this->getList();
@@ -129,6 +147,7 @@ class ControllerExtensionModule extends Controller {
 		}
 
 		$data['header'] = $this->load->controller('common/header');
+		$data['menu'] = $this->load->controller('common/menu');
 		$data['footer'] = $this->load->controller('common/footer');
 
 		$this->response->setOutput($this->load->view('extension/module.tpl', $data));

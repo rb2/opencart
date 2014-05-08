@@ -27,6 +27,15 @@ class ControllerExtensionPayment extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
+			require_once(DIR_APPLICATION . 'controller/payment/' . $this->request->get['extension'] . '.php');
+
+			$class = 'ControllerPayment' . str_replace('_', '', $this->request->get['extension']);
+			$class = new $class($this->registry);
+
+			if (method_exists($class, 'install')) {
+				$class->install();
+			}
+
 			$this->response->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));
 		}
 
@@ -40,19 +49,28 @@ class ControllerExtensionPayment extends Controller {
 
 		$this->load->model('setting/extension');
 
-		if ($this->validate()) {		
+		if ($this->validate()) {
 			$this->model_setting_extension->uninstall('payment', $this->request->get['extension']);
 
 			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->deleteSetting($this->request->get['extension']);
 
+			require_once(DIR_APPLICATION . 'controller/payment/' . $this->request->get['extension'] . '.php');
+
+			$class = 'ControllerPayment' . str_replace('_', '', $this->request->get['extension']);
+			$class = new $class($this->registry);
+
+			if (method_exists($class, 'uninstall')) {
+				$class->uninstall();
+			}
+
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));	
-		}		
+			$this->response->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));
+		}
 
-		$this->getList();	
+		$this->getList();
 	}
 
 	public function getList() {
@@ -140,6 +158,7 @@ class ControllerExtensionPayment extends Controller {
 		}
 
 		$data['header'] = $this->load->controller('common/header');
+		$data['menu'] = $this->load->controller('common/menu');
 		$data['footer'] = $this->load->controller('common/footer');
 
 		$this->response->setOutput($this->load->view('extension/payment.tpl', $data));

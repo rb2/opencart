@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerSaleVoucher extends Controller {
 	private $error = array();
 
@@ -197,7 +197,7 @@ class ControllerSaleVoucher extends Controller {
 		$data['column_amount'] = $this->language->get('column_amount');
 		$data['column_status'] = $this->language->get('column_status');
 		$data['column_date_added'] = $this->language->get('column_date_added');
-		$data['column_action'] = $this->language->get('column_action');		
+		$data['column_action'] = $this->language->get('column_action');
 
 		$data['button_insert'] = $this->language->get('button_insert');
 		$data['button_edit'] = $this->language->get('button_edit');
@@ -270,6 +270,7 @@ class ControllerSaleVoucher extends Controller {
 		$data['order'] = $order;
 
 		$data['header'] = $this->load->controller('common/header');
+		$data['menu'] = $this->load->controller('common/menu');
 		$data['footer'] = $this->load->controller('common/footer');
 
 		$this->response->setOutput($this->load->view('sale/voucher_list.tpl', $data));
@@ -316,31 +317,31 @@ class ControllerSaleVoucher extends Controller {
 			$data['error_code'] = $this->error['code'];
 		} else {
 			$data['error_code'] = '';
-		}		
+		}
 
 		if (isset($this->error['from_name'])) {
 			$data['error_from_name'] = $this->error['from_name'];
 		} else {
 			$data['error_from_name'] = '';
-		}	
+		}
 
 		if (isset($this->error['from_email'])) {
 			$data['error_from_email'] = $this->error['from_email'];
 		} else {
 			$data['error_from_email'] = '';
-		}	
+		}
 
 		if (isset($this->error['to_name'])) {
 			$data['error_to_name'] = $this->error['to_name'];
 		} else {
 			$data['error_to_name'] = '';
-		}	
+		}
 
 		if (isset($this->error['to_email'])) {
 			$data['error_to_email'] = $this->error['to_email'];
 		} else {
 			$data['error_to_email'] = '';
-		}	
+		}
 
 		if (isset($this->error['amount'])) {
 			$data['error_amount'] = $this->error['amount'];
@@ -465,9 +466,10 @@ class ControllerSaleVoucher extends Controller {
 		}
 
 		$data['header'] = $this->load->controller('common/header');
+		$data['menu'] = $this->load->controller('common/menu');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('sale/voucher_form.tpl', $data));		
+		$this->response->setOutput($this->load->view('sale/voucher_form.tpl', $data));
 	}
 
 	protected function validateForm() {
@@ -523,9 +525,9 @@ class ControllerSaleVoucher extends Controller {
 			$order_voucher_info = $this->model_sale_order->getOrderVoucherByVoucherId($voucher_id);
 
 			if ($order_voucher_info) {
-				$this->error['warning'] = sprintf($this->language->get('error_order'), $this->url->link('sale/order/info', 'token=' . $this->session->data['token'] . '&order_id=' . $order_voucher_info['order_id'], 'SSL')); 
+				$this->error['warning'] = sprintf($this->language->get('error_order'), $this->url->link('sale/order/info', 'token=' . $this->session->data['token'] . '&order_id=' . $order_voucher_info['order_id'], 'SSL'));
 
-				break;       
+				break;
 			}
 		}
 
@@ -548,7 +550,7 @@ class ControllerSaleVoucher extends Controller {
 			$page = $this->request->get['page'];
 		} else {
 			$page = 1;
-		}  
+		}
 
 		$data['histories'] = array();
 
@@ -568,12 +570,12 @@ class ControllerSaleVoucher extends Controller {
 		$pagination = new Pagination();
 		$pagination->total = $history_total;
 		$pagination->page = $page;
-		$pagination->limit = 10; 
+		$pagination->limit = 10;
 		$pagination->url = $this->url->link('sale/voucher/history', 'token=' . $this->session->data['token'] . '&voucher_id=' . $this->request->get['voucher_id'] . '&page={page}', 'SSL');
 
 		$data['pagination'] = $pagination->render();
 
-		$data['results'] = sprintf($this->language->get('text_pagination'), ($history_total) ? (($page - 1) * $this->config->get('config_limit_admin')) + 1 : 0, ((($page - 1) * $this->config->get('config_limit_admin')) > ($history_total - $this->config->get('config_limit_admin'))) ? $history_total : ((($page - 1) * $this->config->get('config_limit_admin')) + $this->config->get('config_limit_admin')), $history_total, ceil($history_total / $this->config->get('config_limit_admin')));
+		$data['results'] = sprintf($this->language->get('text_pagination'), ($history_total) ? (($page - 1) * 10) + 1 : 0, ((($page - 1) * 10) > ($history_total - 10)) ? $history_total : ((($page - 1) * 10) + 10), $history_total, ceil($history_total / 10));
 
 		$this->response->setOutput($this->load->view('sale/voucher_history.tpl', $data));
 	}
@@ -603,8 +605,8 @@ class ControllerSaleVoucher extends Controller {
 			}
 
 			$json['success'] = $this->language->get('text_sent');
-		}	
-		
-		$this->response->setOutput(json_encode($json));			
+		}
+
+		$this->response->setOutput(json_encode($json));
   	}
 }

@@ -1,9 +1,9 @@
 <?php
 // Heading
-$_['heading_title']    = 'Store Locations';  
+$_['heading_title']    = 'Store Locations';
 
 // Text
-$_['text_success']     = 'Success: You have modified store locations!'; 
+$_['text_success']     = 'Success: You have modified store locations!';
 $_['text_default']     = 'Default';
 $_['text_time']        = 'Opening Times';
 $_['text_geocode']     = 'Geocode was not successful for the following reason:';
@@ -24,7 +24,7 @@ $_['entry_open']       = 'Opening Times';
 $_['entry_comment']    = 'Comment';
 
 // Help
-$_['help_geocode']     = 'Please enter it in  your store location geocode manually.';
+$_['help_geocode']     = 'Please enter your store location geocode manually.';
 $_['help_open']        = 'Fill in your stores opening times.';
 $_['help_comment']     = 'This field is for any special notes you would like to tell the customer i.e. Store does not accept cheques.';
 
