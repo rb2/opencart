@@ -60,7 +60,7 @@ class ControllerExtensionInstaller extends Controller {
 
 		if (!$json) {
 			if (!empty($this->request->files['file']['name'])) {
-				if (strrchr($this->request->files['file']['name'], '.') != '.zip' && strrchr($this->request->files['file']['name'], '.') != '.xml') {
+				if (substr($this->request->files['file']['name'], -10) != '.ocmod.zip' && substr($this->request->files['file']['name'], -10) != '.ocmod.xml') {
 					$json['error'] = $this->language->get('error_filetype');
 				}
 
@@ -109,7 +109,7 @@ class ControllerExtensionInstaller extends Controller {
 			}
 
 			// If zip file copy it to the temp directory
-			if (strrchr($this->request->files['file']['name'], '.') == '.vqmod.zip') {
+			if (strrchr($this->request->files['file']['name'], '.') == '.zip') {
 				$file = DIR_DOWNLOAD . $path . '/upload.zip';
 
 				move_uploaded_file($this->request->files['file']['tmp_name'], $file);
@@ -255,7 +255,7 @@ class ControllerExtensionInstaller extends Controller {
 		}
 
 		$directory = DIR_DOWNLOAD . str_replace(array('../', '..\\', '..'), '', $this->request->post['path']) . '/upload/';
-		//echo $directory;
+
 		if (!is_dir($directory)) {
 			$json['error'] = $this->language->get('error_directory');
 		}
@@ -321,7 +321,7 @@ class ControllerExtensionInstaller extends Controller {
 
 				ftp_close($connection);
 			} else {
-				$json['error'] = sprintf($this->language->get('error_ftp_connection'), $this->config->get('config_ftp_host'), $this->config->get('config_ftp_port'));
+				$json['error'] = sprintf($this->language->get('error_ftp_connection'), $this->config->get('config_ftp_hostname'), $this->config->get('config_ftp_port'));
 			}
 		}
 
@@ -397,8 +397,8 @@ class ControllerExtensionInstaller extends Controller {
 				try {
 					$dom = new DOMDocument('1.0', 'UTF-8');
 					$dom->loadXml($xml);
-
-					$name = $dom->getElementsByTagName('id')->item(0);
+					
+					$name = $dom->getElementsByTagName('name')->item(0);
 
 					if ($name) {
 						$name = $name->nodeValue;

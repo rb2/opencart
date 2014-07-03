@@ -62,7 +62,7 @@ class ControllerCheckoutCart extends Controller {
 				$data['success'] = '';
 			}
 
-			$data['action'] = $this->url->link('checkout/cart');
+			$data['action'] = $this->url->link('checkout/cart/update');
 
 			if ($this->config->get('config_cart_weight')) {
 				$data['weight'] = $this->weight->format($this->cart->getWeight(), $this->config->get('config_weight_class_id'), $this->language->get('decimal_point'), $this->language->get('thousand_point'));
@@ -224,7 +224,7 @@ class ControllerCheckoutCart extends Controller {
 			foreach ($total_data as $total) {
 				$data['totals'][] = array(
 					'title' => $total['title'],
-					'text'  => $this->currency->format($total['value']),
+					'text'  => $this->currency->format($total['value'])
 				);
 			}
 
@@ -423,7 +423,7 @@ class ControllerCheckoutCart extends Controller {
 		if (isset($this->request->post['key'])) {
 			$this->cart->remove($this->request->post['key']);
 
-			//unset($this->session->data['vouchers'][$this->request->get['remove']]);
+			unset($this->session->data['vouchers'][$this->request->get['remove']]);
 
 			$this->session->data['success'] = $this->language->get('text_remove');
 
