@@ -2,12 +2,23 @@
 class ControllerApiLogin extends Controller {
 	public function index() {
 		$this->load->language('api/login');
+
+		$keys = array(
+			'username',
+			'password'
+		);
+		
+		foreach ($keys as $key) {
+			if (!isset($this->request->post[$key])) {
+				$this->request->post[$key] = '';
+			}
+		}
 		
 		$json = array();
 		
-		$this->model->load('api');
+		$this->load->model('account/api');
 		
-		$api_info = $this->model_user_api->login($this->request->post['username'], $this->request->post['password']);
+		$api_info = $this->model_account_api->login($this->request->post['username'], $this->request->post['password']);
 		
 		if ($api_info) {
 			$this->session->data['api_id'] = $api_info['api_id'];

@@ -15,56 +15,6 @@ class ControllerSaleOrderApi extends Controller {
 			$url = HTTP_CATALOG;
 		}
 		
-		
-		/*
-		// Set SSL if required
-		if (substr($url, 0, 5) == 'https') {
-			curl_setopt($curl, CURLOPT_PORT, 443);
-		}
-		
-		$option_data = array(
-			CURLOPT_HEADER         => false,
-			CURLOPT_USERAGENT      => $this->request->server['HTTP_USER_AGENT']
-			CURLOPT_FOLLOWLOCATION => true,
-			CURLOPT_SSL_VERIFYHOST => false,
-			CURLOPT_FORBID_REUSE   => false,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_POST           => true
-			CURLOPT_URL            =>
-			CURLOPT_POSTFIELDS     =>
-			CURLOPT_COOKIE         => 
-		);
-		
-		// Set SSL if required
-		if (substr($url, 0, 5) == 'https') {
-			curl_setopt($curl, CURLOPT_PORT, 443);
-		}
-		
-		curl_setopt($curl, CURLOPT_HEADER, false);
-		curl_setopt($curl, CURLOPT_USERAGENT, $this->request->server['HTTP_USER_AGENT']);
-		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false); 
-		curl_setopt($curl, CURLOPT_FORBID_REUSE, false);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($curl, CURLOPT_POST, true);
-		curl_setopt($curl, CURLOPT_URL, $url);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
-		
-		if ($cookie) {
-			curl_setopt($curl, CURLOPT_COOKIE, session_name() . '=' . $cookie . ';');
-		}
-		
-		
-		
-				
-		$curl = curl_init();
-		
-		curl_setopt_array
-		
-		*/
-		
-		
-		
 		$this->load->model('user/api');
 		
 		$api_info = $this->model_user_api->getApi($this->config->get('config_api_id'));
@@ -72,10 +22,14 @@ class ControllerSaleOrderApi extends Controller {
 		if ($api_info) {
 			$api_data = array(
 				'username' => $api_info['username'],
-				'password' => $api_info['key']
+				'password' => $api_info['password']
 			);
 			
 			$response = $this->api($url . 'index.php?route=api/login', '', $api_data);
+			
+			if (isset($response['error'])) {
+				$json['error'] = $response['error'];
+			}
 		}		
 		
 		if (isset($response['cookie'])) {
@@ -96,7 +50,7 @@ class ControllerSaleOrderApi extends Controller {
 			$response = $this->api($url . 'index.php?route=api/customer', $cookie, $customer_data);
 			
 			if (isset($response['error'])) {
-				$json['error']['payment'] = $response['error'];
+				$json['error']['customer'] = $response['error'];
 			}		
 					
 			// Payment Address
@@ -114,9 +68,6 @@ class ControllerSaleOrderApi extends Controller {
 			);
 					
 			$response = $this->api($url . 'index.php?route=api/payment/address', $cookie, $payment_address);
-	
-			echo '<br />Payment Address<br />';
-			print_r($response) . '<br />';
 					
 			if (isset($response['error'])) {
 				$json['error']['payment'] = $response['error'];
@@ -138,11 +89,8 @@ class ControllerSaleOrderApi extends Controller {
 			
 			$response = $this->api($url . 'index.php?route=api/shipping/address', $cookie, $shipping_address);
 			
-			echo '<br />Shipping Address<br />';
-			print_r($response) . '<br />';
-			
 			if (isset($response['error'])) {
-				$json['error']['shipping_address'] = $response['error'];
+				$json['error']['shipping'] = $response['error'];
 			}		
 			
 			// Products
@@ -161,13 +109,10 @@ class ControllerSaleOrderApi extends Controller {
 						'override'   => true
 					);
 	
-					$response = $this->api($url . 'index.php?route=api/cart/add', $cookie, $product_data);	
-					
-					echo '<br />Products<br />';
-					print_r($response) . '<br />';
+					$response = $this->api($url . 'index.php?route=api/cart/add', $cookie, $product_data);
 					
 					if (isset($response['error'])) {
-						$json['error'] = $response['error'];
+						$json['error']['product'] = $response['error'];
 						
 						break;	
 					}
@@ -195,25 +140,19 @@ class ControllerSaleOrderApi extends Controller {
 				);
 				
 				$response = $this->api($url . 'index.php?route=api/cart/add', $cookie, $product_data);
-			
-				echo '<br />Add to cart<br />';
-				print_r($response) . '<br />';
 						
 				if (isset($response['error'])) {
-					$json['error'] = $response['error'];
-				}			
+					$json['error']['product'] = $response['error'];
+				}
 			}		
 			
 			// Vouchers
 			if (isset($this->request->post['order_voucher'])) {
 				foreach ($this->request->post['order_voucher'] as $order_voucher) {
 					$response = $this->api($url . 'index.php?route=api/voucher/add', $cookie, $order_voucher);
-			
-					echo '<br />Vouchers<br />';
-					print_r($response) . '<br />';
 						
 					if (isset($response['error'])) {
-						$json['error']['voucher'] = $response['error'];
+						$json['error']['vouchers'] = $response['error'];
 						
 						break;	
 					}
@@ -234,20 +173,14 @@ class ControllerSaleOrderApi extends Controller {
 				
 				$response = $this->api($url . 'index.php?route=api/voucher/add', $cookie, $voucher_data);
 				
-				echo '<br />Add to cart<br />';
-				print_r($response) . '<br />';
-						
 				if (isset($response['error'])) {
-					$json['error']['voucher'] = $response['error'];
+					$json['error']['vouchers'] = $response['error'];
 				}			
 			}
 			
 			// Coupon
 			if ($this->request->post['coupon']) {
 				$response = $this->api($url . 'index.php?route=api/coupon', $cookie, array('coupon' => $this->request->post['coupon']));
-				
-				echo '<br />Coupon<br />';
-				print_r($response) . '<br />';
 							
 				if (isset($response['error'])) {
 					$json['error']['coupon'] = $response['error'];
@@ -258,21 +191,15 @@ class ControllerSaleOrderApi extends Controller {
 			if ($this->request->post['voucher']) {
 				$response = $this->api($url . 'index.php?route=api/voucher', $cookie, array('voucher' => $this->request->post['voucher']));
 			
-				echo '<br />Voucher<br />';
-				print_r($response) . '<br />';
-						
 				if (isset($response['error'])) {
 					$json['error']['voucher'] = $response['error'];
-				}				
+				}
 			}
 			
 			// Reward Points
 			if ($this->request->post['reward']) {
 				$response = $this->api($url . 'index.php?route=api/reward', $cookie, array('reward' => $this->request->post['reward']));
 				
-				echo '<br />Reward Points<br />';
-				print_r($response) . '<br />';
-						
 				if (isset($response['error'])) {
 					$json['error']['reward'] = $response['error'];
 				}
@@ -281,21 +208,15 @@ class ControllerSaleOrderApi extends Controller {
 			// Shipping Methods	
 			$response = $this->api($url . 'index.php?route=api/shipping/methods', $cookie);
 				
-			//echo '<br />Shipping Methods<br />';
-			//print_r($response) . '<br />';
-						
 			if (isset($response['error'])) {
 				$json['error']['shipping_method'] = $response['error'];
 			} else {
-				$json['shipping_methods'] = $response;
+				$json['shipping_methods'] = $response['shipping_methods'];
 			}
 			
 			// Shipping Method
 			$response = $this->api($url . 'index.php?route=api/shipping/method', $cookie, array('shipping_method' => $this->request->post['shipping_code']));
 				
-			//echo '<br />Shipping Method<br />';
-			//print_r($response) . '<br />';
-						
 			if (isset($response['error'])) {
 				$json['error']['shipping_method'] = $response['error'];
 			}
@@ -303,59 +224,68 @@ class ControllerSaleOrderApi extends Controller {
 			// Payment Methods	
 			$response = $this->api($url . 'index.php?route=api/payment/methods', $cookie);
 			
-			//echo '<br />Payment Methods<br />';
-			//print_r($response) . '<br />';
-						
 			if (isset($response['error'])) {
 				$json['error']['payment_method'] = $response['error'];
 			} else {
-				$json['payment_methods'] = $response;
+				$json['payment_methods'] = $response['payment_methods'];
 			}
 			
 			// Payment Method
 			$response = $this->api($url . 'index.php?route=api/payment/method', $cookie, array('payment_method' => $this->request->post['payment_code']));
 				
-			//echo '<br />Payment Method<br />';
-			//print_r($response) . '<br />';
-						
 			if (isset($response['error'])) {
 				$json['error']['payment_method'] = $response['error'];
 			}	
-		} else {
-			$json['error']['warning'] = $response['error'];	
+			
+			// Products
+			$response = $this->api($url . 'index.php?route=api/cart/products', $cookie);
+			
+			if (isset($response['product'])) {
+				$json['product'] = $response['product'];
+			}
+			
+			// Vouchers
+			if (isset($response['voucher'])) {
+				$json['voucher'] = $response['voucher'];
+			}
+					
+			// Totals
+			$response = $this->api($url . 'index.php?route=api/cart/totals', $cookie);
+			
+			if (isset($response['total'])) {
+				$json['total'] = $response['total'];
+			}
+			
+		
+			// Order
+			/*
+			if (!$json['error']) {
+				$response = $curl->post($url . 'index.php?route=api/order/add');
+							
+				if (isset($response['error'])) {
+					$json['error']['payment_method'] = $response['error'];
+				}
+				
+				$response = $curl->post($url . 'index.php?route=api/order/confirm');
+							
+				if (isset($response['error'])) {
+					$json['error']['payment_method'] = $response['error'];
+				}						
+			}
+			
+			if (!$json['error']) {
+				$response = $curl->post($url . 'index.php?route=api/order/update');
+							
+				if (isset($response['error'])) {
+					$json['error']['payment_method'] = $response['error'];
+				}			
+			}			
+			*/
+							
 		}
+
 		
-		// Order
-		//if (!$json['error']) {
-			//$response = $curl->post($url . 'index.php?route=api/order/add');
-						
-			//if ($response['error']) {
-			//	$json['error']['payment_method'] = $response['error'];
-			//}			
-		//}
-		
-		//$response = curl_exec($curl);
-		/*
-		if (!$response) {
-			$this->log->write(curl_error($curl) . '(' . curl_errno($curl) . ')');
-		} else {
-			return json_decode($response);
-		}		
-		*/
-	
-		// Get Products
-		$response = $this->api($url . 'index.php?route=api/cart/products', $cookie);
-		
-		echo '<br />products<br />';
-		print_r($response) . '<br />';
-		
-		// Get Order Totals
-		$response = $this->api($url . 'index.php?route=api/cart/totals', $cookie);
-		
-		echo '<br />totals<br />';
-		print_r($response) . '<br />';
-		
-		//$this->response->setOutput(json_encode($json));		
+		$this->response->setOutput(json_encode($json));		
 	}
 	
 	function api($url, $cookie = '', $data = array()) {
@@ -367,6 +297,7 @@ class ControllerSaleOrderApi extends Controller {
 		}
 		
 		curl_setopt($curl, CURLOPT_HEADER, false);
+		curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 		curl_setopt($curl, CURLOPT_USERAGENT, $this->request->server['HTTP_USER_AGENT']);
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false); 
@@ -384,9 +315,9 @@ class ControllerSaleOrderApi extends Controller {
 		}
 		
 		$response = curl_exec($curl);
-		
+
 		if (!$response) {
-			return curl_error($curl) . '(' . curl_errno($curl) . ')';
+			return array('error' => curl_error($curl) . '(' . curl_errno($curl) . ')');
 		}
 		
 		curl_close($curl);
